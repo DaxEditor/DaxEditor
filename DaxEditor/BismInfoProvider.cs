@@ -1,6 +1,5 @@
 ﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
 
-extern alias ssasmd;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +7,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using Babel;
-using ssasmd::Microsoft.AnalysisServices;
+using Microsoft.AnalysisServices;
 using System.Threading;
 using System.Data;
 using System.Diagnostics;
-using adomd = Microsoft.AnalysisServices.AdomdClient;
+using Microsoft.AnalysisServices.AdomdClient;
 using DaxEditor.GeneratorSource;
 using System.ComponentModel;
 using System.IO;
@@ -56,7 +55,7 @@ namespace DaxEditor
         /// <summary>
         /// AdomdConnection to SSAS tabular database
         /// </summary>
-        adomd.AdomdConnection _adomdConn;
+        AdomdConnection _adomdConn;
 
         /// <summary>
         /// Database object that has up-to-date structure
@@ -209,7 +208,7 @@ namespace DaxEditor
 
             List<string> tableNames = new List<string>();
 
-            foreach (Dimension dim in _database.Dimensions)
+            foreach (Microsoft.AnalysisServices.Dimension dim in _database.Dimensions)
             {
                 tableNames.Add(dim.Name);
             }
@@ -231,7 +230,7 @@ namespace DaxEditor
 
             List<string> columnNames = new List<string>();
 
-            Dimension dim = this._database.Dimensions.FindByName(tableName);
+            Microsoft.AnalysisServices.Dimension dim = this._database.Dimensions.FindByName(tableName);
             if (null == dim)
                 throw new ArgumentException(string.Format("Table '{0}' was not found in database {1}", tableName, this._database.Name), "tableName");
 
@@ -495,7 +494,7 @@ namespace DaxEditor
                 return;
             }
 
-            foreach (Dimension dim in _database.Dimensions)
+            foreach (Microsoft.AnalysisServices.Dimension dim in _database.Dimensions)
             {
                 // Set table declarations
                 tableDeclarations.Add(new Babel.Declaration(dim.Description, dim.Name, Babel.LanguageService.TABLE_GLYPH_INDEX, dim.Name));
@@ -691,7 +690,7 @@ namespace DaxEditor
                 daxFunctions = new List<DaxFunction>();
 
                 // extract scalar functions
-                adomd.AdomdRestrictionCollection restrictions = new adomd.AdomdRestrictionCollection();
+                AdomdRestrictionCollection restrictions = new AdomdRestrictionCollection();
                 restrictions.Add(FUNCTIONS_RESTRICTION_ORIGIN, FUNCTIONS_ORIGIN_SCALAR);
                 daxFunctions.AddRange(
                     ExtractDaxFunctionsWithRestrictions(restrictions)
@@ -721,7 +720,7 @@ namespace DaxEditor
         /// Extracts the list of DAX functions with specific restrictions.
         /// </summary>
         /// <param name="restrictions">Restrictions to be applied.</param>
-        private List<DaxFunction> ExtractDaxFunctionsWithRestrictions(adomd.AdomdRestrictionCollection restrictions)
+        private List<DaxFunction> ExtractDaxFunctionsWithRestrictions(AdomdRestrictionCollection restrictions)
         {
             List<DaxFunction> daxFunctions = new List<DaxFunction>();
 
@@ -846,7 +845,7 @@ namespace DaxEditor
             }
 
             var sb = new StringBuilder();
-            var restrictions = new adomd.AdomdRestrictionCollection();
+            var restrictions = new AdomdRestrictionCollection();
             restrictions.Add("DatabaseID", _database.ID);
             var dataSet = _adomdConn.GetSchemaDataSet("DISCOVER_XML_METADATA", restrictions);
             Debug.Assert(dataSet.Tables.Count == 1);
@@ -922,14 +921,14 @@ namespace DaxEditor
 
                         if (isXmla)
                         {
-                            adomd.AdomdConnection adomdClient = null;
+                            AdomdConnection adomdClient = null;
                             //XmlaClient xmlaClient = null;
                             try
                             {
-                                adomdClient = new adomd.AdomdConnection(this._daxDocumentProperties.ConnectionStringWithoutDatabaseName);
+                                adomdClient = new AdomdConnection(this._daxDocumentProperties.ConnectionStringWithoutDatabaseName);
                                 adomdClient.Open();
-                                var cmd = new adomd.AdomdCommand("@CommandText",adomdClient);
-                                cmd.Parameters.Add(new adomd.AdomdParameter("CommandText", commandText));
+                                var cmd = new AdomdCommand("@CommandText",adomdClient);
+                                cmd.Parameters.Add(new AdomdParameter("CommandText", commandText));
                                 System.Xml.XmlReader reader = cmd.ExecuteXmlReader();
                                 var formattedXmlaResult  = reader.ReadOuterXml().ToString();
                                 reader.Close();
@@ -952,10 +951,10 @@ namespace DaxEditor
                         }
                         else
                         {
-                            using (var cmd = new adomd.AdomdCommand("@CommandText", _adomdConn))
+                            using (var cmd = new AdomdCommand("@CommandText", _adomdConn))
                             {
-                                cmd.Parameters.Add(new adomd.AdomdParameter("CommandText", commandText));
-                                using (adomd.AdomdDataAdapter dataAdapter = new adomd.AdomdDataAdapter(cmd))
+                                cmd.Parameters.Add(new AdomdParameter("CommandText", commandText));
+                                using (AdomdDataAdapter dataAdapter = new AdomdDataAdapter(cmd))
                                 {
                                     dataAdapter.Fill(resultDataTable);
                                 }
@@ -969,7 +968,7 @@ namespace DaxEditor
 
                         LogLine("End executing query.");
                     }
-                    catch (adomd.AdomdConnectionException)
+                    catch (AdomdConnectionException)
                     {
                         if (_adomdConn != null)
                         {
@@ -980,7 +979,7 @@ namespace DaxEditor
                             continue;
                         }
                     }
-                    catch (adomd.AdomdErrorResponseException ex)
+                    catch (AdomdErrorResponseException ex)
                     {
                         LogLine("Error while reading response.");
 
@@ -1016,31 +1015,31 @@ namespace DaxEditor
                 var mc = MeasuresContainer.ParseDaxScript(viewText);
 
                 LogLine("Begin transaction.");
-                using (var cmd = new adomd.AdomdCommand("@CommandText", _adomdConn))
+                using (var cmd = new AdomdCommand("@CommandText", _adomdConn))
                 {
-                    cmd.Parameters.Add(new adomd.AdomdParameter("CommandText", cmdProducer.ProduceBeginTransaction()));
+                    cmd.Parameters.Add(new AdomdParameter("CommandText", cmdProducer.ProduceBeginTransaction()));
                     cmd.ExecuteNonQuery();
                 }
 
                 LogLine("Alter MDX script.");
-                using (var cmd = new adomd.AdomdCommand("@CommandText", _adomdConn))
+                using (var cmd = new AdomdCommand("@CommandText", _adomdConn))
                 {
-                    cmd.Parameters.Add(new adomd.AdomdParameter("CommandText", cmdProducer.ProduceAlterMdxScript(mc.Measures)));
+                    cmd.Parameters.Add(new AdomdParameter("CommandText", cmdProducer.ProduceAlterMdxScript(mc.Measures)));
                     cmd.ExecuteNonQuery();
                 }
 
                 LogLine("Run ProcessRecalc.");
-                using (var cmd = new adomd.AdomdCommand("@CommandText", _adomdConn))
+                using (var cmd = new AdomdCommand("@CommandText", _adomdConn))
                 {
-                    cmd.Parameters.Add(new adomd.AdomdParameter("CommandText", cmdProducer.ProduceProcessRecalc()));
+                    cmd.Parameters.Add(new AdomdParameter("CommandText", cmdProducer.ProduceProcessRecalc()));
                     cmd.ExecuteNonQuery();
                 }
 
 
                 LogLine("Commit transaction.");
-                using (var cmd = new adomd.AdomdCommand("@CommandText", _adomdConn))
+                using (var cmd = new AdomdCommand("@CommandText", _adomdConn))
                 {
-                    cmd.Parameters.Add(new adomd.AdomdParameter("CommandText", cmdProducer.ProduceCommitTransaction()));
+                    cmd.Parameters.Add(new AdomdParameter("CommandText", cmdProducer.ProduceCommitTransaction()));
                     cmd.ExecuteNonQuery();
                 }
 
@@ -1048,9 +1047,9 @@ namespace DaxEditor
             }
             catch (Exception ex)
             {
-                using (var cmd = new adomd.AdomdCommand("@CommandText", _adomdConn))
+                using (var cmd = new AdomdCommand("@CommandText", _adomdConn))
                 {
-                    cmd.Parameters.Add(new adomd.AdomdParameter("CommandText", cmdProducer.ProduceRollbackTransaction()));
+                    cmd.Parameters.Add(new AdomdParameter("CommandText", cmdProducer.ProduceRollbackTransaction()));
                     cmd.ExecuteNonQuery();
                 }
 
@@ -1076,7 +1075,7 @@ namespace DaxEditor
 
         private void DoConnect(string connectionString)
         {
-            _adomdConn = new adomd.AdomdConnection(connectionString);
+            _adomdConn = new AdomdConnection(connectionString);
             _adomdConn.Open();
         }
 

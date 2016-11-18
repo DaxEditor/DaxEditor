@@ -1,7 +1,6 @@
 ﻿namespace DaxEditor.Xml
 {
-    extern alias ssasmd;
-    using ssasmd::Microsoft.AnalysisServices;
+    using Microsoft.AnalysisServices;
     using System.IO;
     using System.Text;
     using System.Xml.Serialization;

@@ -20,7 +20,8 @@ namespace Babel
 {
 	public class Source : Microsoft.VisualStudio.Package.Source
 	{
-		public Source(BabelLanguageService service, IVsTextLines textLines, Colorizer colorizer)
+
+        public Source(BabelLanguageService service, IVsTextLines textLines, Colorizer colorizer)
 			: base(service, textLines, colorizer)
         {
             bismInforProvider = null;

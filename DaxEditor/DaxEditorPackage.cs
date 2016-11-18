@@ -43,7 +43,7 @@ namespace DaxEditor
     [PackageRegistration(UseManagedResourcesOnly = true)]
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
-    [InstalledProductRegistration("#110", "#112", "2.0.1611.1803", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "2.0", IconResourceID = 400)]
     [Guid(GuidList.guidDaxEditorPkgString)]
     [ProvideService(typeof(Babel.LanguageService))]
     [ProvideLanguageExtension(typeof(Babel.LanguageService), Babel.Configuration.Extension)]
@@ -623,6 +623,7 @@ namespace DaxEditor
                 var id = command.CommandID.ID;
                 var isOnline = _languageService.FormattingPage.IsOnline;
                 var isBaseCommand =
+                    // id == newFileCommandId || --> removed, we don't manage well different DAX filenames
                     id == reformatSelectionCommandId ||
                     id == reformatDocumentCommandId ||
                     id == increaseDepthCommandId ||
