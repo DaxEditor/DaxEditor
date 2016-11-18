@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DaxEditor.IntegrationTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("daxeditor.codeplex.com")]
+[assembly: AssemblyCompany("https://github.com/DaxEditor")]
 [assembly: AssemblyProduct("DAX EDITOR")]
-[assembly: AssemblyCopyright("daxeditor.codeplex.com")]
-[assembly: AssemblyTrademark("daxeditor.codeplex.com")]
+[assembly: AssemblyCopyright("https://github.com/DaxEditor")]
+[assembly: AssemblyTrademark("https://github.com/DaxEditor")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.7.41510.1")]
-[assembly: AssemblyFileVersion("1.7.41510.1")]
+[assembly: AssemblyVersion("2.0.1611.1803")]
+[assembly: AssemblyFileVersion("2.0.1611.1803")]

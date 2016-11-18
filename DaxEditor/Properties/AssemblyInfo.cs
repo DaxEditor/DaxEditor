@@ -12,10 +12,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DaxEditor")]
 [assembly: AssemblyDescription("DAX EDITOR")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("daxeditor.codeplex.com")]
+[assembly: AssemblyCompany("https://github.com/DaxEditor")]
 [assembly: AssemblyProduct("DAX EDITOR")]
-[assembly: AssemblyCopyright("daxeditor.codeplex.com")]
-[assembly: AssemblyTrademark("daxeditor.codeplex.com")]
+[assembly: AssemblyCopyright("https://github.com/DaxEditor")]
+[assembly: AssemblyTrademark("dhttps://github.com/DaxEditor")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
@@ -34,7 +34,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("2.0.1611.1801")]
-[assembly: AssemblyFileVersion("2.0.1611.1801")]
+[assembly: AssemblyVersion("2.0.1611.1803")]
+[assembly: AssemblyFileVersion("2.0.1611.1803")]
 
 
