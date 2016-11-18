@@ -1,0 +1,1 @@
+﻿This directory is used by DAX Editor for storing snippets.  Upgrading to a new version of DAX Editor will cleanup the content of this directory, so please don't put custom snippets in it.

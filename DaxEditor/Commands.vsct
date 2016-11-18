@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+// The project released under MS-PL license https://daxeditor.codeplex.com/license
+-->
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary 
+        format that VisualStudio will consume) has the ability to run a preprocessor 
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so 
+        it is possible to define includes and macros with the same syntax used 
+        in C++ files. Using this ability of the compiler here, we include some files 
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h"/>
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h"/>
+
+  
+
+
+
+  <!--The Commands section is where we the commands, menus and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidDaxEditorPkg">
+
+    <!-- Inside this section we have different sub-sections: one for the menus, another  
+    for the menu groups, one for the buttons (the actual commands), one for the combos 
+    and the last one for the bitmaps used. Each element is identified by a command id that  
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually  
+    called "command set" and is used to group different command inside a logically related  
+    group; your package should define its own command set in order to avoid collisions  
+    with command ids defined by other packages. -->
+    <Menus>
+      <!-- Top Level Menu: DAX Editor -->
+      <Menu guid="guidDaxEditorCmdSet" id="menuDaxTopLevel" priority ="0x0601" type ="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS"/>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>DAX</ButtonText>
+          <CommandName>D&amp;AX</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="guidDaxEditorCmdSet" id="toolbarDaxEditor" type="Toolbar" priority="11">
+        <Parent guid="guidDaxEditorCmdSet" id="0" />
+        <Strings>
+          <ButtonText>DAX Editor Toolbar</ButtonText>
+          <CommandName>DAX Editor</CommandName>
+        </Strings>
+      </Menu>
+
+    </Menus>
+
+    <Bitmaps>
+      <Bitmap guid="ImageNewFile" href="Resources\NewFile.png" />
+      <Bitmap guid="ImageConnect" href="Resources\Connect.png" />
+      <Bitmap guid="ImageDisconnect" href="Resources\Disconnect.png" />
+      <Bitmap guid="ImageGetMeasuresAndColumns" href="Resources\GetMeasuresAndColumns.png" />
+      <Bitmap guid="ImageSaveMeasuresAndColumns" href="Resources\SaveMeasuresAndColumns.png" />
+      <Bitmap guid="ImageSaveToBimFile" href="Resources\SaveToBim.png" />
+      <Bitmap guid="ImageExecuteQuery" href="Resources\ExecuteQuery.png" />
+      <Bitmap guid="ImageReformatDocument" href="Resources\ReformatDocument.png" />
+      <Bitmap guid="ImageReformatSelection" href="Resources\ReformatSelection.png" />
+      <Bitmap guid="ImageIncreaseIndentDepth" href="Resources\IncreaseIndentDepth.png" />
+      <Bitmap guid="ImageDecreaseIndentDepth" href="Resources\DecreaseIndentDepth.png" />
+    </Bitmaps>
+
+    <!-- In this section you can define new menu groups. A menu group is a container for 
+         other menus or buttons (commands); from a visual point of view you can see the 
+         group as the part of a menu contained between two lines. The parent of a group 
+         must be a menu. -->
+    <Groups>
+      <Group guid="guidDaxEditorCmdSet" id="groupFormattingAdvanced" priority="0xff00">
+        <Parent guid="guidStdEditor" id="IDM_VS_EDITOR_ADVANCED_MENU"/>
+      </Group>
+      <Group guid="guidDaxEditorCmdSet" id="groupConnect" priority="0x100">
+        <Parent guid="guidDaxEditorCmdSet" id="toolbarDaxEditor"/>
+      </Group>
+      <Group guid="guidDaxEditorCmdSet" id="groupLoadSave" priority="0x180">
+        <Parent guid="guidDaxEditorCmdSet" id="toolbarDaxEditor"/>
+      </Group>
+      <Group guid="guidDaxEditorCmdSet" id="groupExecute" priority="0x200">
+        <Parent guid="guidDaxEditorCmdSet" id="toolbarDaxEditor"/>
+      </Group>
+      <Group guid="guidDaxEditorCmdSet" id="groupFormat" priority="0x300">
+        <Parent guid="guidDaxEditorCmdSet" id="toolbarDaxEditor"/>
+      </Group>
+      <Group guid="guidDaxEditorCmdSet" id="groupModelDax" priority="0x1710">
+        <Parent guid="GUID_COMMAND_SET" id="MENU_MODEL"/>
+      </Group>
+    </Groups>
+
+    <!--Buttons section. -->
+    <!--This section defines the elements the user can interact with, like a menu command or a button 
+        or combo box in a toolbar. -->
+    <Buttons>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidNewFile" priority="1" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupConnect" />
+        <Icon guid="ImageNewFile" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidNewFile</CommandName>
+          <ButtonText>Create a new DAX file</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidConnect" priority="5" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupConnect" />
+        <Icon guid="ImageConnect" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidConnect</CommandName>
+          <ButtonText>Connect to a Tabular database</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidDisconnect" priority="10" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupConnect" />
+        <Icon guid="ImageDisconnect" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidDisconnect</CommandName>
+          <ButtonText>Disconnect from the Tabular database</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidReformatSelection" priority="0x0100" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupFormat" />
+        <Icon guid="ImageReformatSelection" id="1"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <CommandName>cmdidReformatSelection</CommandName>
+          <ButtonText>Reformat selection</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidReformatDocument" priority="0x0100" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupFormat" />
+        <Icon guid="ImageReformatDocument" id="1"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <CommandName>cmdidReformatDocument</CommandName>
+          <ButtonText>Reformat document</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidIncreaseIndentDepth" priority="0x0100" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupFormat" />
+        <Icon guid="ImageIncreaseIndentDepth" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidIncreaseIndentDepth</CommandName>
+          <ButtonText>Increase format indent depth</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidDecreaseIndentDepth" priority="0x0110" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupFormat" />
+        <Icon guid="ImageDecreaseIndentDepth" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidDecreaseIndentDepth</CommandName>
+          <ButtonText>Decrease format indend depth</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid ="guidDaxEditorCmdSet" id="cmdidGetMeasuresAndCalculatedColumns" priority="20" type="Button">
+        <Parent guid ="guidDaxEditorCmdSet" id="groupLoadSave"/>
+        <Icon guid="ImageGetMeasuresAndColumns" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidGetMeasuresAndCalculatedColumns</CommandName>
+          <ButtonText>Load measures from the database</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidSaveMeasuresAndCalculatedColumns" priority="30" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupLoadSave" />
+        <Icon guid="ImageSaveMeasuresAndColumns" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidSaveMeasuresAndCalculatedColumns</CommandName>
+          <ButtonText>Save measures to the database</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidExecuteQuery" priority="100" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupExecute" />
+        <Icon guid="ImageExecuteQuery" id="1"/>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidExecuteQuery</CommandName>
+          <ButtonText>Execute query</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid ="guidDaxEditorCmdSet" id="cmdidGetBimFileContent" priority="500" type="Button">
+        <Parent guid ="guidDaxEditorCmdSet" id="groupModelDax"/>
+        <Strings>
+          <CommandName>cmdidGetBimFileContent</CommandName>
+          <ButtonText>Get Measures from BIM File</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidDaxEditorCmdSet" id="cmdidSaveBimFileContent" priority="600" type="Button">
+        <Parent guid="guidDaxEditorCmdSet" id="groupLoadSave" />
+        <Icon guid="ImageSaveToBimFile" id="1"/>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>AllowVisibilityChangeOnToolBar</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidSaveBimFileContent</CommandName>
+          <ButtonText>Save Measures to BIM File</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="guidDaxEditorCmdSet" id="cmdidExecuteQuery" editor="guidVSStd97" key1="K" mod1="Control" key2 ="E"/>
+    <KeyBinding guid="guidDaxEditorCmdSet" id="cmdidConnect" editor="guidVSStd97" key1="K" mod1="Control" key2="C" />
+  </KeyBindings>
+
+  <CommandPlacements>
+    <!-- Top level menu -->
+    <CommandPlacement guid="guidDaxEditorCmdSet" id="groupConnect" priority="0x100">
+      <Parent guid="guidDaxEditorCmdSet" id="menuDaxTopLevel" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidDaxEditorCmdSet" id="groupLoadSave" priority="0x180">
+      <Parent guid="guidDaxEditorCmdSet" id="menuDaxTopLevel" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidDaxEditorCmdSet" id="groupExecute" priority="0x200">
+      <Parent guid="guidDaxEditorCmdSet" id="menuDaxTopLevel" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidDaxEditorCmdSet" id="groupFormat" priority="0x300">
+      <Parent guid="guidDaxEditorCmdSet" id="menuDaxTopLevel" />
+    </CommandPlacement>
+    <!-- Advanced formating  menu -->
+    <CommandPlacement guid="guidDaxEditorCmdSet" id="groupFormat" priority="0x100">
+      <Parent guid="guidDaxEditorCmdSet" id="groupFormattingAdvanced" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidDaxEditorPkg" value="{2da4570a-86fa-43dc-b855-890d9ad96f4c}" />
+    <GuidSymbol name="guidDaxLanguageService" value="{cb34f6da-8cec-4f9d-bdfe-d1b13b795df7}" />
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidDaxEditorCmdSet" value="{e5f8052e-fc46-4920-9bb9-a8687ae567ef}">
+      <IDSymbol name="groupFormattingAdvanced" value="0x1020" />
+      <IDSymbol name="cmdidNewFile" value="0x00e0"/>
+      <IDSymbol name="cmdidConnect" value="0x00f0"/>
+      <IDSymbol name="cmdidDisconnect" value="0x00f1"/>
+      <IDSymbol name="cmdidReformatSelection" value="0x00f7"/>
+      <IDSymbol name="cmdidReformatDocument" value="0x00f8"/>
+      <IDSymbol name="cmdidIncreaseIndentDepth" value="0x0100" />
+      <IDSymbol name="cmdidDecreaseIndentDepth" value="0x0110" />
+      <IDSymbol name="cmdidGetMeasuresAndCalculatedColumns" value="0x1601" />
+      <IDSymbol name="cmdidSaveMeasuresAndCalculatedColumns" value="0x1602" />
+      <IDSymbol name="cmdidExecuteQuery" value="0x1621" />
+      <IDSymbol name="cmdidGetBimFileContent" value="0x1801" />
+      <IDSymbol name="cmdidSaveBimFileContent" value="0x1802" />
+      <IDSymbol name="menuDaxTopLevel" value ="0x0601"/>
+      <IDSymbol name="toolbarDaxEditor" value="0x1701" />
+      <IDSymbol name="groupConnect" value="0x1702" />
+      <IDSymbol name="groupExecute" value="0x1704" />
+      <IDSymbol name="groupFormat" value="0x1706"/>
+      <IDSymbol name="groupModelDax" value="0x1201"/>
+      <IDSymbol name="groupLoadSave" value="0x1251"/>
+    </GuidSymbol>
+
+    <GuidSymbol name="guidSHLMainMenu" value="{d309f791-903f-11d0-9efc-00a0c911004f}" />
+    <GuidSymbol name="ImageNewFile" value="{ad0b88f9-a285-4f60-9164-1419e5803963}" />
+    <GuidSymbol name="ImageConnect" value="{3d09f791-903f-11d0-9efc-00a0c91100ff}" />
+    <GuidSymbol name="ImageDisconnect" value="{13ae7884-fad3-43d2-bbe6-07acf67c79e9}" />
+    <GuidSymbol name="ImageGetMeasuresAndColumns" value="{86f12bda-e679-4971-be69-49eb80d35839}" />
+    <GuidSymbol name="ImageSaveMeasuresAndColumns" value="{b25ef175-1b57-466b-87aa-c625b76cb56a}" />
+    <GuidSymbol name="ImageSaveToBimFile" value="{6f06a662-4c7d-4c88-82f1-03d2c181de35}" />
+    <GuidSymbol name="ImageExecuteQuery" value="{c1acc2b6-1f0c-41ae-9ed1-63108728d254}" />
+    <GuidSymbol name="ImageReformatDocument" value="{22c219ad-2fa7-4df0-b565-2d65467aa433}" />
+    <GuidSymbol name="ImageReformatSelection" value="{a9245e75-8c07-47a2-94fc-73295eebc773}" />
+    <GuidSymbol name="ImageIncreaseIndentDepth" value="{0b5e6780-e67d-47a6-841d-7cdfacfc4608}" />
+    <GuidSymbol name="ImageDecreaseIndentDepth" value="{9fb16438-f33f-49a2-aeae-69a29bda80ce}" />
+
+    <GuidSymbol name="GUID_COMMAND_SET" value="{d7e63709-778e-429d-b3e2-dcee260e9b23}">
+      <IDSymbol name="MENU_MODEL" value="0x0601"/>
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>
+

@@ -1,0 +1,570 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "name": "SqlServer Demo ContosoDW",
+        "connectionString": "Provider=SQLNCLI11;Data Source=Demo;Initial Catalog=ContosoDW;Integrated Security=SSPI;Persist Security Info=false",
+        "impersonationMode": "impersonateServiceAccount",
+        "annotations": [
+          {
+            "name": "ConnectionEditUISource",
+            "value": "SqlServer"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "Product",
+        "columns": [
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Product Code",
+            "dataType": "string",
+            "sourceColumn": "Product Code",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Product Name",
+            "dataType": "string",
+            "sourceColumn": "Product Name",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Product Description",
+            "dataType": "string",
+            "sourceColumn": "Product Description",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ProductSubcategoryKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductSubcategoryKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Manufacturer",
+            "dataType": "string",
+            "sourceColumn": "Manufacturer",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Brand",
+            "dataType": "string",
+            "sourceColumn": "Brand",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Class",
+            "dataType": "string",
+            "sourceColumn": "Class",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Style",
+            "dataType": "string",
+            "sourceColumn": "Style",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Color",
+            "dataType": "string",
+            "sourceColumn": "Color",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Size",
+            "dataType": "string",
+            "sourceColumn": "Size",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Weight",
+            "dataType": "double",
+            "sourceColumn": "Weight",
+            "sourceProviderType": "Double"
+          },
+          {
+            "name": "Weight Unit Measure",
+            "dataType": "string",
+            "sourceColumn": "Weight Unit Measure",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Stock Type Code",
+            "dataType": "string",
+            "sourceColumn": "Stock Type Code",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Stock Type",
+            "dataType": "string",
+            "sourceColumn": "Stock Type",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Unit Cost",
+            "dataType": "decimal",
+            "sourceColumn": "Unit Cost",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "decimal",
+            "sourceColumn": "Unit Price",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Available Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Available Date",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "Status",
+            "sourceProviderType": "WChar"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Product",
+            "dataView": "full",
+            "source": {
+              "query": " SELECT [Analytics].[Product].* FROM [Analytics].[Product] ",
+              "dataSource": "SqlServer Demo ContosoDW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "T_IsEven",
+            "expression": " ISEVEN ( SUM ( Sales[Quantity] ) )"
+          },
+          {
+            "name": "T_IsOdd",
+            "expression": " ISODD( SUM ( Sales[Quantity] ) )"
+          },
+          {
+            "name": "T_Acot",
+            "expression": " ACOT( AVERAGE( 'Product'[Unit Cost] ) )"
+          },
+          {
+            "name": "T_Acoth",
+            "expression": " ACOTH( AVERAGE( 'Product'[Unit Price] ) )"
+          },
+          {
+            "name": "T_ChisqDist",
+            "expression": " CHISQ.DIST( AVERAGE(  'Product'[Unit Cost] ), 3.2, FALSE )"
+          },
+          {
+            "name": "T_ChisqDist2",
+            "expression": " CHISQ.DIST( AVERAGE(  'Product'[Unit Cost] ), 2, TRUE)"
+          },
+          {
+            "name": "T_ChisqDistRt",
+            "expression": " CHISQ.DIST.RT( AVERAGE(  'Product'[Unit Cost] ), 2 )"
+          },
+          {
+            "name": "T_ChisqDistRt2",
+            "expression": " CHISQ.DIST.RT( AVERAGE(  'Product'[Unit Cost] ), 2.5 )"
+          },
+          {
+            "name": "T_Cot",
+            "expression": " COT ( AVERAGE( Sales[Net Price] ) )"
+          },
+          {
+            "name": "T_Coth",
+            "expression": " COTH( AVERAGE( Sales[Net Price] ) )"
+          },
+          {
+            "name": "T_Permut",
+            "expression": " PERMUT( COUNTROWS ( 'Product' ), 2 )"
+          },
+          {
+            "name": "T_PoissonDist",
+            "expression": " POISSON.DIST( AVERAGE(  'Product'[Unit Cost] ), 3.2, FALSE )"
+          },
+          {
+            "name": "T_PoissonDist2",
+            "expression": " POISSON.DIST( AVERAGE(  'Product'[Unit Cost] ), 2, TRUE )"
+          },
+          {
+            "name": "T_Unicode",
+            "expression": " UNICODE( LEFT ( LASTNONBLANK( 'Product'[Product Name], 1 ), 1 ) )"
+          },
+          {
+            "name": "T_Crossfilter",
+            "expression": " CALCULATE ( DISTINCTCOUNT( 'Product'[Manufacturer] ), CROSSFILTER( Sales[ProductKey], 'Product'[ProductKey], Both ) )"
+          },
+          {
+            "name": "T_Crossfilter2",
+            "expression": " CALCULATE ( DISTINCTCOUNT( 'Product'[Manufacturer] ), CROSSFILTER( Sales[ProductKey], 'Product'[ProductKey], OneWay) )"
+          },
+          {
+            "name": "T_Crossfilter3",
+            "expression": " CALCULATE ( DISTINCTCOUNT( 'Product'[Manufacturer] ), CROSSFILTER( Sales[ProductKey], 'Product'[ProductKey], None ) )"
+          },
+          {
+            "name": "T_CurrentGroup",
+            "expression": " COUNTROWS ( GROUPBY( Sales, 'Product'[Brand], \"T\", SUMX ( CURRENTGROUP(), Sales[Quantity] ) ) )"
+          },
+          {
+            "name": "T_DataTable",
+            "expression": [
+              " COUNTROWS ( DATATABLE (",
+              "    \"Price Range\", STRING, ",
+              "    \"Min Price\", CURRENCY, ",
+              "    \"Max Price\", CURRENCY, ",
+              "    { ",
+              "        { \"Low\", 0, 10 }, ",
+              "        { \"Medium\", 10, 100 }, ",
+              "        { \"High\", 100, 9999999 } ",
+              "    } ",
+              ") )"
+            ]
+          },
+          {
+            "name": "T_Except",
+            "expression": " COUNTROWS ( EXCEPT ( 'Product', FILTER ( 'Product', 'Product'[Class] = \"Economy\" ) ) )"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [Analytics].[Product].* FROM [Analytics].[Product] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "Product"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "Analytics"
+          }
+        ]
+      },
+      {
+        "name": "Sales",
+        "columns": [
+          {
+            "name": "OnlineSalesKey",
+            "dataType": "int64",
+            "sourceColumn": "OnlineSalesKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "StoreKey",
+            "dataType": "int64",
+            "sourceColumn": "StoreKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "PromotionKey",
+            "dataType": "int64",
+            "sourceColumn": "PromotionKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "CurrencyKey",
+            "dataType": "int64",
+            "sourceColumn": "CurrencyKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "sourceColumn": "CustomerKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "OrderDateKey",
+            "dataType": "int64",
+            "sourceColumn": "OrderDateKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DueDateKey",
+            "dataType": "int64",
+            "sourceColumn": "DueDateKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DeliveryDateKey",
+            "dataType": "int64",
+            "sourceColumn": "DeliveryDateKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Order Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Order Date",
+            "formatString": "General Date",
+            "sourceProviderType": "DBDate"
+          },
+          {
+            "name": "Due Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Due Date",
+            "formatString": "General Date",
+            "sourceProviderType": "DBDate"
+          },
+          {
+            "name": "Delivery Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Delivery Date",
+            "formatString": "General Date",
+            "sourceProviderType": "DBDate"
+          },
+          {
+            "name": "Order Number",
+            "dataType": "string",
+            "sourceColumn": "Order Number",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Order Line Number",
+            "dataType": "int64",
+            "sourceColumn": "Order Line Number",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "int64",
+            "sourceColumn": "Quantity",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Unit Price",
+            "dataType": "decimal",
+            "sourceColumn": "Unit Price",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Unit Discount",
+            "dataType": "decimal",
+            "sourceColumn": "Unit Discount",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Unit Cost",
+            "dataType": "decimal",
+            "sourceColumn": "Unit Cost",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Net Price",
+            "dataType": "decimal",
+            "sourceColumn": "Net Price",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Sales",
+            "dataView": "full",
+            "source": {
+              "query": " SELECT [Analytics].[Sales].* FROM [Analytics].[Sales] ",
+              "dataSource": "SqlServer Demo ContosoDW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Sales Amount",
+            "expression": " SUMX ( Sales, Sales[Quantity] * Sales[Net Price] )",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [Analytics].[Sales].* FROM [Analytics].[Sales] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "Sales"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "Analytics"
+          }
+        ]
+      },
+      {
+        "name": "CalcIgnore",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Brand",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Product[Brand]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Total Qty",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Total Qty]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "SUMMARIZECOLUMNS( 'Product'[Brand], \"Total Qty\", IGNORE ( SUM ( Sales[Quantity] ) ) )"
+            }
+          }
+        ]
+      },
+      {
+        "name": "CalcRollupAddIssubtotal",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Class",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Product[Class]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Quantity",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Quantity]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Color",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Product[Color]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Weight Unit Measure",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "Product[Weight Unit Measure]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Subtotal Color",
+            "dataType": "boolean",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Subtotal Color]",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Subtotal Product",
+            "dataType": "boolean",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Subtotal Product]",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\""
+          }
+        ],
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "SUMMARIZECOLUMNS ( ROLLUPADDISSUBTOTAL ( 'Product'[Color], \"Subtotal Color\", ROLLUPGROUP ( Product[Class], Product[Weight Unit Measure] ), \"Subtotal Product\" ), CALCULATETABLE ( Sales, Product[Unit Price] > 1000 ), \"Quantity\", SUM ( Sales[Quantity] ) ) "
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "ff4821f0-6c79-4264-8f0f-604a675dcfd0",
+        "fromTable": "Sales",
+        "fromColumn": "ProductKey",
+        "toTable": "Product",
+        "toColumn": "ProductKey"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "400"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}

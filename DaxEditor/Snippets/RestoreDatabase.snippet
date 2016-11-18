@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Keywords>
+        <Keyword>xmlarestore</Keyword>
+      </Keywords>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>XMLA Restore Database</Title>
+      <Author>DAX Editor</Author>
+      <Description>XMLA for restoring a database from backup</Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>xmla:Restore</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>param1</ID>
+          <ToolTip>Database Name</ToolTip>
+          <Default>db1</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>param2</ID>
+          <ToolTip>Path to backup .abf file</ToolTip>
+          <Default>file.abf</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="DAX"><![CDATA[
+<Restore xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <File>$param2$</File>
+  <DatabaseName>$param1$</DatabaseName>
+</Restore>
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Keywords>
+        <Keyword>xmlaxecreate</Keyword>
+      </Keywords>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>XMLA Create XEvent Trace</Title>
+      <Author>DAX Editor</Author>
+      <Description>XMLA for creating XEvent trace</Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>xmla:xecreate</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>param1</ID>
+          <ToolTip>Database ID</ToolTip>
+          <Default>xesesssion1</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="DAX"><![CDATA[<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300">
+    <ObjectDefinition>
+        <Trace>
+            <ID>$param1$</ID>
+            <Name>$param1$</Name>
+            <ddl300_300:XEvent>
+                <event_session name="$param1$" dispatchLatency="1" maxEventSize="4" maxMemory="4" memoryPartitionMode="none" eventRetentionMode="allowSingleEventLoss" trackCausality="true">
+                    <event package="AS" name="DiscoverBegin" />
+                    <event package="AS" name="DiscoverEnd" />
+                    <event package="AS" name="QueryBegin" />
+                    <event package="AS" name="QueryEnd" />
+                    <event package="AS" name="CommandBegin" />
+                    <event package="AS" name="CommandEnd" />
+                    <event package="AS" name="LockAcquired">
+                        <action package="Package0" name="callstack" />
+                    </event>
+                    <event package="AS" name="LockReleased">
+                        <action package="Package0" name="callstack" />
+                    </event>
+                    <event package="AS" name="LockWaiting">
+                        <action package="Package0" name="callstack" />
+                    </event>
+                    <target package="Package0" name="event_file">
+                        <parameter name="filename" value="$param1$.xel" />
+                    </target>
+                </event_session>
+            </ddl300_300:XEvent>
+        </Trace>
+    </ObjectDefinition>
+</Create>
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

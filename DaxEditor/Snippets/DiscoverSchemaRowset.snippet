@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Keywords>
+        <Keyword>xmladschema</Keyword>
+      </Keywords>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Discover Schema Rowset</Title>
+      <Author>DAX Editor</Author>
+      <Description>Returns the names, restrictions, description, and other information for all enumeration values and any additional provider-specific enumeration values supported by the Microsoft XML for Analysis (XMLA) provider</Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>xmla:Process</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="DAX"><![CDATA[<Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+	<RequestType>DISCOVER_SCHEMA_ROWSETS</RequestType>
+    <Restrictions>
+		<RestrictionList>
+		</RestrictionList>
+	</Restrictions>
+    <Properties>
+		<PropertyList>
+   		</PropertyList>
+	</Properties>
+</Discover>
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

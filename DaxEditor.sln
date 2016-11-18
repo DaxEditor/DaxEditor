@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9326DAC9-8A66-4914-81C6-4D7A69B7C617}"
+	ProjectSection(SolutionItems) = preProject
+		DaxEditor.vsmdi = DaxEditor.vsmdi
+		Local.testsettings = Local.testsettings
+		Microsoft Public License.rtf = Microsoft Public License.rtf
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor", "DaxEditor\DaxEditor.csproj", "{05A67D31-2607-49E3-825A-9F720A105D7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor.Test", "DaxEditor.Test\DaxEditor.Test.csproj", "{57475029-350C-4E9E-AB8C-6240DEE121F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor.IntegrationTests", "DaxEditor.IntegrationTests\DaxEditor.IntegrationTests.csproj", "{6E4406D6-F9A7-4260-8BA1-71EEBE971A3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05A67D31-2607-49E3-825A-9F720A105D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A67D31-2607-49E3-825A-9F720A105D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A67D31-2607-49E3-825A-9F720A105D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A67D31-2607-49E3-825A-9F720A105D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57475029-350C-4E9E-AB8C-6240DEE121F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57475029-350C-4E9E-AB8C-6240DEE121F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57475029-350C-4E9E-AB8C-6240DEE121F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57475029-350C-4E9E-AB8C-6240DEE121F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4406D6-F9A7-4260-8BA1-71EEBE971A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E4406D6-F9A7-4260-8BA1-71EEBE971A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E4406D6-F9A7-4260-8BA1-71EEBE971A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E4406D6-F9A7-4260-8BA1-71EEBE971A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = DaxEditor.vsmdi
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,87 @@
+{
+  "name": "SemanticModel",
+  "id": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "name": "SqlAzure . test1",
+        "connectionString": "Data Source=.,1433;User ID=user1;Persist Security Info=true;Encrypt=true;TrustServerCertificate=false;Initial Catalog=test1",
+        "impersonationMode": "impersonateServiceAccount",
+        "provider": "System.Data.SqlClient",
+        "annotations": [
+          {
+            "name": "ConnectionEditUISource",
+            "value": "SqlAzure"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "Query",
+        "columns": [
+          {
+            "name": "C1",
+            "dataType": "int64",
+            "sourceColumn": "C1"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Query",
+            "source": {
+              "query": [
+                "SELECT 1 as C1",
+                "UNION",
+                "SELECT 2 as C1",
+                "UNION",
+                "SELECT 3 as C1"
+              ],
+              "dataSource": "SqlAzure . test1"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization"
+              },
+              {
+                "name": "TableWidgetSerialization"
+              }
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "name": "m1",
+            "expression": "1"
+          },
+          {
+            "name": "m2",
+            "expression": "Rand()"
+          },
+          {
+            "name": "m 3",
+            "expression": "\"Hello\""
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "Query"
+          },
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": [
+              "SELECT 1 as C1",
+              "UNION",
+              "SELECT 2 as C1",
+              "UNION",
+              "SELECT 3 as C1"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
