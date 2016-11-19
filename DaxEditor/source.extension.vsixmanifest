@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="2da4570a-86fa-43dc-b855-890d9ad96f4d" Version="2.0.1611.1804" Language="en-US" Publisher="github.com.DaxEditor" />
+    <Identity Id="2da4570a-86fa-43dc-b855-890d9ad96f4d" Version="2.0.1611.1809" Language="en-US" Publisher="github.com.DaxEditor" />
     <DisplayName>DAX Editor</DisplayName>
     <Description xml:space="preserve">DAX Editor  is a Visual Studio extension that implements a language service for DAX language for SQL Server Analysis Services</Description>
     <MoreInfo>http://github.com/DaxEditor</MoreInfo>
     <License>Microsoft Public License.rtf</License>
     <Icon>Resources\DaxEditor.png</Icon>
+    <PreviewImage>Resources\DaxEditor-page.jpg</PreviewImage>
   </Metadata>
   <Installation>
-    <InstallationTarget Version="[10.0,)" Id="Microsoft.VisualStudio.Community" />
-    <InstallationTarget Version="[10.0,)" Id="Microsoft.VisualStudio.Premium" />
-    <InstallationTarget Version="[10.0,)" Id="Microsoft.VisualStudio.Pro" />
-    <InstallationTarget Version="[10.0,)" Id="Microsoft.VisualStudio.Enterprise" />
-    <InstallationTarget Version="[10.0,)" Id="Microsoft.VisualStudio.IntegratedShell" />
+    <InstallationTarget Version="[11.0,15.0.0.0)" Id="Microsoft.VisualStudio.Community" />
+    <InstallationTarget Version="[11.0,15.0.0.0)" Id="Microsoft.VisualStudio.Premium" />
+    <InstallationTarget Version="[11.0,15.0.0.0)" Id="Microsoft.VisualStudio.Pro" />
+    <InstallationTarget Version="[11.0,15.0.0.0)" Id="Microsoft.VisualStudio.Enterprise" />
+    <InstallationTarget Version="[11.0,15.0.0.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.0,)" />
