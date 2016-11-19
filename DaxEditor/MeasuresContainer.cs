@@ -37,15 +37,30 @@ namespace DaxEditor
 
         public static MeasuresContainer ParseJsonAsText(string jsonText)
         {
-            try
-            {
+            try {
                 var jsonObject = JsonUtilities.Deserialize(jsonText);
                 Debug.Assert(null != jsonObject);
+
+                // TODO: remove this when KPI will be supported
+                CheckKpiInMeasures(jsonText, jsonObject);
+
                 return ParseJsonAsJsonObject(jsonObject);
             }
             catch (Exception e)
             {
                 throw new DaxException(string.Format("Error while parsing jsonScript:{0}{2}{0}{1}", Environment.NewLine, jsonText, e.Message), e);
+            }
+        }
+
+        private static void CheckKpiInMeasures(string jsonText, Database jsonObject) {
+            foreach (var t in jsonObject.Model.Tables) {
+                if (t.Measures != null) {
+                    foreach (var m in t.Measures) {
+                        if (m.KPI != null) {
+                            throw new DaxException(string.Format("KPI not supported - remove KPI from measure {0} in table {1}", m.Name, t.Name) );
+                        }
+                    }
+                }
             }
         }
 
