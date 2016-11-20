@@ -145,7 +145,7 @@ namespace DaxEditor
             var rv = CreateDefaultCalculationProperty();
 
             rv.FormatString = measure.FormatString != null ? "'" + measure.FormatString + "'" : _defaultFormatString;
-            rv.DisplayFolder = measure.DisplayFolder ?? _defaultDisplayFolder;
+            rv.DisplayFolder = measure.DisplayFolder?.ToString()?.Replace("'", "`") ?? string.Empty;
             rv.Visible = !measure.IsHidden;
             rv.Description = measure.Description?.ToString()?.Replace("'", "`") ?? string.Empty;
 
@@ -216,7 +216,8 @@ namespace DaxEditor
             if (Format == FormatType.General && 
                 FormatString == _defaultFormatString &&
                 !(Visible.HasValue && Visible.Value == false)
-                && string.IsNullOrWhiteSpace(Description) )
+                && string.IsNullOrWhiteSpace(Description) 
+                && string.IsNullOrWhiteSpace(DisplayFolder) )
                 return string.Empty;
 
             string result;
@@ -298,7 +299,7 @@ namespace DaxEditor
                 writer.WriteElementString("Visible", "false");
             }
             if (!string.IsNullOrEmpty(DisplayFolder)) {
-                writer.WriteElementString("DisplayFolder", DisplayFolder.Trim('\''));
+                writer.WriteElementString("DisplayFolder", DisplayFolder.Trim('\'').Replace("`", "'"));
             }
 
             if (!string.IsNullOrEmpty(Description))
@@ -391,7 +392,7 @@ namespace DaxEditor
             
             if (!string.IsNullOrWhiteSpace(DisplayFolder))
             {
-                measure.DisplayFolder = DisplayFolder.Trim('\'');
+                measure.DisplayFolder = DisplayFolder.Trim('\'').Replace("`", "'");
             }
 
             if (!string.IsNullOrWhiteSpace(Description))
