@@ -42,10 +42,11 @@
             //var serializer = new XmlSerializer(typeof(Server));
             //serializer.Serialize(stream, server);
             //return new StreamReader(stream).ReadToEnd();
-            string path;
+            //string path;
             //server.Connect()
-            server.SendXmlaRequest(XmlaRequestType.Execute, GenerateStreamFromString(GenerateBackupXmla(out path)));
-            return File.ReadAllText(path);
+            //server.SendXmlaRequest(XmlaRequestType.Execute, GenerateStreamFromString(GenerateBackupXmla(out path)));
+            //return File.ReadAllText(path);
+            return string.Empty;
         }
     }
 }
