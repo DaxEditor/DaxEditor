@@ -145,7 +145,7 @@ namespace DaxEditor
             var rv = CreateDefaultCalculationProperty();
 
             rv.FormatString = measure.FormatString != null ? "'" + measure.FormatString + "'" : _defaultFormatString;
-            rv.DisplayFolder = measure.DisplayFolder?.ToString()?.Replace("'", "`") ?? string.Empty;
+            rv.DisplayFolder = measure.DisplayFolder?.ToString()?.Replace("'", "`") ?? _defaultDisplayFolder;
             rv.Visible = !measure.IsHidden;
             rv.Description = measure.Description?.ToString()?.Replace("'", "`") ?? string.Empty;
 
@@ -216,7 +216,7 @@ namespace DaxEditor
             if (Format == FormatType.General && 
                 FormatString == _defaultFormatString &&
                 !(Visible.HasValue && Visible.Value == false)
-                && string.IsNullOrWhiteSpace(Description) 
+                && string.IsNullOrWhiteSpace(Description)
                 && string.IsNullOrWhiteSpace(DisplayFolder) )
                 return string.Empty;
 
