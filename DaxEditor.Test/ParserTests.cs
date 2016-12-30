@@ -338,6 +338,108 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             Babel.Parser.Parser parser = ParseText(text);
         }
 
+        [TestMethod]
+        public void ParseExpressionRankX()
+        {
+            var text =
+                @"CREATE MEASURE 'TaxRefund'[Market Ranking TFS] = RANKX(All(Nationalities[Country]), [Net Tax Refund Sales], [Other measure], TRUE, DENSE);";
+            var parser = ParseText(text);
+
+            Assert.AreEqual(1, parser.Measures.Count);
+
+            var measure1 = parser.Measures[0];
+            Assert.AreEqual("TaxRefund", measure1.TableName);
+            Assert.AreEqual("Market Ranking TFS", measure1.Name);
+            Assert.AreEqual(@"RANKX(All(Nationalities[Country]), [Net Tax Refund Sales], [Other measure], TRUE, DENSE)", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'TaxRefund'[Market Ranking TFS] = RANKX(All(Nationalities[Country]), [Net Tax Refund Sales], [Other measure], TRUE, DENSE)", measure1.FullText);
+            Assert.IsNull(measure1.CalcProperty);
+        }
+
+        [TestMethod]
+        public void ParseExpressionWithComments()
+        {
+            var text = @"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */
+CALCULATION PROPERTY General Format='0';
+
+CREATE MEASURE 'Sales'[b] = 99
+/* Comment after measure definition */
+// Single line comment after measure definition
+CALCULATION PROPERTY General Format='0';
+
+CREATE MEASURE 'Sales'[c] = 1
+// Final comment without CALCULATION
+/* Final check
+*/
+";
+            var parser = ParseText(text);
+            
+            Assert.AreEqual(3, parser.Measures.Count);
+
+            var measure1 = parser.Measures.First();
+            Assert.AreEqual("Sales", measure1.TableName);
+            Assert.AreEqual("a", measure1.Name);
+            Assert.AreEqual(@"CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.FullText);
+            Assert.IsNotNull(measure1.CalcProperty);
+            Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
+            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
+            Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
+
+            var measure2 = parser.Measures[ 1 ];
+            Assert.AreEqual("Sales", measure2.TableName);
+            Assert.AreEqual("b", measure2.Name);
+            Assert.AreEqual(@"99
+/* Comment after measure definition */
+// Single line comment after measure definition", measure2.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Sales'[b] = 99
+/* Comment after measure definition */
+// Single line comment after measure definition", measure2.FullText);
+            Assert.IsNotNull(measure2.CalcProperty);
+            Assert.AreEqual(DaxCalcProperty.FormatType.General, measure2.CalcProperty.Format);
+            Assert.AreEqual("Member", measure2.CalcProperty.CalculationType);
+            Assert.IsFalse(measure2.CalcProperty.Accuracy.HasValue);
+
+            var measure3 = parser.Measures[2];
+            Assert.AreEqual("Sales", measure3.TableName);
+            Assert.AreEqual("c", measure3.Name);
+            Assert.AreEqual(@"1
+// Final comment without CALCULATION
+/* Final check
+*/", measure3.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Sales'[c] = 1
+// Final comment without CALCULATION
+/* Final check
+*/", measure3.FullText);
+            Assert.IsNull(measure3.CalcProperty);
+        }
+
         private static Babel.Parser.Parser ParseText(string text)
         {
             Babel.Parser.ErrorHandler handler = new Babel.Parser.ErrorHandler();

@@ -129,8 +129,11 @@ namespace DaxEditorSample.Test
             var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
             Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
 
-            //kpi not supported
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
             var document = JsonUtilities.Deserialize(text);
+            //kpi not supported
             document?.Model?.Tables?.ForEach(table =>
             {
                 table.Measures?.ForEach(measure =>
@@ -138,7 +141,8 @@ namespace DaxEditorSample.Test
                     measure.KPI = null;
                 });
             });
-            var expected = JsonUtilities.Serialize(document);
+            expected = JsonUtilities.Serialize(document);
+
             var actual = measuresFromDax.UpdateMeasures(text);
             WindiffAssert.AreEqual(expected, actual);
         }
@@ -181,6 +185,9 @@ namespace DaxEditorSample.Test
             var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
             Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
 
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
             var document = JsonUtilities.Deserialize(text);
             //kpi not supported
             document?.Model?.Tables?.ForEach(table =>
@@ -190,7 +197,8 @@ namespace DaxEditorSample.Test
                     measure.KPI = null;
                 });
             });
-            var expected = JsonUtilities.Serialize(document);
+            expected = JsonUtilities.Serialize(document);
+
             var actual = measuresFromDax.UpdateMeasures(text);
             WindiffAssert.AreEqual(expected, actual);
         }
@@ -207,8 +215,12 @@ namespace DaxEditorSample.Test
             var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
             Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
 
-            var document = JsonUtilities.Deserialize(text);
-            var expected = JsonUtilities.Serialize(document);
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
+            var document = JsonUtilities.Deserialize(expected);
+            expected = JsonUtilities.Serialize(document);
+
             var actual = measuresFromDax.UpdateMeasures(text);
             WindiffAssert.AreEqual(expected, actual);
         }
@@ -225,8 +237,56 @@ namespace DaxEditorSample.Test
             var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
             Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
 
-            var document = JsonUtilities.Deserialize(text);
-            var expected = JsonUtilities.Serialize(document);
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
+            var document = JsonUtilities.Deserialize(expected);
+            expected = JsonUtilities.Serialize(document);
+
+            var actual = measuresFromDax.UpdateMeasures(text);
+            WindiffAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WithComments_Json()
+        {
+            var text = Utils.ReadFileFromResources("WithComments_JSON.bim");
+            var bim = MeasuresContainer.ParseText(text);
+            Assert.IsNotNull(bim.Measures);
+            var daxText = bim.GetDaxText();
+            Assert.IsNotNull(daxText);
+
+            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
+            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
+
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
+            var document = JsonUtilities.Deserialize(expected);
+            expected = JsonUtilities.Serialize(document);
+
+            var actual = measuresFromDax.UpdateMeasures(text);
+            WindiffAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WithTranslations_Json()
+        {
+            var text = Utils.ReadFileFromResources("WithTranslations_JSON.bim");
+            var bim = MeasuresContainer.ParseText(text);
+            Assert.IsNotNull(bim.Measures);
+            var daxText = bim.GetDaxText();
+            Assert.IsNotNull(daxText);
+
+            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
+            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
+
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
+            var document = JsonUtilities.Deserialize(expected);
+            expected = JsonUtilities.Serialize(document);
+
             var actual = measuresFromDax.UpdateMeasures(text);
             WindiffAssert.AreEqual(expected, actual);
         }
