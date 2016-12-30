@@ -148,6 +148,12 @@
     <EmbeddedResource Include="Resources\NewMeasuresFuncs_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\WithComments_JSON.bim" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\WithTranslations_JSON.bim" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
