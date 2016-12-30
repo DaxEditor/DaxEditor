@@ -37,13 +37,14 @@ namespace DaxEditor
 
         public static MeasuresContainer ParseJsonAsText(string jsonText)
         {
-            try {
+            try
+            {
                 var jsonObject = JsonUtilities.Deserialize(jsonText);
                 Debug.Assert(null != jsonObject);
 
                 // TODO: remove this when KPI will be supported
                 CheckKpiInMeasures(jsonText, jsonObject);
-
+                
                 return ParseJsonAsJsonObject(jsonObject);
             }
             catch (Exception e)
@@ -52,12 +53,17 @@ namespace DaxEditor
             }
         }
 
-        private static void CheckKpiInMeasures(string jsonText, Database jsonObject) {
-            foreach (var t in jsonObject.Model.Tables) {
-                if (t.Measures != null) {
-                    foreach (var m in t.Measures) {
-                        if (m.KPI != null) {
-                            throw new DaxException(string.Format("KPI not supported - remove KPI from measure {0} in table {1}", m.Name, t.Name) );
+        private static void CheckKpiInMeasures(string jsonText, Database jsonObject)
+        {
+            foreach (var t in jsonObject.Model.Tables)
+            {
+                if (t.Measures != null)
+                {
+                    foreach (var m in t.Measures)
+                    {
+                        if (m.KPI != null)
+                        {
+                            throw new DaxException(string.Format("KPI not supported - remove KPI from measure {0} in table {1}", m.Name, t.Name));
                         }
                     }
                 }
@@ -231,7 +237,11 @@ namespace DaxEditor
 
             var document = JsonUtilities.Deserialize(inputJson);
             var jsonMeasures = MeasuresToJsonMeasures(Measures);
-
+            
+            //Fix Internal Exception
+            //var culturesText = JsonUtilities.SerializeCultures(document?.Model?.Cultures);
+            //document?.Model?.Cultures?.Clear();
+            
             var tables = document?.Model?.Tables;
             if (tables != null)
             {
@@ -255,7 +265,40 @@ namespace DaxEditor
                 }
             }
 
-            return JsonUtilities.Serialize(document);
+            /*
+            foreach (var culture in document?.Model?.Cultures)
+            {
+                foreach (var translation in culture.ObjectTranslations)
+                {
+                    foreach (var error in translation.Validate().Errors)
+                    {
+                        Console.WriteLine(error.Message);
+                        Console.WriteLine(translation.Object);
+                    }
+                    var obj = translation.Object;
+                    if (obj.ObjectType == ObjectType.Measure)
+                    {
+                        var objMeasure = obj as Measure;
+                        foreach (var table in document?.Model?.Tables)
+                        {
+                            foreach (var measure in table.Measures)
+                            {
+                                if (measure.Name == objMeasure.Name)
+                                {
+                                    translation.Object = measure;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            */
+
+            var json = JsonUtilities.Serialize(document);
+            //var indexOfTables = json.IndexOf("\"tables\":");
+            //json = indexOfTables != -1 ? json.Insert(indexOfTables, culturesText) : json;
+            //Console.WriteLine(json);
+            return json;
         }
 
         public string UpdateMeasures(string text)

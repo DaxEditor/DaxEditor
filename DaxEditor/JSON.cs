@@ -8,7 +8,7 @@
         {
             return text[0] != '<';
         }
-
+        
         public static Database Deserialize(string text)
         {
             return JsonSerializer.DeserializeDatabase(text);
@@ -21,14 +21,47 @@
             return JsonSerializer.SerializeDatabase(database, options);
         }
 
+        public static string SerializeCulture(Culture culture)
+        {
+            var options = new SerializeOptions();
+            options.SplitMultilineStrings = true;
+            return JsonSerializer.SerializeObject(culture, options);
+        }
+
+        public static string SerializeCultures(CultureCollection cultures)
+        {
+            if (cultures == null)
+            {
+                return string.Empty;
+            }
+
+            var culturesText = string.Empty;
+            int i = 0;
+            foreach (var culture in cultures)
+            {
+                culturesText += i > 0 ? "," + System.Environment.NewLine : string.Empty;
+                culturesText += SerializeCulture(culture);
+                ++i;
+            }
+
+            if (string.IsNullOrWhiteSpace(culturesText))
+            {
+                return string.Empty;
+            }
+
+            culturesText = "\"cultures\": [" + System.Environment.NewLine +
+                culturesText + System.Environment.NewLine + "]," + System.Environment.NewLine;
+            return culturesText;
+        }
+
         //Custom implementation
         /*
-        public static Tabular.Database Parse(string text)
+        public static Tabular.Database Deserialize(string text)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Tabular.Database>(text);
         }
 
-        public static string ToString(this Tabular.Database database)
+        public static string Serialize(Tabular.Database database)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(database, Newtonsoft.Json.Formatting.Indented);
         }
@@ -178,6 +211,9 @@
             [JsonProperty(PropertyName = "kpi", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public KPI KPI { get; set; }
 
+            [JsonProperty(PropertyName = "translatedCaption", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+            public string TranslatedCaption { get; set; }
+
             [JsonProperty(PropertyName = "annotations", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public IList<Annotation> Annotations { get; set; }
         }
@@ -288,6 +324,9 @@
             [JsonProperty(PropertyName = "isDefaultLabel", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public bool? IsDefaultLabel { get; set; }
 
+            [JsonProperty(PropertyName = "translatedCaption", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+            public string TranslatedCaption { get; set; }
+
             [JsonProperty(PropertyName = "annotations", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public IList<Annotation> Annotations { get; set; }
         }
@@ -307,7 +346,7 @@
             [JsonProperty(PropertyName = "isHidden", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public bool? IsHidden { get; set; }
 
-            [JsonProperty(PropertyName = "columns", Required = Required.Always)]
+            [JsonProperty(PropertyName = "columns", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public IList<Column> Columns { get; set; }
 
             [JsonProperty(PropertyName = "partitions", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -360,6 +399,30 @@
 
             [JsonProperty(PropertyName = "annotations", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public IList<Annotation> Annotations { get; set; }
+        }
+
+        public class TranslationModel
+        {
+            [JsonProperty(PropertyName = "name", Required = Required.Always)]
+            public string Name { get; set; }
+
+            [JsonProperty(PropertyName = "tables", Required = Required.Always)]
+            public IList<Table> Tables { get; set; }
+        }
+
+        public class Translation
+        {
+            [JsonProperty(PropertyName = "model", Required = Required.Always)]
+            public TranslationModel Model { get; set; }
+        }
+
+        public class Culture
+        {
+            [JsonProperty(PropertyName = "name", Required = Required.Always)]
+            public string Name { get; set; }
+
+            [JsonProperty(PropertyName = "translations", Required = Required.Always)]
+            public Translation Translations { get; set; }
         }
 
         public class Perspective
@@ -499,6 +562,9 @@
 
             [JsonProperty(PropertyName = "relationships", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public IList<Relationship> Relationships { get; set; }
+
+            [JsonProperty(PropertyName = "cultures", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+            public IList<Culture> Cultures { get; set; }
 
             [JsonProperty(PropertyName = "perspectives", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
             public IList<Perspective> Perspectives { get; set; }
