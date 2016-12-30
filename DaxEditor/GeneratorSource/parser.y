@@ -83,9 +83,25 @@ Start
     | Empty
     ;
 
+Order
+    : KWASC
+    | KWDESC
+    ;
+
+OrderByList
+    : Expression Order ',' OrderByList
+    | Expression ',' OrderByList
+    | Expression Order
+    | Expression
+    ;
+
+OrderBy
+    : KWORDER KWBY OrderByList
+    ;
+
 DaxQueries
     : DaxQuery
-    | DaxQuery DaxQueries
+    | DaxQueries DaxQuery
     ;
 
 DaxQuery
@@ -211,6 +227,10 @@ VarDeclarations
     : VarDeclaration
     | VarDeclarations VarDeclaration
     ;
+    
+VarExpression
+    : VarDeclarations KWRETURN Expression
+    ;
 
 CalculationPropertyParams
     : CalculationPropertyVisible
@@ -237,22 +257,6 @@ CalculationProperty
 Definitions
     : KWMEASURE QueryMeasureName EQ QueryMeasureExpression
     | KWMEASURE QueryMeasureName EQ QueryMeasureExpression Definitions
-    ;
-
-OrderBy
-    : KWORDER KWBY OrderByList
-    ;
-
-OrderByList
-    : Expression Order ',' OrderByList
-    | Expression ',' OrderByList
-    | Expression Order
-    | Expression
-    ;
-
-Order
-    : KWASC
-    | KWDESC
     ;
 
 Params1
@@ -293,7 +297,7 @@ TableRef
     : TABLENAME 
     | ESCAPEDTABLENAME
     | FUNCTION  /* Very special case when a table name is the same as function name, but it is not wrapped in quotes */
-    | DataTable
+    | DataTableFunction
     ;
 
 TableExpression
@@ -302,11 +306,7 @@ TableExpression
     ;
 
 DataTableValue
-    : 
-    | KWTRUE
-    | KWFALSE
-    | NUMBER
-    | STRING
+    : /* empty */
     | FunctionCall
     | ScalarExpression
     ;
@@ -340,28 +340,28 @@ DataTableColumns
     ;
 
 DataTable
-    : KWDATATABLE '(' DataTableColumns ',' '{' DataTableRows '}' ')'    { StartFunction(@1, $1.str); }
+    : KWDATATABLE '(' DataTableColumns ',' '{' DataTableRows '}' ')'
     ;
-    
-VarExpression
-    : VarDeclarations KWRETURN Expression
+
+DataTableFunction
+    : DataTable                     { StartFunction(@1, $1.str); }
     ;
 
 RankXTies
-    :
+    : /* empty */
     | KWSKIP
     | KWDENSE
     ;
 
 RankXOrder
-    :
+    : /* empty */
     | NUMBER
     | KWTRUE
     | KWFALSE
     ;
 
 RankXValue
-    :
+    : /* empty */
     | ScalarExpression
     ;
 
@@ -375,7 +375,7 @@ RankX
 RankXFunction
     : RankX                         { StartFunction(@1, $1.str); }
     ;
-    
+
 MeasureExpression
     : Expression                    { SpecifyMeasureExpression(@1); }
     ;
@@ -401,8 +401,8 @@ ScalarExpression
     ;
 
 Expression
-    : TableExpression
-    | ScalarExpression
+    : TableExpression 
+	| ScalarExpression
     | VarExpression
     ;
 
@@ -454,7 +454,7 @@ FunctionName
 
 FunctionArgs
     : StartArg
-    | ParenthesisParameters
+	| ParenthesisParameters
     ;
 
 

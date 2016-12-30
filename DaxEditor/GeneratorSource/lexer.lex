@@ -68,6 +68,7 @@ The project released under MS-PL license https://daxeditor.codeplex.com/license
                 if(prevChar == '\n')
                     lineStartList.Add(position);
             }
+            lineStartList.Add(textChars.Length - 1);
 
             _lineStartArray = lineStartList.ToArray();
        }
@@ -77,7 +78,7 @@ The project released under MS-PL license https://daxeditor.codeplex.com/license
        /// </summary>
        private int FindBegginingOfLinePosition(int line)
        {
-            Debug.Assert(line > 0 && line < _lineStartArray.Length + 1);
+            Debug.Assert(line > 0 && line < _lineStartArray.Length);
             return _lineStartArray[line - 1];
        }
 %}

@@ -99,10 +99,16 @@ namespace Babel.Parser
                 TakeWhile(c => char.IsWhiteSpace(c) && c!='\n').Count() + startIndex;
         }
 
+        private string GetLineText(int line)
+        {
+            return scanner.GetText(new LexLocation(line, 0, line + 1, 0));
+        }
+
         public void SpecifyMeasureExpression(LexLocation s)
         {
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure.Expression == null);
+
             //Empty line before VAR fix
             for (int i = s.sLin; i >= 0; --i)
             {
@@ -117,6 +123,73 @@ namespace Babel.Parser
                     break;
                 }
             }
+
+            //Append comments to expression
+            //Add all content before non commented symvol(exclude whitespaces) or EOF
+            var lastNonWhitespaceLine = s.eLin;
+            var lastNonWhitespaceCol = s.eCol - 1;
+            try
+            {
+                var inMultilineComment = false;
+                for (var line = s.eLin; ; ++line)
+                {
+                    var inSingleLineComment = false;
+                    var lineText = GetLineText(line);
+                    var prevSymvol = '\n';
+                    for (var col = line == s.eLin ? s.eCol : 0; col < lineText.Length - 1; ++col)
+                    {
+                        var c = lineText[col];
+
+                        if (prevSymvol == '/' && c == '*')
+                        {
+                            Debug.WriteLine($"Start multiline comment. Line: {line}, Col: {col}, char: {c}");
+                            inMultilineComment = true;
+                        }
+                        if (prevSymvol == '*' && c == '/')
+                        {
+                            Debug.WriteLine($"End multiline comment. Line: {line}, Col: {col}, char: {c}");
+                            inMultilineComment = false;
+                            lastNonWhitespaceLine = line;
+                            lastNonWhitespaceCol = col;
+                        }
+                        if (prevSymvol == '/' && c == '/')
+                        {
+                            Debug.WriteLine($"Start single line comment. Line: {line}, Col: {col}, char: {c}");
+                            inSingleLineComment = true;
+                        }
+
+                        //As soon as we meet the first uncommented symbol - 
+                        //we exit the loop
+                        if (!inMultilineComment &&
+                            !inSingleLineComment &&
+                            !char.IsWhiteSpace(c) &&
+                            !char.IsControl(c) &&
+                            c != '/')
+                        {
+                            Debug.WriteLine($"Final Line: {line}, Col: {col}, char: {c}");
+                            throw new Exception("Instead goto");
+                        }
+
+                        if (!char.IsWhiteSpace(c) &&
+                            !char.IsControl(c))
+                        {
+                            Debug.WriteLine($"Line: {line}, Col: {col}, char: {c}");
+                            lastNonWhitespaceLine = line;
+                            lastNonWhitespaceCol = col;
+                        }
+                        prevSymvol = c;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //We have reached the end of the file or received our exception.
+                s.eLin = lastNonWhitespaceLine;
+                s.eCol = lastNonWhitespaceCol + 1;
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.StackTrace);
+            }
+
             lastMeasure.Expression = scanner.GetText(s);
         }
 
