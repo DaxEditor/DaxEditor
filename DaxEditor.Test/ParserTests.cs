@@ -440,6 +440,174 @@ CREATE MEASURE 'Sales'[c] = 1
             Assert.IsNull(measure3.CalcProperty);
         }
 
+        [TestMethod]
+        public void ParseExpressionWithKPI1()
+        {
+            var text = @"CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )
+CALCULATION 
+    PROPERTY Currency 
+	Accuracy=2 
+	Description=""Description of Value""
+
+    KpiDescription = ""Description of KPI""
+    KpiTargetDescription = ""Description of Target""
+    KpiTargetExpression = 'Test'[Budget]
+    KpiStatusGraphic = ""Traffic Light - Single""
+    KpiStatusDescription = ""Description of Status""
+
+    KpiStatusExpression =
+     var x = 'Test'[Sales1] / 'Test'[_Sales1 Goal]
+
+     return
+
+         if (ISBLANK(x),BLANK(),
+			 If(x < 0.4, -1,
+                 If(x < 0.8, 0, 1)
+             )
+		 )
+    KpiAnnotations = 'GoalType=""Measure"", KpiStatusType= ""Linear"", KpiThresholdType=""Percentage"", KpiThresholdOrdering=""Ascending"", KpiThresholdCount=""2"", KpiThreshold_0=""40"",KpiThreshold_1 =""80""
+	;";
+            var parser = ParseText(text);
+
+            Assert.AreEqual(3, parser.Measures.Count);
+
+            var measure1 = parser.Measures.First();
+            Assert.AreEqual("Sales", measure1.TableName);
+            Assert.AreEqual("a", measure1.Name);
+            Assert.AreEqual(@"CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.FullText);
+            Assert.IsNotNull(measure1.CalcProperty);
+            Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
+            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
+            Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
+        }
+
+        [TestMethod]
+        public void ParseExpressionWithKPI2()
+        {
+            var text = @"CREATE MEASURE 'Test'[Sales2] =  SUM ( Test[Value] ) / 2
+CALCULATION 
+    PROPERTY General 
+    KpiTargetExpression = 8
+    KpiStatusGraphic = ""Five Bars Colored""
+	KpiStatusExpression = 
+var x='Test'[Sales2] 
+return
+    if(ISBLANK(x),BLANK(),
+        If(x<3.2,"",
+            If(x<1.6,-2,-1),
+			If(x<4.8,0,
+				If(x<6.4,1,2)
+            )
+        )
+	)
+    KpiAnnotations = 'GoalType=""StaticValue"",KpiStatusType=""Linear"",KpiThresholdType=""Absolute"",KpiThresholdOrdering=""Ascending"",KpiThresholdCount=""4"",KpiThreshold_0=""1.6"",KpiThreshold_1=""3.2"",KpiThreshold_2= ""4.8"",KpiThreshold_3=""6.4""'
+	;";
+            var parser = ParseText(text);
+
+            Assert.AreEqual(3, parser.Measures.Count);
+
+            var measure1 = parser.Measures.First();
+            Assert.AreEqual("Sales", measure1.TableName);
+            Assert.AreEqual("a", measure1.Name);
+            Assert.AreEqual(@"CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.FullText);
+            Assert.IsNotNull(measure1.CalcProperty);
+            Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
+            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
+            Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
+        }
+
+        [TestMethod]
+        public void ParseExpressionWithKPI3()
+        {
+            var text = @"CREATE MEASURE 'Test'[Sales3] =  SUM ( Test[Value] ) / 3
+CALCULATION 
+    PROPERTY General
+    KpiTargetExpression = 'Test'[Budget]
+    KpiStatusGraphic = ""Traffic Light - Single""
+	KpiStatusExpression = 
+var x='Test'[Sales3]/'Test'[_Sales3 Goal] 
+return
+    if(ISBLANK(x),BLANK(),
+        If(x<0.67,
+            If(x<0.34,-1,0),
+			If(x<1.33,1,
+				If(x<1.66,0,-1)
+			)
+		)
+	)
+    KpiAnnotations = 'GoalType=""Measure"",KpiStatusType=""Centered"",KpiThresholdType=""Percentage"",KpiThresholdOrdering=""Ascending"",KpiThresholdCount=""4"",KpiThreshold_0=""34"",KpiThreshold_1=""67"",KpiThreshold_2= ""133"",KpiThreshold_3=""166""'
+	;";
+            var parser = ParseText(text);
+
+            Assert.AreEqual(3, parser.Measures.Count);
+
+            var measure1 = parser.Measures.First();
+            Assert.AreEqual("Sales", measure1.TableName);
+            Assert.AreEqual("a", measure1.Name);
+            Assert.AreEqual(@"CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
+    [b], -- Comment with dash
+    Sales[Quantity]  > 0 /* Comment
+    on multiple 
+    lines */
+ )
+ // Final comment after expression
+ /* Multiline final comment 
+  * after 
+  * expression */", measure1.FullText);
+            Assert.IsNotNull(measure1.CalcProperty);
+            Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
+            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
+            Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
+        }
+
         private static Babel.Parser.Parser ParseText(string text)
         {
             Babel.Parser.ErrorHandler handler = new Babel.Parser.ErrorHandler();
