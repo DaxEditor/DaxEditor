@@ -1,0 +1,235 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "culture": "en-US",
+    "tables": [
+      {
+        "name": "Test",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Name",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Name]"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Value",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Value]"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Test",
+            "source": {
+              "type": "calculated",
+              "expression": [
+                "DataTable(\"Name\", STRING,",
+                "\"Value\", INTEGER,",
+                "{",
+                "\t{\"a\",1},",
+                "\t{\"b\",2},",
+                "\t{\"c\",3}",
+                "}",
+                ")"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Budget",
+            "expression": " 4"
+          },
+          {
+            "name": "Sales1",
+            "description": "Description of Value",
+            "expression": " SUM ( Test[Value] )",
+            "kpi": {
+              "description": "Description of KPI",
+              "targetDescription": "Description of Target",
+              "targetExpression": "'Test'[Budget]",
+              "targetFormatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+              "statusGraphic": "Traffic Light - Single",
+              "statusDescription": "Description of Status",
+              "statusExpression": [
+                "var x='Test'[Sales1]/'Test'[_Sales1 Goal] return",
+                "            if(ISBLANK(x),BLANK(),",
+                "                    If(x<0.4,-1,",
+                "\t                If(x<0.8,0,1)",
+                "                )",
+                "            )",
+                "            "
+              ],
+              "annotations": [
+                {
+                  "name": "GoalType",
+                  "value": "Measure"
+                },
+                {
+                  "name": "KpiStatusType",
+                  "value": "Linear"
+                },
+                {
+                  "name": "KpiThresholdType",
+                  "value": "Percentage"
+                },
+                {
+                  "name": "KpiThresholdOrdering",
+                  "value": "Ascending"
+                },
+                {
+                  "name": "KpiThresholdCount",
+                  "value": "2"
+                },
+                {
+                  "name": "KpiThreshold_0",
+                  "value": "40"
+                },
+                {
+                  "name": "KpiThreshold_1",
+                  "value": "80"
+                }
+              ]
+            },
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Sales2",
+            "expression": " SUM ( Test[Value] ) / 2",
+            "kpi": {
+              "targetExpression": "8",
+              "statusGraphic": "Five Bars Colored",
+              "statusExpression": [
+                "var x='Test'[Sales2] return",
+                "            if(ISBLANK(x),BLANK(),",
+                "                If(x<3.2,",
+                "\t                If(x<1.6,-2,-1),",
+                "\t                If(x<4.8,0,",
+                "\t\t                If(x<6.4,1,2)",
+                "\t                    )",
+                "                    )",
+                "                )",
+                "                "
+              ],
+              "annotations": [
+                {
+                  "name": "GoalType",
+                  "value": "StaticValue"
+                },
+                {
+                  "name": "KpiStatusType",
+                  "value": "Linear"
+                },
+                {
+                  "name": "KpiThresholdType",
+                  "value": "Absolute"
+                },
+                {
+                  "name": "KpiThresholdOrdering",
+                  "value": "Ascending"
+                },
+                {
+                  "name": "KpiThresholdCount",
+                  "value": "4"
+                },
+                {
+                  "name": "KpiThreshold_0",
+                  "value": "1.6"
+                },
+                {
+                  "name": "KpiThreshold_1",
+                  "value": "3.2"
+                },
+                {
+                  "name": "KpiThreshold_2",
+                  "value": "4.8"
+                },
+                {
+                  "name": "KpiThreshold_3",
+                  "value": "6.4"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Sales3",
+            "expression": " [Sales1] / 3",
+            "kpi": {
+              "targetExpression": "'Test'[Budget]",
+              "statusGraphic": "Traffic Light - Single",
+              "statusExpression": [
+                "var x='Test'[Sales3]/'Test'[_Sales3 Goal] return",
+                "            if(ISBLANK(x),BLANK(),",
+                "                If(x<0.67,",
+                "\t                If(x<0.34,-1,0),",
+                "\t                If(x<1.33,1,",
+                "\t\t                If(x<1.66,0,-1)",
+                "\t                    )",
+                "                    )",
+                "                )",
+                "                "
+              ],
+              "annotations": [
+                {
+                  "name": "GoalType",
+                  "value": "Measure"
+                },
+                {
+                  "name": "KpiStatusType",
+                  "value": "Centered"
+                },
+                {
+                  "name": "KpiThresholdType",
+                  "value": "Percentage"
+                },
+                {
+                  "name": "KpiThresholdOrdering",
+                  "value": "Ascending"
+                },
+                {
+                  "name": "KpiThresholdCount",
+                  "value": "4"
+                },
+                {
+                  "name": "KpiThreshold_0",
+                  "value": "34"
+                },
+                {
+                  "name": "KpiThreshold_1",
+                  "value": "67"
+                },
+                {
+                  "name": "KpiThreshold_2",
+                  "value": "133"
+                },
+                {
+                  "name": "KpiThreshold_3",
+                  "value": "166"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "400"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}

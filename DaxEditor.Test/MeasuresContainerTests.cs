@@ -209,5 +209,27 @@ namespace DaxEditorSample.Test
             var actual = measuresFromDax.UpdateMeasures(text);
             WindiffAssert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void WithKPI_Json()
+        {
+            var text = Utils.ReadFileFromResources("WithKPI_JSON.bim");
+            var bim = MeasuresContainer.ParseText(text);
+            Assert.IsNotNull(bim.Measures);
+            var daxText = bim.GetDaxText();
+            Assert.IsNotNull(daxText);
+
+            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
+            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
+
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
+            var document = JsonUtilities.Deserialize(expected);
+            expected = JsonUtilities.Serialize(document);
+
+            var actual = measuresFromDax.UpdateMeasures(text);
+            WindiffAssert.AreEqual(expected, actual);
+        }
     }
 }
