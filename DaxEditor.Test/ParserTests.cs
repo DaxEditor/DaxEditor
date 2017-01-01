@@ -227,16 +227,8 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
         [TestMethod]
         public void ParseKPI()
         {
-            try
-            {
-                var text = @"CREATE KPI CURRENTCUBE.[Products with Negative Stock] AS Measures.[Products with Negative Stock], ASSOCIATED_MEASURE_GROUP = 'Product Inventory', GOAL = Measures.[_Products with Negative Stock Goal], STATUS = Measures.[_Products with Negative Stock Status], STATUS_GRAPHIC = 'Three Symbols UnCircled Colored';";
-                Babel.Parser.Parser parser = ParseText(text);
-                Assert.Fail("Exception expected");
-            }
-            catch (Exception e)
-            {
-                StringAssert.Contains(e.Message, "KPI are not yet supported");
-            }
+            var text = @"CREATE KPI CURRENTCUBE.[Products with Negative Stock] AS Measures.[Products with Negative Stock], ASSOCIATED_MEASURE_GROUP = 'Product Inventory', GOAL = Measures.[_Products with Negative Stock Goal], STATUS = Measures.[_Products with Negative Stock Status], STATUS_GRAPHIC = 'Three Symbols UnCircled Colored';";
+            var parser = ParseText(text);
         }
 
         [TestMethod]
