@@ -29,57 +29,50 @@ namespace DaxEditor
         public FormatType Format { get; set; }
         public int? Accuracy { get; set; }
         public bool? ThousandSeparator { get; set; }
-        public string FormatString { get; set; }
         public string CalculationType { get; set; }
         public string CustomFormat { get; set; }
-        public bool? Visible { get; set; }
-        public string DisplayFolder { get; set; } 
-        public string Description { get; set; }
         public KPI KPI { get; set; }
-
-        private static readonly string _defaultFormatString = string.Empty;
-        private static readonly string _defaultDisplayFolder = string.Empty;
+        public Measure Measure { get; set; }
+        
         private static readonly string _defaultCalculationType = "Member";
 
         private DaxCalcProperty()
         {
+            Measure = new Measure();
         }
 
         public static DaxCalcProperty CreateDefaultCalculationProperty()
         {
             var rv = new DaxCalcProperty();
-            rv.FormatString = _defaultFormatString;
-            rv.DisplayFolder = _defaultDisplayFolder;
             rv.CalculationType = _defaultCalculationType;
-            rv.Description = string.Empty;
             return rv;
         }
 
         public static DaxCalcProperty CreateFromXElement(XElement cp)
         {
-            var rv = new DaxCalcProperty();
+            var rv = CreateDefaultCalculationProperty();
 
             if (cp != null)
             {
                 Debug.Assert(cp.Name.LocalName == "CalculationProperty");
                 var annotations = cp.Element(MeasuresContainer.NS + "Annotations");
                 var formatStringElement = cp.Element(MeasuresContainer.NS + "FormatString");
-                rv.FormatString = formatStringElement != null ? formatStringElement.Value.Trim('\'') : _defaultFormatString;
+                rv.Measure.FormatString = formatStringElement?.Value?.Trim('\'');
                 
                 var calculationTypeElement = cp.Element(MeasuresContainer.NS + "CalculationType");
                 rv.CalculationType = calculationTypeElement != null ? calculationTypeElement.Value : _defaultCalculationType;
 
                 var displayFolderElement = cp.Element(MeasuresContainer.NS + "DisplayFolder");
                 if (displayFolderElement != null)
-                    rv.DisplayFolder = displayFolderElement != null ? displayFolderElement.Value : _defaultDisplayFolder;
+                    rv.Measure.DisplayFolder = displayFolderElement.Value;
                 
                 var visibleElement = cp.Element(MeasuresContainer.NS + "Visible");
                 if (visibleElement != null)
-                    rv.Visible = bool.Parse ( visibleElement.Value );
+                    rv.Measure.IsHidden = !bool.Parse(visibleElement.Value);
 
                 var descriptionElement = cp.Element(MeasuresContainer.NS + "Description");
                 if (descriptionElement != null)
-                    rv.Description = descriptionElement.Value.Replace("'", "`");
+                    rv.Measure.Description = descriptionElement.Value.Replace("'", "`");
 
                 if (annotations != null)
                 {
@@ -126,12 +119,6 @@ namespace DaxEditor
                     }
                 }
             }
-            else
-            {
-                rv.FormatString = _defaultFormatString;
-                rv.CalculationType = "Member";
-                rv.DisplayFolder = _defaultDisplayFolder;
-            }
 
             return rv;
         }
@@ -145,10 +132,10 @@ namespace DaxEditor
 
             var rv = CreateDefaultCalculationProperty();
 
-            rv.FormatString = measure.FormatString?.Trim('\'') ?? _defaultFormatString;
-            rv.DisplayFolder = measure.DisplayFolder?.ToString()?.Replace("'", "`") ?? _defaultDisplayFolder;
-            rv.Visible = !measure.IsHidden;
-            rv.Description = measure.Description?.ToString()?.Replace("'", "`") ?? string.Empty;
+            rv.Measure.FormatString = measure.FormatString?.Trim('\'');
+            rv.Measure.DisplayFolder = measure.DisplayFolder?.Replace("'", "`");
+            rv.Measure.IsHidden = measure.IsHidden;
+            rv.Measure.Description = measure.Description?.Replace("'", "`");
 
             if (measure.KPI != null)
             {
@@ -181,7 +168,7 @@ namespace DaxEditor
             Debug.Assert(formatValueElement.Name == "Format");
             var formatString = formatValueElement.Attribute("Format").Value;
             rv.Format = (FormatType)Enum.Parse(typeof(FormatType), formatString);
-
+            
             switch (rv.Format)
             {
                 case FormatType.General:
@@ -245,10 +232,10 @@ namespace DaxEditor
         {
             // skip property only if general and visible
             if (Format == FormatType.General &&
-                FormatString == _defaultFormatString &&
-                !(Visible.HasValue && Visible.Value == false) &&
-                string.IsNullOrWhiteSpace(Description) &&
-                string.IsNullOrWhiteSpace(DisplayFolder) &&
+                !Measure.IsHidden &&
+                string.IsNullOrWhiteSpace(Measure.FormatString) &&
+                string.IsNullOrWhiteSpace(Measure.Description) &&
+                string.IsNullOrWhiteSpace(Measure.DisplayFolder) &&
                 KPI == null)
             {
                 return string.Empty;
@@ -268,7 +255,7 @@ namespace DaxEditor
                 case FormatType.DateTimeShortDatePattern:
                 case FormatType.DateTimeGeneral:
                     result = "CALCULATION PROPERTY " + Format.ToString();
-                    if (Visible.HasValue && Visible.Value == false)
+                    if (Measure.IsHidden)
                         result += " Visible=False";
 
                     if (Accuracy.HasValue)
@@ -277,10 +264,10 @@ namespace DaxEditor
                     if (ThousandSeparator.HasValue && ThousandSeparator.Value == true)
                         result += " ThousandSeparator=True";
 
-                    result = AppendIfNotEmpty(result, "Format", FormatString, "\'");
+                    result = AppendIfNotEmpty(result, "Format", Measure.FormatString, "\'");
                     result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, "\'");
-                    result = AppendIfNotEmpty(result, "DisplayFolder", DisplayFolder, "\'");
-                    result = AppendIfNotEmpty(result, "Description", Description, "\'");
+                    result = AppendIfNotEmpty(result, "DisplayFolder", Measure.DisplayFolder, "\'");
+                    result = AppendIfNotEmpty(result, "Description", Measure.Description, "\'");
 
                     break;
                 default:
@@ -328,7 +315,7 @@ namespace DaxEditor
 
             writer.WriteStartElement("Annotation");
             writer.WriteElementString("Name", "IsPrivate");
-            writer.WriteElementString("Value", (Visible.HasValue && (Visible.Value == false)) ? "True" : "False");
+            writer.WriteElementString("Value", Measure.IsHidden ? "True" : "False");
             writer.WriteEndElement(); // Annotation
 
             writer.WriteStartElement("Annotation");
@@ -345,16 +332,16 @@ namespace DaxEditor
             writer.WriteEndElement(); // Annotations
             writer.WriteElementString("CalculationReference", measureName);
             writer.WriteElementString("CalculationType", "Member");
-            writer.WriteElementString("FormatString", $"\'{FormatString}\'");
-            if (Visible.HasValue && (Visible.Value == false)) {
+            writer.WriteElementString("FormatString", $"\'{Measure.FormatString}\'");
+            if (Measure.IsHidden) {
                 writer.WriteElementString("Visible", "false");
             }
-            if (!string.IsNullOrEmpty(DisplayFolder)) {
-                writer.WriteElementString("DisplayFolder", DisplayFolder.Trim('\'').Replace("`", "'"));
+            if (!string.IsNullOrEmpty(Measure.DisplayFolder)) {
+                writer.WriteElementString("DisplayFolder", Measure.DisplayFolder.Trim('\'').Replace("`", "'"));
             }
 
-            if (!string.IsNullOrEmpty(Description))
-                writer.WriteElementString("Description", Description.Trim('\'').Replace("`", "'"));
+            if (!string.IsNullOrEmpty(Measure.Description))
+                writer.WriteElementString("Description", Measure.Description.Trim('\'').Replace("`", "'"));
             
 
             writer.WriteEndElement(); // CalculationProperty
@@ -417,17 +404,13 @@ namespace DaxEditor
             //measure.Annotations = measure.Annotations ?? new List<Annotation>();
             //measure.Annotations.Add(nameAnnotation);
 
-            var isPrivate = Visible.HasValue && Visible.Value == false;
-            if (isPrivate)
-            {
-                measure.IsHidden = true;
+            measure.IsHidden = Measure.IsHidden;
 
-                //var annotation = new Annotation();
-                //annotation.Name = "IsPrivate";
-                //annotation.Value = new Json.Tabular.String("True");
-                //measure.Annotations = measure.Annotations ?? new List<Annotation>();
-                //measure.Annotations.Add(annotation);
-            }
+            //var annotation = new Annotation();
+            //annotation.Name = "IsPrivate";
+            //annotation.Value = new Json.Tabular.String("True");
+            //measure.Annotations = measure.Annotations ?? new List<Annotation>();
+            //measure.Annotations.Add(annotation);
 
             var formatAnnotationValue = produceFormatXmlString();
             if (!string.IsNullOrWhiteSpace(formatAnnotationValue))
@@ -439,16 +422,16 @@ namespace DaxEditor
                 measure.Annotations.Add(annotation);
             }
 
-            measure.FormatString = FormatString == _defaultFormatString ? null : FormatString;
+            measure.FormatString = Measure.FormatString;
             
-            if (!string.IsNullOrWhiteSpace(DisplayFolder))
+            if (!string.IsNullOrWhiteSpace(Measure.DisplayFolder))
             {
-                measure.DisplayFolder = DisplayFolder.Trim('\'').Replace("`", "'");
+                measure.DisplayFolder = Measure.DisplayFolder.Trim('\'').Replace("`", "'");
             }
 
-            if (!string.IsNullOrWhiteSpace(Description))
+            if (!string.IsNullOrWhiteSpace(Measure.Description))
             {
-                measure.Description = Description.Trim('\'').Replace("`","'");
+                measure.Description = Measure.Description.Trim('\'').Replace("`","'");
             }
 
             if (KPI != null)

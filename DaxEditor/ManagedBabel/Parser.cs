@@ -228,11 +228,10 @@ namespace Babel.Parser
             lastMeasure.CalcProperty.Accuracy = int.Parse(accuracyText);
         }
 
-        public void SpecifyCalcPropVisible(bool isVisible) {
+        public void SpecifyCalcPropIsHidden(bool isHidden) {
             var lastMeasure = measures.Last();
-            Debug.Assert(lastMeasure != null);
-            Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.Visible = isVisible;
+            Debug.Assert(lastMeasure?.CalcProperty?.Measure != null);
+            lastMeasure.CalcProperty.Measure.IsHidden = isHidden;
         }
 
         public void SpecifyCalcPropDescription(LexLocation location)
@@ -240,7 +239,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.Description = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.Measure.Description = scanner.GetText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiDescription(LexLocation location)
@@ -364,7 +363,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.DisplayFolder = scanner.GetText(location);
+            lastMeasure.CalcProperty.Measure.DisplayFolder = scanner.GetText(location);
         }
 
         public void SpecifyCalcPropThousandSeparator(bool hasThousandSeparator)
@@ -380,7 +379,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.FormatString = scanner.GetText(location).Trim('\'');
+            lastMeasure.CalcProperty.Measure.FormatString = scanner.GetText(location).Trim('\'');
         }
 
         public void SpecifyCalcPropAdditionalInfo(LexLocation location)

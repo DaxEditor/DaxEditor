@@ -810,11 +810,11 @@ public partial class Parser: ShiftReduceParser<LexValue, LexLocation>
         break;
       case 60: // CalculationPropertyVisible -> KWVISIBLE EQ KWTRUE 
 #line 188 "../../GeneratorSource/parser.y"
-			{ SpecifyCalcPropVisible(true); }
+			{ SpecifyCalcPropIsHidden(false); }
         break;
       case 61: // CalculationPropertyVisible -> KWVISIBLE EQ KWFALSE 
 #line 189 "../../GeneratorSource/parser.y"
-			{ SpecifyCalcPropVisible(false); }
+			{ SpecifyCalcPropIsHidden(true); }
         break;
       case 62: // CalculationPropertyVisible -> KWVISIBLE error 
 #line 190 "../../GeneratorSource/parser.y"

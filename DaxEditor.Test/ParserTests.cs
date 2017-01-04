@@ -471,7 +471,7 @@ CALCULATION
             Assert.IsNotNull(measure1.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.Currency, measure1.CalcProperty.Format);
             Assert.AreEqual(2, measure1.CalcProperty.Accuracy);
-            Assert.AreEqual(@"Description of Value", measure1.CalcProperty.Description);
+            Assert.AreEqual(@"Description of Value", measure1.CalcProperty.Measure.Description);
 
             Assert.IsNotNull(measure1.CalcProperty.KPI);
             Assert.AreEqual(@"Description of KPI", measure1.CalcProperty.KPI.Description);
@@ -530,7 +530,7 @@ return
             Assert.IsNotNull(measure1.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
             Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.Description));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.Measure.Description));
 
             Assert.IsNotNull(measure1.CalcProperty.KPI);
             Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.Description));
@@ -592,7 +592,7 @@ return
             Assert.IsNotNull(measure1.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
             Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.Description));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.Measure.Description));
 
             Assert.IsNotNull(measure1.CalcProperty.KPI);
             Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.Description));

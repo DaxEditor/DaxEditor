@@ -185,8 +185,8 @@ CalculationPropertyAccuracy
     ;
 
 CalculationPropertyVisible
-    : KWVISIBLE EQ  KWTRUE                                                              { SpecifyCalcPropVisible(true); }
-    | KWVISIBLE EQ  KWFALSE                                                             { SpecifyCalcPropVisible(false); }
+    : KWVISIBLE EQ  KWTRUE                                                              { SpecifyCalcPropIsHidden(false); }
+    | KWVISIBLE EQ  KWFALSE                                                             { SpecifyCalcPropIsHidden(true); }
     | KWVISIBLE error                                                                   { CallHdlr("'=' is not specified", @2); }
     | KWVISIBLE EQ error                                                                { CallHdlr("Visible can be either TRUE or FALSE", @3); }
     ;
