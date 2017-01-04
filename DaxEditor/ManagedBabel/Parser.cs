@@ -18,6 +18,7 @@ using DaxEditor;
 using Babel.ParserGenerator;
 using System.Linq;
 using System.Diagnostics;
+using Microsoft.AnalysisServices.Tabular;
 
 namespace Babel.Parser
 {
@@ -239,7 +240,124 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.Description = scanner.GetText(location);
+            lastMeasure.CalcProperty.Description = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiDescription(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.Description = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiTargetFormatString(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.TargetFormatString = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiTargetDescription(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.TargetDescription = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiTargetExpression(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.TargetExpression = scanner.GetText(location);
+        }
+
+        public void SpecifyCalcPropKpiStatusGraphic(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.StatusGraphic = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiStatusDescription(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.StatusDescription = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiStatusExpression(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.StatusExpression = scanner.GetText(location);
+        }
+
+        public void SpecifyCalcPropKpiTrendGraphic(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.TrendGraphic = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiTrendDescription(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.TrendDescription = scanner.GetText(location).Trim('\"');
+        }
+
+        public void SpecifyCalcPropKpiTrendExpression(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+            lastMeasure.CalcProperty.KPI.TrendExpression = scanner.GetText(location);
+        }
+
+        public void SpecifyCalcPropKpiAnnotations(LexLocation location)
+        {
+            var lastMeasure = measures.Last();
+            Debug.Assert(lastMeasure != null);
+            Debug.Assert(lastMeasure.CalcProperty != null);
+            lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
+
+            //'GoalType=""Measure"", KpiStatusType= ""Linear"", KpiThresholdType=""Percentage"", KpiThresholdOrdering=""Ascending"", KpiThresholdCount=""2"", KpiThreshold_0=""40"",KpiThreshold_1 =""80""'
+            var text = scanner.GetText(location).Trim('\'');
+            var propertiesData = text.Split(',');
+
+            foreach (var propertyData in propertiesData)
+            {
+                var values = propertyData.Trim(' ').Split('=');
+                Debug.Assert(values.Length == 2);
+
+                var name = values[0].Trim(' ');
+                var value = values[1].Trim('\"', ' ');
+
+                var annotation = new Annotation();
+                annotation.Name = name;
+                annotation.Value = value;
+
+                lastMeasure.CalcProperty.KPI.Annotations.Add(annotation);
+            }
         }
 
         public void SpecifyCalcPropDisplayFolder(LexLocation location) {
