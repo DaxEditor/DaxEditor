@@ -29,24 +29,27 @@ namespace DaxEditor
         {
             if (JsonUtilities.IsJson(text))
             {
-                return ParseJsonAsText(text);
+                return ParseJson(text);
             }
 
             return ParseXmlaAsText(text);
         }
 
-        public static MeasuresContainer ParseJsonAsText(string jsonText)
+        public static MeasuresContainer ParseJson(string text)
         {
             try
             {
-                var jsonObject = JsonUtilities.Deserialize(jsonText);
-                Debug.Assert(null != jsonObject);
+                var database = JsonUtilities.Deserialize(text);
+                Debug.Assert(database != null);
                 
-                return ParseJsonAsJsonObject(jsonObject);
+                return CreateFromDatabase(database);
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                throw new DaxException(string.Format("Error while parsing jsonScript:{0}{2}{0}{1}", Environment.NewLine, jsonText, e.Message), e);
+                throw new DaxException(
+                    $@"Error while parsing Json:
+Message: {exception.Message}
+{text}", exception);
             }
         }
 
@@ -65,31 +68,35 @@ namespace DaxEditor
             }
         }
 
-        public static MeasuresContainer ParseJsonAsJsonObject(Database jsonObject)
+        public static MeasuresContainer CreateFromDatabase(Database database)
         {
-            if (jsonObject == null)
+            if (database == null)
             {
-                throw new ArgumentNullException("jsonObject");
+                throw new ArgumentNullException(nameof(database));
+            }
+            if (database.Model == null)
+            {
+                throw new ArgumentNullException(nameof(database.Model));
             }
 
-            var allMeasures = new List<DaxMeasure>();
-            jsonObject.Model?.Tables?.ForEach(jsonTable =>
+            var measures = new List<DaxMeasure>();
+            foreach (var table in database.Model.Tables)
             {
-                jsonTable.Measures?.ForEach(jsonMeasure =>
+                foreach (var measure in table.Measures)
                 {
-                    var measure = new DaxMeasure();
-                    measure.Name = jsonMeasure.Name;
-                    measure.Expression = jsonMeasure.Expression;
-                    measure.TableName = jsonTable.Name;
-                    measure.CalcProperty = DaxCalcProperty.CreateFromJsonMeasure(jsonMeasure);
-                    measure.FullText = 
-                        $"CREATE MEASURE '{measure.TableName ?? ""}'[{measure.Name ?? ""}] = {measure.Expression ?? ""}";
+                    var newMeasure = new DaxMeasure();
+                    newMeasure.Name = measure.Name;
+                    newMeasure.Expression = measure.Expression;
+                    newMeasure.TableName = table.Name;
+                    newMeasure.CalcProperty = DaxCalcProperty.CreateFromJsonMeasure(measure);
+                    newMeasure.FullText =
+                        $"CREATE MEASURE '{newMeasure.TableName ?? ""}'[{newMeasure.Name ?? ""}] = {newMeasure.Expression ?? ""}";
 
-                    allMeasures.Add(measure);
-                });
-            });
+                    measures.Add(newMeasure);
+                }
+            }
 
-            return new MeasuresContainer(allMeasures);
+            return new MeasuresContainer(measures);
         }
 
         public static MeasuresContainer ParseXmlaAsXElement(XElement mdxScript)
@@ -184,7 +191,7 @@ namespace DaxEditor
         {
             if (measures == null)
             {
-                throw new ArgumentNullException("measures");
+                throw new ArgumentNullException(nameof(measures));
             }
 
             var dictionary = new Dictionary<string, IList<Measure>>();
