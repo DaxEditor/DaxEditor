@@ -224,14 +224,17 @@ namespace DaxEditor
             if (customFormatElement.Name.LocalName == "DateTimes")
                 customFormatElement = customFormatElement.Element("DateTime");
 
-            return string.Join(" ", customFormatElement.Attributes().Select(i => string.Format(@"{0}=""{1}""", i.Name, i.Value)));
+            string customFormat = "'";
+            customFormat += string.Join(" ", customFormatElement.Attributes().Select(i => string.Format(@"{0}=""{1}""", i.Name, i.Value)));
+            customFormat += "'";
+            return customFormat;
         }
 
-        private string AppendIfNotEmpty(string text, string name, string value, char symvol = ' ')
+        private string AppendIfNotEmpty(string text, string name, string value, string quote = "")
         {
             if (!string.IsNullOrWhiteSpace(value))
             {
-                text += $" {name} ={symvol}{value}{symvol}";
+                text += $" {name}={quote}{value}{quote}";
             }
 
             return text;
@@ -276,9 +279,9 @@ namespace DaxEditor
                     if (!string.IsNullOrEmpty(FormatString) && !string.Equals("''", FormatString))
                         result += " Format=" + FormatString;
 
-                    result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, '\'');
-                    result = AppendIfNotEmpty(result, "DisplayFolder", DisplayFolder, '\'');
-                    result = AppendIfNotEmpty(result, "Description", Description, '\'');
+                    result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat);
+                    result = AppendIfNotEmpty(result, "DisplayFolder", DisplayFolder, "\'");
+                    result = AppendIfNotEmpty(result, "Description", Description, "\'");
 
                     break;
                 default:
@@ -289,15 +292,15 @@ namespace DaxEditor
 
             if (KPI != null)
             {
-                result = AppendIfNotEmpty(result, "KpiDescription", KPI.Description, '\"');
-                result = AppendIfNotEmpty(result, "KpiTargetFormatString", KPI.TargetFormatString, '\"');
-                result = AppendIfNotEmpty(result, "KpiTargetDescription", KPI.TargetDescription, '\"');
+                result = AppendIfNotEmpty(result, "KpiDescription", KPI.Description, "\"");
+                result = AppendIfNotEmpty(result, "KpiTargetFormatString", KPI.TargetFormatString, "\"");
+                result = AppendIfNotEmpty(result, "KpiTargetDescription", KPI.TargetDescription, "\"");
                 result = AppendIfNotEmpty(result, "KpiTargetExpression", KPI.TargetExpression);
-                result = AppendIfNotEmpty(result, "KpiStatusGraphic", KPI.StatusGraphic, '\"');
-                result = AppendIfNotEmpty(result, "KpiStatusDescription", KPI.StatusDescription, '\"');
+                result = AppendIfNotEmpty(result, "KpiStatusGraphic", KPI.StatusGraphic, "\"");
+                result = AppendIfNotEmpty(result, "KpiStatusDescription", KPI.StatusDescription, "\"");
                 result = AppendIfNotEmpty(result, "KpiStatusExpression", KPI.StatusExpression);
-                result = AppendIfNotEmpty(result, "KpiTrendGraphic", KPI.TrendGraphic, '\"');
-                result = AppendIfNotEmpty(result, "KpiTrendDescription", KPI.TrendDescription, '\"');
+                result = AppendIfNotEmpty(result, "KpiTrendGraphic", KPI.TrendGraphic, "\"");
+                result = AppendIfNotEmpty(result, "KpiTrendDescription", KPI.TrendDescription, "\"");
                 result = AppendIfNotEmpty(result, "KpiTrendExpression", KPI.TrendExpression);
                 
                 var texts = new List<string>();
@@ -373,14 +376,14 @@ namespace DaxEditor
                 if (Format == FormatType.Currency)
                 {
                     writer.WriteRaw("<Currency ");
-                    writer.WriteRaw(CustomFormat);
+                    writer.WriteRaw(CustomFormat.Trim('\''));
                     writer.WriteRaw(" />");
                 }
                 else if (Format == FormatType.DateTimeCustom)
                 {
                     writer.WriteStartElement("DateTimes");
                     writer.WriteRaw("<DateTime ");
-                    writer.WriteRaw(CustomFormat);
+                    writer.WriteRaw(CustomFormat.Trim('\''));
                     writer.WriteRaw(" />");
                     writer.WriteEndElement();
                 }
