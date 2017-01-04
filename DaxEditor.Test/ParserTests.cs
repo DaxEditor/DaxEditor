@@ -457,39 +457,44 @@ CALCULATION
                  If(x < 0.8, 0, 1)
              )
 		 )
-    KpiAnnotations = 'GoalType=""Measure"", KpiStatusType= ""Linear"", KpiThresholdType=""Percentage"", KpiThresholdOrdering=""Ascending"", KpiThresholdCount=""2"", KpiThreshold_0=""40"",KpiThreshold_1 =""80""
+    KpiAnnotations = 'GoalType=""Measure"", KpiStatusType= ""Linear"", KpiThresholdType=""Percentage"", KpiThresholdOrdering=""Ascending"", KpiThresholdCount=""2"", KpiThreshold_0=""40"",KpiThreshold_1 =""80""'
 	;";
             var parser = ParseText(text);
 
-            Assert.AreEqual(3, parser.Measures.Count);
+            Assert.AreEqual(1, parser.Measures.Count);
 
             var measure1 = parser.Measures.First();
-            Assert.AreEqual("Sales", measure1.TableName);
-            Assert.AreEqual("a", measure1.Name);
-            Assert.AreEqual(@"CALCULATE ( // Comment with slash
-    [b], -- Comment with dash
-    Sales[Quantity]  > 0 /* Comment
-    on multiple 
-    lines */
- )
- // Final comment after expression
- /* Multiline final comment 
-  * after 
-  * expression */", measure1.Expression);
-            Assert.AreEqual(@"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
-    [b], -- Comment with dash
-    Sales[Quantity]  > 0 /* Comment
-    on multiple 
-    lines */
- )
- // Final comment after expression
- /* Multiline final comment 
-  * after 
-  * expression */", measure1.FullText);
+            Assert.AreEqual("Test", measure1.TableName);
+            Assert.AreEqual("Sales1", measure1.Name);
+            Assert.AreEqual(@"SUM ( Test[Value] )", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )", measure1.FullText);
             Assert.IsNotNull(measure1.CalcProperty);
-            Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
-            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
-            Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
+            Assert.AreEqual(DaxCalcProperty.FormatType.Currency, measure1.CalcProperty.Format);
+            Assert.AreEqual(2, measure1.CalcProperty.Accuracy);
+            Assert.AreEqual(@"Description of Value", measure1.CalcProperty.Description);
+
+            Assert.IsNotNull(measure1.CalcProperty.KPI);
+            Assert.AreEqual(@"Description of KPI", measure1.CalcProperty.KPI.Description);
+            Assert.AreEqual(@"Description of Target", measure1.CalcProperty.KPI.TargetDescription);
+            Assert.AreEqual(@"'Test'[Budget]", measure1.CalcProperty.KPI.TargetExpression);
+            Assert.AreEqual(@"Traffic Light - Single", measure1.CalcProperty.KPI.StatusGraphic);
+            Assert.AreEqual(@"Description of Status", measure1.CalcProperty.KPI.StatusDescription);
+            Assert.AreEqual(@"var x = 'Test'[Sales1] / 'Test'[_Sales1 Goal]
+
+     return
+
+         if (ISBLANK(x),BLANK(),
+			 If(x < 0.4, -1,
+                 If(x < 0.8, 0, 1)
+             )
+		 )", measure1.CalcProperty.KPI.StatusExpression);
+            Assert.AreEqual(@"Measure", measure1.CalcProperty.KPI.Annotations["GoalType"].Value);
+            Assert.AreEqual(@"Linear", measure1.CalcProperty.KPI.Annotations["KpiStatusType"].Value);
+            Assert.AreEqual(@"Percentage", measure1.CalcProperty.KPI.Annotations["KpiThresholdType"].Value);
+            Assert.AreEqual(@"Ascending", measure1.CalcProperty.KPI.Annotations["KpiThresholdOrdering"].Value);
+            Assert.AreEqual(@"2", measure1.CalcProperty.KPI.Annotations["KpiThresholdCount"].Value);
+            Assert.AreEqual(@"40", measure1.CalcProperty.KPI.Annotations["KpiThreshold_0"].Value);
+            Assert.AreEqual(@"80", measure1.CalcProperty.KPI.Annotations["KpiThreshold_1"].Value);
         }
 
         [TestMethod]
@@ -504,7 +509,7 @@ CALCULATION
 var x='Test'[Sales2] 
 return
     if(ISBLANK(x),BLANK(),
-        If(x<3.2,"",
+        If(x<3.2,
             If(x<1.6,-2,-1),
 			If(x<4.8,0,
 				If(x<6.4,1,2)
@@ -515,35 +520,43 @@ return
 	;";
             var parser = ParseText(text);
 
-            Assert.AreEqual(3, parser.Measures.Count);
+            Assert.AreEqual(1, parser.Measures.Count);
 
             var measure1 = parser.Measures.First();
-            Assert.AreEqual("Sales", measure1.TableName);
-            Assert.AreEqual("a", measure1.Name);
-            Assert.AreEqual(@"CALCULATE ( // Comment with slash
-    [b], -- Comment with dash
-    Sales[Quantity]  > 0 /* Comment
-    on multiple 
-    lines */
- )
- // Final comment after expression
- /* Multiline final comment 
-  * after 
-  * expression */", measure1.Expression);
-            Assert.AreEqual(@"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
-    [b], -- Comment with dash
-    Sales[Quantity]  > 0 /* Comment
-    on multiple 
-    lines */
- )
- // Final comment after expression
- /* Multiline final comment 
-  * after 
-  * expression */", measure1.FullText);
+            Assert.AreEqual("Test", measure1.TableName);
+            Assert.AreEqual("Sales2", measure1.Name);
+            Assert.AreEqual(@"SUM ( Test[Value] ) / 2", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Test'[Sales2] =  SUM ( Test[Value] ) / 2", measure1.FullText);
             Assert.IsNotNull(measure1.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
-            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
             Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.Description));
+
+            Assert.IsNotNull(measure1.CalcProperty.KPI);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.Description));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.TargetDescription));
+            Assert.AreEqual(@"8", measure1.CalcProperty.KPI.TargetExpression);
+            Assert.AreEqual(@"Five Bars Colored", measure1.CalcProperty.KPI.StatusGraphic);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.StatusDescription));
+            Assert.AreEqual(@"var x='Test'[Sales2] 
+return
+    if(ISBLANK(x),BLANK(),
+        If(x<3.2,
+            If(x<1.6,-2,-1),
+			If(x<4.8,0,
+				If(x<6.4,1,2)
+            )
+        )
+	)", measure1.CalcProperty.KPI.StatusExpression);
+            Assert.AreEqual(@"StaticValue", measure1.CalcProperty.KPI.Annotations["GoalType"].Value);
+            Assert.AreEqual(@"Linear", measure1.CalcProperty.KPI.Annotations["KpiStatusType"].Value);
+            Assert.AreEqual(@"Absolute", measure1.CalcProperty.KPI.Annotations["KpiThresholdType"].Value);
+            Assert.AreEqual(@"Ascending", measure1.CalcProperty.KPI.Annotations["KpiThresholdOrdering"].Value);
+            Assert.AreEqual(@"4", measure1.CalcProperty.KPI.Annotations["KpiThresholdCount"].Value);
+            Assert.AreEqual(@"1.6", measure1.CalcProperty.KPI.Annotations["KpiThreshold_0"].Value);
+            Assert.AreEqual(@"3.2", measure1.CalcProperty.KPI.Annotations["KpiThreshold_1"].Value);
+            Assert.AreEqual(@"4.8", measure1.CalcProperty.KPI.Annotations["KpiThreshold_2"].Value);
+            Assert.AreEqual(@"6.4", measure1.CalcProperty.KPI.Annotations["KpiThreshold_3"].Value);
         }
 
         [TestMethod]
@@ -569,35 +582,43 @@ return
 	;";
             var parser = ParseText(text);
 
-            Assert.AreEqual(3, parser.Measures.Count);
+            Assert.AreEqual(1, parser.Measures.Count);
 
             var measure1 = parser.Measures.First();
-            Assert.AreEqual("Sales", measure1.TableName);
-            Assert.AreEqual("a", measure1.Name);
-            Assert.AreEqual(@"CALCULATE ( // Comment with slash
-    [b], -- Comment with dash
-    Sales[Quantity]  > 0 /* Comment
-    on multiple 
-    lines */
- )
- // Final comment after expression
- /* Multiline final comment 
-  * after 
-  * expression */", measure1.Expression);
-            Assert.AreEqual(@"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
-    [b], -- Comment with dash
-    Sales[Quantity]  > 0 /* Comment
-    on multiple 
-    lines */
- )
- // Final comment after expression
- /* Multiline final comment 
-  * after 
-  * expression */", measure1.FullText);
+            Assert.AreEqual("Test", measure1.TableName);
+            Assert.AreEqual("Sales3", measure1.Name);
+            Assert.AreEqual(@"SUM ( Test[Value] ) / 3", measure1.Expression);
+            Assert.AreEqual(@"CREATE MEASURE 'Test'[Sales3] =  SUM ( Test[Value] ) / 3", measure1.FullText);
             Assert.IsNotNull(measure1.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
-            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
             Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.Description));
+
+            Assert.IsNotNull(measure1.CalcProperty.KPI);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.Description));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.TargetDescription));
+            Assert.AreEqual(@"'Test'[Budget]", measure1.CalcProperty.KPI.TargetExpression);
+            Assert.AreEqual(@"Traffic Light - Single", measure1.CalcProperty.KPI.StatusGraphic);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(measure1.CalcProperty.KPI.StatusDescription));
+            Assert.AreEqual(@"var x='Test'[Sales3]/'Test'[_Sales3 Goal] 
+return
+    if(ISBLANK(x),BLANK(),
+        If(x<0.67,
+            If(x<0.34,-1,0),
+			If(x<1.33,1,
+				If(x<1.66,0,-1)
+			)
+		)
+	)", measure1.CalcProperty.KPI.StatusExpression);
+            Assert.AreEqual(@"Measure", measure1.CalcProperty.KPI.Annotations["GoalType"].Value);
+            Assert.AreEqual(@"Centered", measure1.CalcProperty.KPI.Annotations["KpiStatusType"].Value);
+            Assert.AreEqual(@"Percentage", measure1.CalcProperty.KPI.Annotations["KpiThresholdType"].Value);
+            Assert.AreEqual(@"Ascending", measure1.CalcProperty.KPI.Annotations["KpiThresholdOrdering"].Value);
+            Assert.AreEqual(@"4", measure1.CalcProperty.KPI.Annotations["KpiThresholdCount"].Value);
+            Assert.AreEqual(@"34", measure1.CalcProperty.KPI.Annotations["KpiThreshold_0"].Value);
+            Assert.AreEqual(@"67", measure1.CalcProperty.KPI.Annotations["KpiThreshold_1"].Value);
+            Assert.AreEqual(@"133", measure1.CalcProperty.KPI.Annotations["KpiThreshold_2"].Value);
+            Assert.AreEqual(@"166", measure1.CalcProperty.KPI.Annotations["KpiThreshold_3"].Value);
         }
 
         private static Babel.Parser.Parser ParseText(string text)
