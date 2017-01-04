@@ -146,6 +146,17 @@ TableNameNotEscaped  [a-zA-Z_][a-zA-Z0-9_]
 [Ss][Kk][Ii][Pp]                                                                                        { return (int)Tokens.KWSKIP; }
 [Dd][Ee][Nn][Ss][Ee]                                                                                    { return (int)Tokens.KWDENSE; }
 [Nn][Oo][Tt]                                                                                            { return (int)Tokens.KWNOT; }
+[Kk][Pp][Ii][Dd][Ee][Ss][Cc][Rr][Ii][Pp][Tt][Ii][Oo][Nn]                                                { return (int)Tokens.KWKPIDESCRIPTION; }
+[Kk][Pp][Ii][Tt][Aa][Rr][Gg][Ee][Tt][Ff][Oo][Rr][Mm][Aa][Tt][Ss][Tt][Rr][Ii][Nn][Gg]                    { return (int)Tokens.KWKPITARGETFORMATSTRING; }
+[Kk][Pp][Ii][Tt][Aa][Rr][Gg][Ee][Tt][Dd][Ee][Ss][Cc][Rr][Ii][Pp][Tt][Ii][Oo][Nn]                        { return (int)Tokens.KWKPITARGETDESCRIPTION; }
+[Kk][Pp][Ii][Tt][Aa][Rr][Gg][Ee][Tt][Ee][Xx][Pp][Rr][Ee][Ss][Ss][Ii][Oo][Nn]                            { return (int)Tokens.KWKPITARGETEXPRESSION; }
+[Kk][Pp][Ii][Ss][Tt][Aa][Tt][Uu][Ss][Gg][Rr][Aa][Pp][Hh][Ii][Cc]                                        { return (int)Tokens.KWKPISTATUSGRAPHIC; }
+[Kk][Pp][Ii][Ss][Tt][Aa][Tt][Uu][Ss][Dd][Ee][Ss][Cc][Rr][Ii][Pp][Tt][Ii][Oo][Nn]                        { return (int)Tokens.KWKPISTATUSDESCRIPTION; }
+[Kk][Pp][Ii][Ss][Tt][Aa][Tt][Uu][Ss][Ee][Xx][Pp][Rr][Ee][Ss][Ss][Ii][Oo][Nn]                            { return (int)Tokens.KWKPISTATUSEXPRESSION; }
+[Kk][Pp][Ii][Tt][Rr][Ee][Nn][Dd][Gg][Rr][Aa][Pp][Hh][Ii][Cc]                                            { return (int)Tokens.KWKPITRENDGRAPHIC; }
+[Kk][Pp][Ii][Tt][Rr][Ee][Nn][Dd][Dd][Ee][Ss][Cc][Rr][Ii][Pp][Tt][Ii][Oo][Nn]                            { return (int)Tokens.KWKPITRENDDESCRIPTION; }
+[Kk][Pp][Ii][Tt][Rr][Ee][Nn][Dd][Ee][Xx][Pp][Rr][Ee][Ss][Ss][Ii][Oo][Nn]                                { return (int)Tokens.KWKPITRENDEXPRESSION; }
+[Kk][Pp][Ii][Aa][Nn][Nn][Oo][Tt][Aa][Tt][Ii][Oo][Nn][Ss]                                                { return (int)Tokens.KWKPIANNOTATIONS; }
 /* End generated code */
 
 [Mm][Ee][Mm][Bb][Ee][Rr][^;]*           { return (int)Tokens.MDXCODE; }
@@ -211,6 +222,10 @@ TableNameNotEscaped  [a-zA-Z_][a-zA-Z0-9_]
 %%
 
 /* .... */
+
+
+
+
 
 
 

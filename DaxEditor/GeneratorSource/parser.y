@@ -63,9 +63,9 @@ The project released under MS-PL license https://daxeditor.codeplex.com/license
     }
 %}
 
-%token FUNCTION NUMBER STRING COLUMNNAME TABLENAME ESCAPEDTABLENAME PARTIALCOLUMNNAME PARTIALTABLENAME MDXCODE KWALTER
+%token FUNCTION NUMBER STRING COLUMNNAME TABLENAME ESCAPEDTABLENAME PARTIALCOLUMNNAME PARTIALTABLENAME MDXCODE KWALTER KPI
 /* Begin generated list of tokens */
-%token KWEVALUATE KWDEFINE KWMEASURE KWORDER KWBY KWTRUE KWFALSE KWASC KWDESC KWDAY KWMONTH KWYEAR KWCREATE KWCALCULATE KWCALCULATION KWPROPERTY KWGENERAL KWNUMBERDECIMAL KWNUMBERWHOLE KWPERCENTAGE KWSCIENTIFIC KWCURRENCY KWDATETIMECUSTOM KWDATETIMESHORTDATEPATTERN KWDATETIMEGENERAL KWTEXT KWACCURACY KWTHOUSANDSEPARATOR KWFORMAT KWADDITIONALINFO KWKPI KWVISIBLE KWDESCRIPTION KWDISPLAYFOLDER KWVAR KWRETURN KWDATATABLE KWBOOLEAN KWDATETIME KWDOUBLE KWINTEGER KWSTRING KWRANKX KWSKIP KWDENSE KWNOT
+%token KWEVALUATE KWDEFINE KWMEASURE KWORDER KWBY KWTRUE KWFALSE KWASC KWDESC KWDAY KWMONTH KWYEAR KWCREATE KWCALCULATE KWCALCULATION KWPROPERTY KWGENERAL KWNUMBERDECIMAL KWNUMBERWHOLE KWPERCENTAGE KWSCIENTIFIC KWCURRENCY KWDATETIMECUSTOM KWDATETIMESHORTDATEPATTERN KWDATETIMEGENERAL KWTEXT KWACCURACY KWTHOUSANDSEPARATOR KWFORMAT KWADDITIONALINFO KWKPI KWVISIBLE KWDESCRIPTION KWDISPLAYFOLDER KWVAR KWRETURN KWDATATABLE KWBOOLEAN KWDATETIME KWDOUBLE KWINTEGER KWSTRING KWRANKX KWSKIP KWDENSE KWNOT KWKPIDESCRIPTION KWKPITARGETFORMATSTRING KWKPITARGETDESCRIPTION KWKPITARGETEXPRESSION KWKPISTATUSGRAPHIC KWKPISTATUSDESCRIPTION KWKPISTATUSEXPRESSION KWKPITRENDGRAPHIC KWKPITRENDDESCRIPTION KWKPITRENDEXPRESSION KWKPIANNOTATIONS
 /* End generated list of tokens */
 
 %token EQ NEQ GT GTE LT LTE POW AMPAMP BARBAR LEFTSQUAREBRACKET RIGHTSQUAREBRACKET
@@ -116,6 +116,8 @@ DaxScript
     | CreateMeasure ';'
     | CreateMeasure ';' DaxScript
     | CreateKpi
+    | CreateKpi ';'
+    | CreateKpi ';' DaxScript
     | CreateMember
     | CreateMember ';'
     | CreateMember ';' DaxScript
@@ -148,7 +150,7 @@ CreateMeasure
     ;
 
 CreateKpi
-    : KWCREATE KWKPI                                                         { CallHdlr("KPI are not yet supported", @2); }
+    : KWCREATE KWKPI
     ;
 
 CreateMember
@@ -189,13 +191,18 @@ CalculationPropertyVisible
     | KWVISIBLE EQ error                                                                { CallHdlr("Visible can be either TRUE or FALSE", @3); }
     ;
 
+CalculationPropertyDescriptionContent
+    : ESCAPEDTABLENAME
+    | STRING
+    ;
+
 CalculationPropertyDescription
-    : KWDESCRIPTION    EQ ESCAPEDTABLENAME                                                      { SpecifyCalcPropDescription(@3);  }
+    : KWDESCRIPTION EQ CalculationPropertyDescriptionContent                            { SpecifyCalcPropDescription(@3);  }
     | KWDESCRIPTION error                                                               { CallHdlr("'=' is not specified", @2); }
     ;
 
 CalculationPropertyDisplayFolder
-    : KWDISPLAYFOLDER EQ ESCAPEDTABLENAME                                                  { SpecifyCalcPropDisplayFolder(@3);  }
+    : KWDISPLAYFOLDER EQ ESCAPEDTABLENAME                                               { SpecifyCalcPropDisplayFolder(@3);  }
     | KWDISPLAYFOLDER error                                                             { CallHdlr("'=' is not specified", @2); }
     ;
 
@@ -212,6 +219,61 @@ CalculationPropertyFormat
 
 CalculationPropertyAdditionalInfo
     : KWADDITIONALINFO EQ ESCAPEDTABLENAME                                              { SpecifyCalcPropAdditionalInfo(@3); }
+    ;
+
+CalculationPropertyKpiDescription
+    : KWKPIDESCRIPTION EQ CalculationPropertyDescriptionContent                         { SpecifyCalcPropKpiDescription(@3);  }
+    | KWKPIDESCRIPTION error                                                            { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiTargetFormatString
+    : KWKPITARGETFORMATSTRING EQ CalculationPropertyDescriptionContent                  { SpecifyCalcPropKpiTargetFormatString(@3);  }
+    | KWKPITARGETFORMATSTRING error                                                     { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiTargetDescription
+    : KWKPITARGETDESCRIPTION EQ CalculationPropertyDescriptionContent                   { SpecifyCalcPropKpiTargetDescription(@3);  }
+    | KWKPITARGETDESCRIPTION error                                                      { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiTargetExpression
+    : KWKPITARGETEXPRESSION EQ Expression                                               { SpecifyCalcPropKpiTargetExpression(@3);  }
+    | KWKPITARGETEXPRESSION error                                                       { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiStatusGraphic
+    : KWKPISTATUSGRAPHIC EQ CalculationPropertyDescriptionContent                       { SpecifyCalcPropKpiStatusGraphic(@3);  }
+    | KWKPISTATUSGRAPHIC error                                                          { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiStatusDescription
+    : KWKPISTATUSDESCRIPTION EQ CalculationPropertyDescriptionContent                   { SpecifyCalcPropKpiStatusDescription(@3);  }
+    | KWKPISTATUSDESCRIPTION error                                                      { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiStatusExpression
+    : KWKPISTATUSEXPRESSION EQ Expression                                               { SpecifyCalcPropKpiStatusExpression(@3);  }
+    | KWKPISTATUSEXPRESSION error                                                       { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiTrendGraphic
+    : KWKPITRENDGRAPHIC EQ CalculationPropertyDescriptionContent                        { SpecifyCalcPropKpiTrendGraphic(@3);  }
+    | KWKPITRENDGRAPHIC error                                                           { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiTrendDescription
+    : KWKPITRENDDESCRIPTION EQ CalculationPropertyDescriptionContent                    { SpecifyCalcPropKpiTrendDescription(@3);  }
+    | KWKPITRENDDESCRIPTION error                                                       { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiTrendExpression
+    : KWKPITRENDEXPRESSION EQ Expression                                                { SpecifyCalcPropKpiTrendExpression(@3);  }
+    | KWKPITRENDEXPRESSION error                                                        { CallHdlr("'=' is not specified", @2); }
+    ;
+
+CalculationPropertyKpiAnnotations
+    : KWKPIANNOTATIONS EQ ESCAPEDTABLENAME                                              { SpecifyCalcPropKpiAnnotations(@3);  }
+    | KWKPIANNOTATIONS error                                                            { CallHdlr("'=' is not specified", @2); }
     ;
     
 VarName
@@ -247,6 +309,29 @@ CalculationPropertyParams
     | CalculationPropertyDescription CalculationPropertyParams
     | CalculationPropertyDisplayFolder
     | CalculationPropertyDisplayFolder CalculationPropertyParams
+	/* KPI properties */
+    | CalculationPropertyKpiDescription
+    | CalculationPropertyKpiDescription CalculationPropertyParams
+    | CalculationPropertyKpiTargetFormatString
+    | CalculationPropertyKpiTargetFormatString CalculationPropertyParams
+    | CalculationPropertyKpiTargetDescription
+    | CalculationPropertyKpiTargetDescription CalculationPropertyParams
+    | CalculationPropertyKpiTargetExpression
+    | CalculationPropertyKpiTargetExpression CalculationPropertyParams
+    | CalculationPropertyKpiStatusGraphic
+    | CalculationPropertyKpiStatusGraphic CalculationPropertyParams
+    | CalculationPropertyKpiStatusDescription
+    | CalculationPropertyKpiStatusDescription CalculationPropertyParams
+    | CalculationPropertyKpiStatusExpression
+    | CalculationPropertyKpiStatusExpression CalculationPropertyParams
+    | CalculationPropertyKpiTrendGraphic
+    | CalculationPropertyKpiTrendGraphic CalculationPropertyParams
+    | CalculationPropertyKpiTrendDescription
+    | CalculationPropertyKpiTrendDescription CalculationPropertyParams
+    | CalculationPropertyKpiTrendExpression
+    | CalculationPropertyKpiTrendExpression CalculationPropertyParams
+    | CalculationPropertyKpiAnnotations
+    | CalculationPropertyKpiAnnotations CalculationPropertyParams
     ;
 CalculationProperty
     : KWCALCULATION KWPROPERTY CalculationPropertyFormatType
@@ -473,6 +558,7 @@ EndArg
     ;
 
 %%
+
 
 
 

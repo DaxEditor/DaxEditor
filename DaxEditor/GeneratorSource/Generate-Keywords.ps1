@@ -49,6 +49,17 @@ $keyWords += New-Object object | add-member NoteProperty Name "RankX" -passThru 
 $keyWords += New-Object object | add-member NoteProperty Name "Skip" -passThru  | add-member NoteProperty Description "RANKX Ties Enum Element" -passThru
 $keyWords += New-Object object | add-member NoteProperty Name "Dense" -passThru  | add-member NoteProperty Description "RANKX Ties Enum Element" -passThru
 $keyWords += New-Object object | add-member NoteProperty Name "Not" -passThru  | add-member NoteProperty Description "NOT operator" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiDescription" -passThru  | add-member NoteProperty Description "Measure KpiDescription Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiTargetFormatString" -passThru  | add-member NoteProperty Description "Measure KpiTargetFormatString Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiTargetDescription" -passThru  | add-member NoteProperty Description "Measure KpiTargetDescription Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiTargetExpression" -passThru  | add-member NoteProperty Description "Measure KpiTargetExpression Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiStatusGraphic" -passThru  | add-member NoteProperty Description "Measure KpiStatusGraphic Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiStatusDescription" -passThru  | add-member NoteProperty Description "Measure KpiStatusDescription Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiStatusExpression" -passThru  | add-member NoteProperty Description "Measure KpiStatusExpression Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiTrendGraphic" -passThru  | add-member NoteProperty Description "Measure KpiTrendGraphic Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiTrendDescription" -passThru  | add-member NoteProperty Description "Measure KpiTrendDescription Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiTrendExpression" -passThru  | add-member NoteProperty Description "Measure KpiTrendExpression Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "KpiAnnotations" -passThru  | add-member NoteProperty Description "Measure KpiAnnotations Property" -passThru
 
 # DaxKeywords_Gen.cs
 $pathToGeneratedFile = (Get-Location).ToString() + "\DaxKeywords_Gen.cs"

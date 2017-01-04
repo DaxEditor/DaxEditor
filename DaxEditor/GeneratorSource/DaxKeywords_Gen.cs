@@ -59,6 +59,17 @@ namespace DaxEditor.GeneratorSource
       this.Add(new DaxKeywordDescription() { Name = @"SKIP", Description = @"RANKX Ties Enum Element"});
       this.Add(new DaxKeywordDescription() { Name = @"DENSE", Description = @"RANKX Ties Enum Element"});
       this.Add(new DaxKeywordDescription() { Name = @"NOT", Description = @"NOT operator"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPIDESCRIPTION", Description = @"Measure KpiDescription Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPITARGETFORMATSTRING", Description = @"Measure KpiTargetFormatString Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPITARGETDESCRIPTION", Description = @"Measure KpiTargetDescription Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPITARGETEXPRESSION", Description = @"Measure KpiTargetExpression Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPISTATUSGRAPHIC", Description = @"Measure KpiStatusGraphic Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPISTATUSDESCRIPTION", Description = @"Measure KpiStatusDescription Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPISTATUSEXPRESSION", Description = @"Measure KpiStatusExpression Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPITRENDGRAPHIC", Description = @"Measure KpiTrendGraphic Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPITRENDDESCRIPTION", Description = @"Measure KpiTrendDescription Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPITRENDEXPRESSION", Description = @"Measure KpiTrendExpression Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"KPIANNOTATIONS", Description = @"Measure KpiAnnotations Property"});
 /* End generated code */
         }
 
