@@ -380,7 +380,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.FormatString = scanner.GetText(location);
+            lastMeasure.CalcProperty.FormatString = scanner.GetText(location).Trim('\'');
         }
 
         public void SpecifyCalcPropAdditionalInfo(LexLocation location)
@@ -388,7 +388,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.CustomFormat = scanner.GetText(location);
+            lastMeasure.CalcProperty.CustomFormat = scanner.GetText(location).Trim('\'');
         }
 
         // error reporting

@@ -40,7 +40,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.General, calcProp.Format);
             Assert.IsNull(calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
-            Assert.AreEqual("''", calcProp.FormatString);
+            Assert.AreEqual(string.Empty, calcProp.FormatString);
 
             Assert.AreEqual(string.Empty, calcProp.ToDax());
         }
@@ -76,7 +76,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.NumberDecimal, calcProp.Format);
             Assert.AreEqual(5, calcProp.Accuracy);
             Assert.AreEqual(true, calcProp.ThousandSeparator);
-            Assert.AreEqual("'#,0.00000'", calcProp.FormatString);
+            Assert.AreEqual("#,0.00000", calcProp.FormatString);
 
             string expectedDaxCalculatedPropertyString = "CALCULATION PROPERTY NumberDecimal Accuracy=5 ThousandSeparator=True Format='#,0.00000'";
             Assert.AreEqual(expectedDaxCalculatedPropertyString, calcProp.ToDax());
@@ -113,7 +113,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.NumberWhole, calcProp.Format);
             Assert.IsNull(calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
-            Assert.AreEqual("'0'", calcProp.FormatString);
+            Assert.AreEqual("0", calcProp.FormatString);
 
             string expectedDaxCalculatedPropertyString = "CALCULATION PROPERTY NumberWhole Format='0'";
             Assert.AreEqual(expectedDaxCalculatedPropertyString, calcProp.ToDax());
@@ -150,7 +150,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.Percentage, calcProp.Format);
             Assert.AreEqual(2, calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
-            Assert.AreEqual("'0.00 %;-0.00 %;0.00 %'", calcProp.FormatString);
+            Assert.AreEqual("0.00 %;-0.00 %;0.00 %", calcProp.FormatString);
 
             string expectedDaxCalculatedPropertyString = "CALCULATION PROPERTY Percentage Accuracy=2 Format='0.00 %;-0.00 %;0.00 %'";
             Assert.AreEqual(expectedDaxCalculatedPropertyString, calcProp.ToDax());
@@ -187,7 +187,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.Scientific, calcProp.Format);
             Assert.AreEqual(2, calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
-            Assert.AreEqual("'0.00E+000'", calcProp.FormatString);
+            Assert.AreEqual("0.00E+000", calcProp.FormatString);
 
             string expectedDaxCalculatedPropertyString = "CALCULATION PROPERTY Scientific Accuracy=2 Format='0.00E+000'";
             Assert.AreEqual(expectedDaxCalculatedPropertyString, calcProp.ToDax());
@@ -226,8 +226,8 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.Currency, calcProp.Format);
             Assert.AreEqual(3, calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
-            Assert.AreEqual(@"'LCID=""1040"" DisplayName=""€ Euro(€ 123)"" Symbol=""€"" PositivePattern=""2"" NegativePattern=""9""'", calcProp.CustomFormat);
-            Assert.AreEqual(@"'""€"" #,0.00;-""€"" #,0.00;""€"" #,0.00'", calcProp.FormatString);
+            Assert.AreEqual(@"LCID=""1040"" DisplayName=""€ Euro(€ 123)"" Symbol=""€"" PositivePattern=""2"" NegativePattern=""9""", calcProp.CustomFormat);
+            Assert.AreEqual(@"""€"" #,0.00;-""€"" #,0.00;""€"" #,0.00", calcProp.FormatString);
 
             string expectedDaxCalculatedPropertyString = @"CALCULATION PROPERTY Currency Accuracy=3 Format='""€"" #,0.00;-""€"" #,0.00;""€"" #,0.00' AdditionalInfo='LCID=""1040"" DisplayName=""€ Euro(€ 123)"" Symbol=""€"" PositivePattern=""2"" NegativePattern=""9""'";
             Assert.AreEqual(expectedDaxCalculatedPropertyString, calcProp.ToDax());
@@ -268,8 +268,8 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.DateTimeCustom, calcProp.Format);
             Assert.IsNull(calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
-            Assert.AreEqual(@"'LCID=""1033"" Group=""GeneralLongDateTime"" FormatString=""M/d/yyyy HH:mm:ss""'", calcProp.CustomFormat);
-            Assert.AreEqual(@"'M/d/yyyy HH:mm:ss'", calcProp.FormatString);
+            Assert.AreEqual(@"LCID=""1033"" Group=""GeneralLongDateTime"" FormatString=""M/d/yyyy HH:mm:ss""", calcProp.CustomFormat);
+            Assert.AreEqual(@"M/d/yyyy HH:mm:ss", calcProp.FormatString);
 
             var expected = @"CALCULATION PROPERTY DateTimeCustom Format='M/d/yyyy HH:mm:ss' AdditionalInfo='LCID=""1033"" Group=""GeneralLongDateTime"" FormatString=""M/d/yyyy HH:mm:ss""'";
             var actual = calcProp.ToDax();
@@ -308,7 +308,7 @@ namespace DaxEditorSample.Test
             Assert.IsNull(calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
             Assert.IsNull(calcProp.CustomFormat);
-            Assert.AreEqual(@"'M/d/yyyy HH:mm:ss'", calcProp.FormatString);
+            Assert.AreEqual(@"M/d/yyyy HH:mm:ss", calcProp.FormatString);
 
             var expected = @"CALCULATION PROPERTY DateTimeShortDatePattern Format='M/d/yyyy HH:mm:ss'";
             var actual = calcProp.ToDax();
@@ -347,7 +347,7 @@ namespace DaxEditorSample.Test
             Assert.IsNull(calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
             Assert.IsNull(calcProp.CustomFormat);
-            Assert.AreEqual(@"'M/d/yyyy HH:mm:ss'", calcProp.FormatString);
+            Assert.AreEqual(@"M/d/yyyy HH:mm:ss", calcProp.FormatString);
 
             var expected = @"CALCULATION PROPERTY DateTimeGeneral Format='M/d/yyyy HH:mm:ss'";
             var actual = calcProp.ToDax();
@@ -385,7 +385,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(DaxCalcProperty.FormatType.Text, calcProp.Format);
             Assert.IsNull(calcProp.Accuracy);
             Assert.IsNull(calcProp.ThousandSeparator);
-            Assert.AreEqual("''", calcProp.FormatString);
+            Assert.AreEqual(string.Empty, calcProp.FormatString);
 
             string expectedDaxCalculatedPropertyString = "CALCULATION PROPERTY Text";
             Assert.AreEqual(expectedDaxCalculatedPropertyString, calcProp.ToDax());
