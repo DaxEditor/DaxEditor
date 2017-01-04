@@ -35,6 +35,7 @@ namespace DaxEditor
         public bool? Visible { get; set; }
         public string DisplayFolder { get; set; } 
         public string Description { get; set; }
+        public KPI KPI { get; set; }
 
         private static readonly string _defaultFormatString = "''";
         private static readonly string _defaultDisplayFolder = string.Empty;
@@ -149,6 +150,25 @@ namespace DaxEditor
             rv.Visible = !measure.IsHidden;
             rv.Description = measure.Description?.ToString()?.Replace("'", "`") ?? string.Empty;
 
+            if (measure.KPI != null)
+            {
+                rv.KPI = new KPI();
+                rv.KPI.Description = measure.KPI.Description;
+                rv.KPI.TargetFormatString = measure.KPI.TargetFormatString;
+                rv.KPI.TargetDescription = measure.KPI.TargetDescription;
+                rv.KPI.TargetExpression = measure.KPI.TargetExpression;
+                rv.KPI.StatusGraphic = measure.KPI.StatusGraphic;
+                rv.KPI.StatusDescription = measure.KPI.StatusDescription;
+                rv.KPI.StatusExpression = measure.KPI.StatusExpression;
+                rv.KPI.TrendGraphic = measure.KPI.TrendGraphic;
+                rv.KPI.TrendDescription = measure.KPI.TrendDescription;
+                rv.KPI.TrendExpression = measure.KPI.TrendExpression;
+                foreach (var annotation in measure.KPI.Annotations)
+                {
+                    rv.KPI.Annotations.Add(annotation.Clone());
+                }
+            }
+
             var formatValueString = measure.Annotations?.
                 FirstOrDefault(i => string.Equals(i.Name, "Format"))?.Value?.ToString();
             if (string.IsNullOrWhiteSpace(formatValueString))
@@ -204,21 +224,31 @@ namespace DaxEditor
             if (customFormatElement.Name.LocalName == "DateTimes")
                 customFormatElement = customFormatElement.Element("DateTime");
 
-            string customFormat = "'";
-            customFormat += string.Join(" ", customFormatElement.Attributes().Select(i => string.Format(@"{0}=""{1}""", i.Name, i.Value)));
-            customFormat += "'";
-            return customFormat;
+            return string.Join(" ", customFormatElement.Attributes().Select(i => string.Format(@"{0}=""{1}""", i.Name, i.Value)));
+        }
+
+        private string AppendIfNotEmpty(string text, string name, string value, char symvol = ' ')
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                text += $" {name} ={symvol}{value}{symvol}";
+            }
+
+            return text;
         }
 
         public string ToDax()
         {
             // skip property only if general and visible
-            if (Format == FormatType.General && 
+            if (Format == FormatType.General &&
                 FormatString == _defaultFormatString &&
-                !(Visible.HasValue && Visible.Value == false)
-                && string.IsNullOrWhiteSpace(Description)
-                && string.IsNullOrWhiteSpace(DisplayFolder) )
+                !(Visible.HasValue && Visible.Value == false) &&
+                string.IsNullOrWhiteSpace(Description) &&
+                string.IsNullOrWhiteSpace(DisplayFolder) &&
+                KPI == null)
+            {
                 return string.Empty;
+            }
 
             string result;
             switch (Format)
@@ -246,20 +276,39 @@ namespace DaxEditor
                     if (!string.IsNullOrEmpty(FormatString) && !string.Equals("''", FormatString))
                         result += " Format=" + FormatString;
 
-                    if (!string.IsNullOrEmpty(CustomFormat))
-                        result += " AdditionalInfo=" + CustomFormat;
-
-                    if (!string.IsNullOrEmpty(DisplayFolder))
-                        result += " DisplayFolder='" + DisplayFolder + "\'";
-
-                    if (!string.IsNullOrEmpty(Description))
-                        result += " Description='" + Description + "\'";
+                    result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, '\'');
+                    result = AppendIfNotEmpty(result, "DisplayFolder", DisplayFolder, '\'');
+                    result = AppendIfNotEmpty(result, "Description", Description, '\'');
 
                     break;
                 default:
                     Debug.Assert(false, "Not reachable");
                     result = string.Empty;
                     break;
+            }
+
+            if (KPI != null)
+            {
+                result = AppendIfNotEmpty(result, "KpiDescription", KPI.Description, '\"');
+                result = AppendIfNotEmpty(result, "KpiTargetFormatString", KPI.TargetFormatString, '\"');
+                result = AppendIfNotEmpty(result, "KpiTargetDescription", KPI.TargetDescription, '\"');
+                result = AppendIfNotEmpty(result, "KpiTargetExpression", KPI.TargetExpression);
+                result = AppendIfNotEmpty(result, "KpiStatusGraphic", KPI.StatusGraphic, '\"');
+                result = AppendIfNotEmpty(result, "KpiStatusDescription", KPI.StatusDescription, '\"');
+                result = AppendIfNotEmpty(result, "KpiStatusExpression", KPI.StatusExpression);
+                result = AppendIfNotEmpty(result, "KpiTrendGraphic", KPI.TrendGraphic, '\"');
+                result = AppendIfNotEmpty(result, "KpiTrendDescription", KPI.TrendDescription, '\"');
+                result = AppendIfNotEmpty(result, "KpiTrendExpression", KPI.TrendExpression);
+                
+                var texts = new List<string>();
+                foreach (var annotation in KPI.Annotations)
+                {
+                    texts.Add($"{annotation.Name} = \"{annotation.Value}\"");
+                }
+                if (KPI.Annotations.Count > 0)
+                {
+                    result += $" KpiAnnotations = '{string.Join(", ", texts)}'";
+                }
             }
 
             return result;
@@ -324,14 +373,14 @@ namespace DaxEditor
                 if (Format == FormatType.Currency)
                 {
                     writer.WriteRaw("<Currency ");
-                    writer.WriteRaw(CustomFormat.Trim('\''));
+                    writer.WriteRaw(CustomFormat);
                     writer.WriteRaw(" />");
                 }
                 else if (Format == FormatType.DateTimeCustom)
                 {
                     writer.WriteStartElement("DateTimes");
                     writer.WriteRaw("<DateTime ");
-                    writer.WriteRaw(CustomFormat.Trim('\''));
+                    writer.WriteRaw(CustomFormat);
                     writer.WriteRaw(" />");
                     writer.WriteEndElement();
                 }
@@ -398,6 +447,26 @@ namespace DaxEditor
             if (!string.IsNullOrWhiteSpace(Description))
             {
                 measure.Description = Description.Trim('\'').Replace("`","'");
+            }
+
+            if (KPI != null)
+            {
+                measure.KPI = new KPI();
+                measure.KPI.Description = KPI.Description;
+                measure.KPI.TargetFormatString = KPI.TargetFormatString;
+                measure.KPI.TargetDescription = KPI.TargetDescription;
+                measure.KPI.TargetExpression = KPI.TargetExpression;
+                measure.KPI.StatusGraphic = KPI.StatusGraphic;
+                measure.KPI.StatusDescription = KPI.StatusDescription;
+                measure.KPI.StatusExpression = KPI.StatusExpression;
+                measure.KPI.TrendGraphic = KPI.TrendGraphic;
+                measure.KPI.TrendDescription = KPI.TrendDescription;
+                measure.KPI.TrendExpression = KPI.TrendExpression;
+                measure.KPI.Annotations.Clear();
+                foreach (var annotation in KPI.Annotations)
+                {
+                    measure.KPI.Annotations.Add(annotation.Clone());
+                }
             }
         }
     }
