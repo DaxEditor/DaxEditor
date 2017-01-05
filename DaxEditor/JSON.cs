@@ -24,26 +24,6 @@ namespace DaxEditor.Json
             return JsonSerializer.SerializeDatabase(database, options);
         }
 
-        public static string SerializeCulture(Culture culture)
-        {
-            var options = new SerializeOptions();
-            options.SplitMultilineStrings = true;
-            return JsonSerializer.SerializeObject(culture, options);
-        }
-
-        public static string SerializeCultures(CultureCollection cultures)
-        {
-            if (cultures == null || cultures.Count == 0)
-            {
-                return string.Empty;
-            }
-
-            return $@"""cultures"": [
-    {string.Join("," + Environment.NewLine, cultures.Select(culture => SerializeCulture(culture)))}
-],
-";
-        }
-
         //Custom implementation
         /*
         public static Tabular.Database Deserialize(string text)

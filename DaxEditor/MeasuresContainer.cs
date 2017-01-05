@@ -224,12 +224,10 @@ Message: {exception.Message}
 
             var document = JsonUtilities.Deserialize(inputJson);
             var jsonMeasures = MeasuresToJsonMeasures(Measures);
-            
-            //Fix Internal Exception
-            //var culturesText = JsonUtilities.SerializeCultures(document?.Model?.Cultures);
-            //document?.Model?.Cultures?.Clear();
-            
-            var tables = document?.Model?.Tables;
+
+            Debug.Assert(document?.Model != null);
+
+            var tables = document.Model.Tables;
             if (tables != null)
             {
                 foreach (var table in tables)
@@ -247,40 +245,48 @@ Message: {exception.Message}
                 }
             }
 
-            /*
-            foreach (var culture in document?.Model?.Cultures)
+            //Fix for serialize translation internal error
+            foreach (var culture in document.Model.Cultures)
             {
+                var newObjects = new List<ObjectTranslation>();
                 foreach (var translation in culture.ObjectTranslations)
                 {
-                    foreach (var error in translation.Validate().Errors)
-                    {
-                        Console.WriteLine(error.Message);
-                        Console.WriteLine(translation.Object);
-                    }
                     var obj = translation.Object;
+
+                    //Find all the translated actions and create objects for them
                     if (obj.ObjectType == ObjectType.Measure)
                     {
                         var objMeasure = obj as Measure;
-                        foreach (var table in document?.Model?.Tables)
+                        foreach (var table in document.Model.Tables)
                         {
                             foreach (var measure in table.Measures)
                             {
                                 if (measure.Name == objMeasure.Name)
                                 {
-                                    translation.Object = measure;
+                                    var newObject = new ObjectTranslation();
+                                    newObject.Object = measure;
+                                    newObject.Property = translation.Property;
+                                    newObject.Value = translation.Value;
+                                    newObjects.Add(newObject);
                                 }
                             }
                         }
                     }
+                    //Readd other objects
+                    else
+                    {
+                        newObjects.Add(translation.Clone());
+                    }
+                }
+
+                culture.ObjectTranslations.Clear();
+                foreach (var newObject in newObjects)
+                {
+                    culture.ObjectTranslations.Add(newObject);
                 }
             }
-            */
-
-            var json = JsonUtilities.Serialize(document);
-            //var indexOfTables = json.IndexOf("\"tables\":");
-            //json = indexOfTables != -1 ? json.Insert(indexOfTables, culturesText) : json;
-            //Console.WriteLine(json);
-            return json;
+            
+            return JsonUtilities.Serialize(document);
         }
 
         public string UpdateMeasures(string text)
