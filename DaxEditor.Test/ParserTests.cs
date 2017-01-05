@@ -196,7 +196,6 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             Assert.AreEqual("CREATE MEASURE 'Table1'[C]=1", measure1.FullText);
             Assert.IsNotNull(measure1.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.NumberDecimal, measure1.CalcProperty.Format);
-            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
             Assert.IsTrue(measure1.CalcProperty.Accuracy.HasValue);
             Assert.AreEqual(5, measure1.CalcProperty.Accuracy.Value);
         }
@@ -456,7 +455,6 @@ CREATE MEASURE 'Sales'[c] = 1
   * expression */", measure1.FullText);
             Assert.IsNotNull(measure1.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.General, measure1.CalcProperty.Format);
-            Assert.AreEqual("Member", measure1.CalcProperty.CalculationType);
             Assert.IsFalse(measure1.CalcProperty.Accuracy.HasValue);
 
             var measure2 = parser.Measures[ 1 ];
@@ -470,7 +468,6 @@ CREATE MEASURE 'Sales'[c] = 1
 // Single line comment after measure definition", measure2.FullText);
             Assert.IsNotNull(measure2.CalcProperty);
             Assert.AreEqual(DaxCalcProperty.FormatType.General, measure2.CalcProperty.Format);
-            Assert.AreEqual("Member", measure2.CalcProperty.CalculationType);
             Assert.IsFalse(measure2.CalcProperty.Accuracy.HasValue);
 
             var measure3 = parser.Measures[2];

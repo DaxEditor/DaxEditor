@@ -29,7 +29,6 @@ namespace DaxEditor
         public FormatType Format { get; set; }
         public int? Accuracy { get; set; }
         public bool? ThousandSeparator { get; set; }
-        public string CalculationType { get; set; }
         public string CustomFormat { get; set; }
 
         public KPI KPI
@@ -40,7 +39,6 @@ namespace DaxEditor
 
         public Measure Measure { get; set; }
         
-        private static readonly string _defaultCalculationType = "Member";
 
         private DaxCalcProperty()
         {
@@ -50,7 +48,6 @@ namespace DaxEditor
         public static DaxCalcProperty CreateDefaultCalculationProperty()
         {
             var rv = new DaxCalcProperty();
-            rv.CalculationType = _defaultCalculationType;
             return rv;
         }
 
@@ -65,8 +62,8 @@ namespace DaxEditor
                 var formatStringElement = cp.Element(MeasuresContainer.NS + "FormatString");
                 rv.Measure.FormatString = formatStringElement?.Value?.Trim('\'');
                 
-                var calculationTypeElement = cp.Element(MeasuresContainer.NS + "CalculationType");
-                rv.CalculationType = calculationTypeElement != null ? calculationTypeElement.Value : _defaultCalculationType;
+                //var calculationTypeElement = cp.Element(MeasuresContainer.NS + "CalculationType");
+                //rv.CalculationType = calculationTypeElement != null ? calculationTypeElement.Value : _defaultCalculationType;
 
                 var displayFolderElement = cp.Element(MeasuresContainer.NS + "DisplayFolder");
                 if (displayFolderElement != null)
