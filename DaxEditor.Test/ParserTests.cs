@@ -339,6 +339,18 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
 
             Assert.AreEqual(1, parser.Measures.Count);
 
+            var text2 =
+    @"CREATE MEASURE 'TaxRefund'[Market Ranking TFS] = RANKX(All(Nationalities[Country]), [Net Tax Refund Sales], , TRUE, DENSE);";
+            var parser2 = ParseText(text2);
+
+            Assert.AreEqual(1, parser2.Measures.Count);
+
+            var text3 =
+@"CREATE MEASURE 'TaxRefund'[Market Ranking TFS] = RANKX ( 'Product Category', [A], , ASC, Dense);";
+            var parser3 = ParseText(text3);
+
+            Assert.AreEqual(1, parser3.Measures.Count);
+
             var measure1 = parser.Measures[0];
             Assert.AreEqual("TaxRefund", measure1.TableName);
             Assert.AreEqual("Market Ranking TFS", measure1.Name);

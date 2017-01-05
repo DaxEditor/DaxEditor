@@ -443,6 +443,8 @@ RankXOrder
     | NUMBER
     | KWTRUE
     | KWFALSE
+	| KWASC
+	| KWDESC
     ;
 
 RankXValue
