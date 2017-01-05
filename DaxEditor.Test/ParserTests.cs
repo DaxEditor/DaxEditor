@@ -556,7 +556,7 @@ CALCULATION
 var x='Test'[Sales2] 
 return
     if(ISBLANK(x),BLANK(),
-        If(x<3.2,
+        If(x<3.2,0,
             If(x<1.6,-2,-1),
 			If(x<4.8,0,
 				If(x<6.4,1,2)
@@ -588,7 +588,7 @@ return
             Assert.AreEqual(@"var x='Test'[Sales2] 
 return
     if(ISBLANK(x),BLANK(),
-        If(x<3.2,
+        If(x<3.2,0,
             If(x<1.6,-2,-1),
 			If(x<4.8,0,
 				If(x<6.4,1,2)
