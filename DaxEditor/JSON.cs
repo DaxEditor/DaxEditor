@@ -1,4 +1,7 @@
-﻿namespace DaxEditor.Json
+﻿using System;
+using System.Linq;
+
+namespace DaxEditor.Json
 {
     using Microsoft.AnalysisServices.Tabular;
 
@@ -30,28 +33,15 @@
 
         public static string SerializeCultures(CultureCollection cultures)
         {
-            if (cultures == null)
+            if (cultures == null || cultures.Count == 0)
             {
                 return string.Empty;
             }
 
-            var culturesText = string.Empty;
-            int i = 0;
-            foreach (var culture in cultures)
-            {
-                culturesText += i > 0 ? "," + System.Environment.NewLine : string.Empty;
-                culturesText += SerializeCulture(culture);
-                ++i;
-            }
-
-            if (string.IsNullOrWhiteSpace(culturesText))
-            {
-                return string.Empty;
-            }
-
-            culturesText = "\"cultures\": [" + System.Environment.NewLine +
-                culturesText + System.Environment.NewLine + "]," + System.Environment.NewLine;
-            return culturesText;
+            return $@"""cultures"": [
+    {string.Join("," + Environment.NewLine, cultures.Select(culture => SerializeCulture(culture)))}
+],
+";
         }
 
         //Custom implementation
