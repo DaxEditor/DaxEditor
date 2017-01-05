@@ -274,6 +274,27 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
+            /*
+            //Empty lines after expression fix
+            try
+            {
+                for (int i = location.eLin; ; ++i)
+                {
+                    var line = GetLineText(i);
+                    var index = GetFirstNonEmptyIndex(line, i == location.eLin ? location.eCol + 1 : 0);
+                    if (index < line.Length)
+                    {
+                        location.eLin = i;
+                        location.eCol = index;
+                        break;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //We have reached the end of the file or received our exception.
+            }
+            */
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
             lastMeasure.CalcProperty.KPI.TargetExpression = scanner.GetText(location);
         }
@@ -301,6 +322,27 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
+            /*
+            //Empty lines after expression fix
+            try
+            {
+                for (int i = location.eLin; ; ++i)
+                {
+                    var line = GetLineText(i);
+                    var index = GetFirstNonEmptyIndex(line, i == location.eLin ? location.eCol + 1 : 0);
+                    if (index < line.Length)
+                    {
+                        location.eLin = i;
+                        location.eCol = index;
+                        break;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //We have reached the end of the file or received our exception.
+            }
+            */
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
             lastMeasure.CalcProperty.KPI.StatusExpression = scanner.GetText(location);
         }
@@ -328,6 +370,27 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
+            /*
+            //Empty lines after expression fix
+            try
+            {
+                for (int i = location.eLin; ; ++i)
+                {
+                    var line = GetLineText(i);
+                    var index = GetFirstNonEmptyIndex(line, i == location.eLin ? location.eCol + 1 : 0);
+                    if (index < line.Length)
+                    {
+                        location.eLin = i;
+                        location.eCol = index;
+                        break;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //We have reached the end of the file or received our exception.
+            }
+            */
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
             lastMeasure.CalcProperty.KPI.TrendExpression = scanner.GetText(location);
         }

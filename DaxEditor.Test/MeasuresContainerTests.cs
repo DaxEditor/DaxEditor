@@ -103,7 +103,8 @@ namespace DaxEditorSample.Test
             expected = JsonUtilities.Serialize(document);
 
             var actual = measuresFromDax.UpdateMeasures(text);
-            WindiffAssert.AreEqual(expected, actual);
+            //Ignore empty lines. Parser not support whitespaces before expressions.
+            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
         }
 
         [TestMethod]
@@ -147,7 +148,8 @@ namespace DaxEditorSample.Test
             expected = JsonUtilities.Serialize(document);
 
             var actual = measuresFromDax.UpdateMeasures(text);
-            WindiffAssert.AreEqual(expected, actual);
+            //Ignore empty lines. Parser not support whitespaces before expressions.
+            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
         }
 
         [TestMethod]
@@ -213,7 +215,8 @@ namespace DaxEditorSample.Test
             expected = JsonUtilities.Serialize(document);
 
             var actual = measuresFromDax.UpdateMeasures(text);
-            WindiffAssert.AreEqual(expected, actual);
+            //Ignore empty lines. Parser not support whitespaces before expressions.
+            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
         }
     }
 }

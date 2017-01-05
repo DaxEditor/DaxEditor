@@ -103,6 +103,14 @@ namespace DaxEditorSample.Test
             }
         }
 
+        public static void AreEqualIgnoreEmptyLinesInExpressions(string expected, string actual)
+        {
+            AreEqual(
+                expected.Replace(" ", "").Replace("\"", "").Replace("\r\n", "").Replace("\r", "").Replace("\n", "").Replace(",", ""), 
+                actual.Replace(" ", "").Replace("\"", "").Replace("\r\n", "").Replace("\r", "").Replace("\n", "").Replace(",", "")
+            );
+        }
+
         /// <summary>
         /// Normalizes XMLA by replacing different const strings in MdxScript with common text
         /// </summary>
