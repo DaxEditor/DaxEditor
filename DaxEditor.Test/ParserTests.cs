@@ -309,7 +309,15 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
                         { ""High"", 100, 9999999 }
                     } 
                 )";
-            Babel.Parser.Parser parser = ParseText(text);
+            var parser = ParseText(text);
+        }
+
+        [TestMethod]
+        public void ParseVeryBigFile()
+        {
+            var text = Utils.ReadFileFromResources("VeryBigFile.dax");
+            //var parser = ParseText(text);
+            //Console.WriteLine(parser.Measures.Count);
         }
 
         [TestMethod]
