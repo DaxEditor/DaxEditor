@@ -351,12 +351,47 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
 
             Assert.AreEqual(1, parser3.Measures.Count);
 
+            var text4 = @"CREATE MEASURE 'Test'[Test] = RANKX(Inventory, [InventoryCost],,,Dense)";
+            var parser4 = ParseText(text4);
+
             var measure1 = parser.Measures[0];
             Assert.AreEqual("TaxRefund", measure1.TableName);
             Assert.AreEqual("Market Ranking TFS", measure1.Name);
             Assert.AreEqual(@"RANKX(All(Nationalities[Country]), [Net Tax Refund Sales], [Other measure], TRUE, DENSE)", measure1.Expression);
             Assert.AreEqual(@"CREATE MEASURE 'TaxRefund'[Market Ranking TFS] = RANKX(All(Nationalities[Country]), [Net Tax Refund Sales], [Other measure], TRUE, DENSE)", measure1.FullText);
             Assert.IsNull(measure1.CalcProperty);
+        }
+
+        [TestMethod]
+        public void ParseExpressionRankX2()
+        {
+            var text = @"
+CREATE MEASURE 'Leases'[Variance % Department Yield TY vs LY MTD Sequence] = IF (
+            NOT ( ISBLANK ( [Variance % Yield TY vs LY MTD] ) ),
+            RANKX (
+                ALLSELECTED (  Leases[Department] ),
+                IF (
+                    ISBLANK ( [Variance % Yield TY vs LY MTD] ),
+                    MINX ( ALL ( Leases ), [Variance % Yield TY vs LY MTD] ) - 1,
+                    [Variance % Yield TY vs LY MTD]
+                ),
+                ,
+                0,
+                SKIP
+            ),
+            BLANK ()
+        )
+CALCULATION PROPERTY General Format='0.00%;-0.00%;0.00%' DisplayFolder='Sequence Ranking';";
+            var parser = ParseText(text);
+
+            Assert.AreEqual(1, parser.Measures.Count);
+
+            var measure1 = parser.Measures[0];
+            Assert.AreEqual("Leases", measure1.TableName);
+            Assert.AreEqual("Variance % Department Yield TY vs LY MTD Sequence", measure1.Name);
+            Assert.IsNotNull(measure1.Expression);
+            Assert.IsNotNull(measure1.FullText);
+            Assert.IsNotNull(measure1.CalcProperty);
         }
 
         [TestMethod]

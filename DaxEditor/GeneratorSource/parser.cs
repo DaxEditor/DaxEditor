@@ -153,8 +153,8 @@ public partial class Parser: ShiftReduceParser<LexValue, LexLocation>
     AddState(58,new State(new int[]{40,59}));
     AddState(59,new State(new int[]{128,36,152,37,144,51,145,52,150,53,148,54,149,55,167,43,184,44,181,58,132,94,133,95,175,98},new int[]{-57,60,-58,155,-78,27,-71,90,-70,57,-53,156,-56,96,-66,97}));
     AddState(60,new State(new int[]{44,61}));
-    AddState(61,new State(new int[]{132,94,133,95,128,36,175,98,131,93,152,37,144,38,145,39,150,40,148,41,149,42,167,43,184,44,181,58,40,83,129,118,130,119,33,124,45,125,43,126,173,133},new int[]{-60,62,-55,81,-53,91,-56,96,-66,97,-54,115,-58,26,-78,27,-71,90,-70,57,-72,116,-73,117,-74,120,-76,121,-75,127,-4,142,-57,25,-44,128,-43,129,-42,132}));
-    AddState(62,new State(new int[]{41,63,44,64,43,-213,45,-213,42,-213,47,-213,203,-213,204,-213,38,-213,198,-213,199,-213,200,-213,201,-213,196,-213,197,-213}));
+    AddState(61,new State(new int[]{128,36,152,37,144,38,145,39,150,40,148,41,149,42,167,43,184,44,181,58,132,94,133,95,175,98,131,93,40,83,129,118,130,119,33,124,45,125,43,126,173,133},new int[]{-4,62,-57,25,-58,26,-78,27,-71,90,-70,57,-53,91,-56,96,-66,97,-60,123,-55,81,-54,115,-72,116,-73,117,-74,120,-76,121,-75,127,-44,128,-43,129,-42,132}));
+    AddState(62,new State(new int[]{41,63,44,64,43,12,45,13,42,14,47,15,203,16,204,17,38,18,198,19,199,20,200,21,201,22,196,23,197,24},new int[]{-77,10}));
     AddState(63,new State(-192));
     AddState(64,new State(new int[]{132,94,133,95,128,36,175,98,131,93,152,37,144,38,145,39,150,40,148,41,149,42,167,43,184,44,181,58,40,83,129,118,130,119,33,124,45,125,43,126,173,133,41,-190,44,-190},new int[]{-69,65,-60,80,-55,81,-53,91,-56,96,-66,97,-54,115,-58,26,-78,27,-71,90,-70,57,-72,116,-73,117,-74,120,-76,121,-75,127,-4,142,-57,25,-44,128,-43,129,-42,132}));
     AddState(65,new State(new int[]{41,66,44,67}));
@@ -645,10 +645,10 @@ public partial class Parser: ShiftReduceParser<LexValue, LexLocation>
     rules[189]=new Rule(-68, new int[]{147});
     rules[190]=new Rule(-69, new int[]{});
     rules[191]=new Rule(-69, new int[]{-60});
-    rules[192]=new Rule(-70, new int[]{181,40,-57,44,-60,41});
-    rules[193]=new Rule(-70, new int[]{181,40,-57,44,-60,44,-69,41});
-    rules[194]=new Rule(-70, new int[]{181,40,-57,44,-60,44,-69,44,-68,41});
-    rules[195]=new Rule(-70, new int[]{181,40,-57,44,-60,44,-69,44,-68,44,-67,41});
+    rules[192]=new Rule(-70, new int[]{181,40,-57,44,-4,41});
+    rules[193]=new Rule(-70, new int[]{181,40,-57,44,-4,44,-69,41});
+    rules[194]=new Rule(-70, new int[]{181,40,-57,44,-4,44,-69,44,-68,41});
+    rules[195]=new Rule(-70, new int[]{181,40,-57,44,-4,44,-69,44,-68,44,-67,41});
     rules[196]=new Rule(-71, new int[]{-70});
     rules[197]=new Rule(-19, new int[]{-4});
     rules[198]=new Rule(-47, new int[]{-4});
@@ -753,310 +753,310 @@ public partial class Parser: ShiftReduceParser<LexValue, LexLocation>
 			{ SpecifyFullMeasureText(location_stack.array[location_stack.top-5], location_stack.array[location_stack.top-1]); }
         break;
       case 41: // CreateMeasure -> KWCREATE KWMEASURE MeasureName EQ MeasureExpression CalculationProperty 
-#line 148 "../../GeneratorSource/parser.y"
+#line 147 "../../GeneratorSource/parser.y"
 			{ SpecifyFullMeasureText(location_stack.array[location_stack.top-6], location_stack.array[location_stack.top-2]); }
         break;
       case 42: // CreateMeasure -> KWCREATE KWMEASURE error EQ MeasureExpression 
-#line 149 "../../GeneratorSource/parser.y"
+#line 148 "../../GeneratorSource/parser.y"
 			{ CallHdlr("Measure name expected", location_stack.array[location_stack.top-3]); }
         break;
       case 47: // CalculationPropertyFormatType -> KWGENERAL 
-#line 169 "../../GeneratorSource/parser.y"
+#line 168 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 48: // CalculationPropertyFormatType -> KWNUMBERDECIMAL 
-#line 170 "../../GeneratorSource/parser.y"
+#line 169 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 49: // CalculationPropertyFormatType -> KWNUMBERWHOLE 
-#line 171 "../../GeneratorSource/parser.y"
+#line 170 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 50: // CalculationPropertyFormatType -> KWPERCENTAGE 
-#line 172 "../../GeneratorSource/parser.y"
+#line 171 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 51: // CalculationPropertyFormatType -> KWSCIENTIFIC 
-#line 173 "../../GeneratorSource/parser.y"
+#line 172 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 52: // CalculationPropertyFormatType -> KWCURRENCY 
-#line 174 "../../GeneratorSource/parser.y"
+#line 173 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 53: // CalculationPropertyFormatType -> KWDATETIMECUSTOM 
-#line 175 "../../GeneratorSource/parser.y"
+#line 174 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 54: // CalculationPropertyFormatType -> KWDATETIMESHORTDATEPATTERN 
-#line 176 "../../GeneratorSource/parser.y"
+#line 175 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 55: // CalculationPropertyFormatType -> KWDATETIMEGENERAL 
-#line 177 "../../GeneratorSource/parser.y"
+#line 176 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 56: // CalculationPropertyFormatType -> KWTEXT 
-#line 178 "../../GeneratorSource/parser.y"
+#line 177 "../../GeneratorSource/parser.y"
 			{ SpecifyCalculationProperty(location_stack.array[location_stack.top-1]); }
         break;
       case 57: // CalculationPropertyAccuracy -> KWACCURACY EQ NUMBER 
-#line 182 "../../GeneratorSource/parser.y"
+#line 181 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropAccuracy(location_stack.array[location_stack.top-1]); }
         break;
       case 58: // CalculationPropertyAccuracy -> KWACCURACY error 
-#line 183 "../../GeneratorSource/parser.y"
+#line 182 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 59: // CalculationPropertyAccuracy -> KWACCURACY EQ error 
-#line 184 "../../GeneratorSource/parser.y"
+#line 183 "../../GeneratorSource/parser.y"
 			{ CallHdlr("Value of Accuracy is not a number", location_stack.array[location_stack.top-1]); }
         break;
       case 60: // CalculationPropertyVisible -> KWVISIBLE EQ KWTRUE 
-#line 188 "../../GeneratorSource/parser.y"
+#line 187 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropIsHidden(false); }
         break;
       case 61: // CalculationPropertyVisible -> KWVISIBLE EQ KWFALSE 
-#line 189 "../../GeneratorSource/parser.y"
+#line 188 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropIsHidden(true); }
         break;
       case 62: // CalculationPropertyVisible -> KWVISIBLE error 
-#line 190 "../../GeneratorSource/parser.y"
+#line 189 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 63: // CalculationPropertyVisible -> KWVISIBLE EQ error 
-#line 191 "../../GeneratorSource/parser.y"
+#line 190 "../../GeneratorSource/parser.y"
 			{ CallHdlr("Visible can be either TRUE or FALSE", location_stack.array[location_stack.top-1]); }
         break;
       case 66: // CalculationPropertyDescription -> KWDESCRIPTION EQ CalculationPropertyDescriptionContent 
-#line 200 "../../GeneratorSource/parser.y"
+#line 199 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropDescription(location_stack.array[location_stack.top-1]);  }
         break;
       case 67: // CalculationPropertyDescription -> KWDESCRIPTION error 
-#line 201 "../../GeneratorSource/parser.y"
+#line 200 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 68: // CalculationPropertyDisplayFolder -> KWDISPLAYFOLDER EQ ESCAPEDTABLENAME 
-#line 205 "../../GeneratorSource/parser.y"
+#line 204 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropDisplayFolder(location_stack.array[location_stack.top-1]);  }
         break;
       case 69: // CalculationPropertyDisplayFolder -> KWDISPLAYFOLDER error 
-#line 206 "../../GeneratorSource/parser.y"
+#line 205 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 70: // CalculationPropertyThousandSeparator -> KWTHOUSANDSEPARATOR EQ KWTRUE 
-#line 210 "../../GeneratorSource/parser.y"
+#line 209 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropThousandSeparator(true); }
         break;
       case 71: // CalculationPropertyThousandSeparator -> KWTHOUSANDSEPARATOR EQ KWFALSE 
-#line 211 "../../GeneratorSource/parser.y"
+#line 210 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropThousandSeparator(false); }
         break;
       case 72: // CalculationPropertyThousandSeparator -> KWTHOUSANDSEPARATOR error 
-#line 212 "../../GeneratorSource/parser.y"
+#line 211 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 73: // CalculationPropertyThousandSeparator -> KWTHOUSANDSEPARATOR EQ error 
-#line 213 "../../GeneratorSource/parser.y"
+#line 212 "../../GeneratorSource/parser.y"
 			{ CallHdlr("ThousandSeparator can be either TRUE or FALSE", location_stack.array[location_stack.top-1]); }
         break;
       case 74: // CalculationPropertyFormat -> KWFORMAT EQ ESCAPEDTABLENAME 
-#line 217 "../../GeneratorSource/parser.y"
+#line 216 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropFormat(location_stack.array[location_stack.top-1]); }
         break;
       case 75: // CalculationPropertyAdditionalInfo -> KWADDITIONALINFO EQ ESCAPEDTABLENAME 
-#line 221 "../../GeneratorSource/parser.y"
+#line 220 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropAdditionalInfo(location_stack.array[location_stack.top-1]); }
         break;
       case 76: // CalculationPropertyKpiDescription -> KWKPIDESCRIPTION EQ CalculationPropertyDescriptionContent 
-#line 225 "../../GeneratorSource/parser.y"
+#line 224 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiDescription(location_stack.array[location_stack.top-1]);  }
         break;
       case 77: // CalculationPropertyKpiDescription -> KWKPIDESCRIPTION error 
-#line 226 "../../GeneratorSource/parser.y"
+#line 225 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 78: // CalculationPropertyKpiTargetFormatString -> KWKPITARGETFORMATSTRING EQ CalculationPropertyDescriptionContent 
-#line 230 "../../GeneratorSource/parser.y"
+#line 229 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiTargetFormatString(location_stack.array[location_stack.top-1]);  }
         break;
       case 79: // CalculationPropertyKpiTargetFormatString -> KWKPITARGETFORMATSTRING error 
-#line 231 "../../GeneratorSource/parser.y"
+#line 230 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 80: // CalculationPropertyKpiTargetDescription -> KWKPITARGETDESCRIPTION EQ CalculationPropertyDescriptionContent 
-#line 235 "../../GeneratorSource/parser.y"
+#line 234 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiTargetDescription(location_stack.array[location_stack.top-1]);  }
         break;
       case 81: // CalculationPropertyKpiTargetDescription -> KWKPITARGETDESCRIPTION error 
-#line 236 "../../GeneratorSource/parser.y"
+#line 235 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 82: // CalculationPropertyKpiTargetExpression -> KWKPITARGETEXPRESSION EQ Expression 
-#line 240 "../../GeneratorSource/parser.y"
+#line 239 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiTargetExpression(location_stack.array[location_stack.top-1]);  }
         break;
       case 83: // CalculationPropertyKpiTargetExpression -> KWKPITARGETEXPRESSION error 
-#line 241 "../../GeneratorSource/parser.y"
+#line 240 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 84: // CalculationPropertyKpiStatusGraphic -> KWKPISTATUSGRAPHIC EQ CalculationPropertyDescriptionContent 
-#line 245 "../../GeneratorSource/parser.y"
+#line 244 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiStatusGraphic(location_stack.array[location_stack.top-1]);  }
         break;
       case 85: // CalculationPropertyKpiStatusGraphic -> KWKPISTATUSGRAPHIC error 
-#line 246 "../../GeneratorSource/parser.y"
+#line 245 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 86: // CalculationPropertyKpiStatusDescription -> KWKPISTATUSDESCRIPTION EQ CalculationPropertyDescriptionContent 
-#line 250 "../../GeneratorSource/parser.y"
+#line 249 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiStatusDescription(location_stack.array[location_stack.top-1]);  }
         break;
       case 87: // CalculationPropertyKpiStatusDescription -> KWKPISTATUSDESCRIPTION error 
-#line 251 "../../GeneratorSource/parser.y"
+#line 250 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 88: // CalculationPropertyKpiStatusExpression -> KWKPISTATUSEXPRESSION EQ Expression 
-#line 255 "../../GeneratorSource/parser.y"
+#line 254 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiStatusExpression(location_stack.array[location_stack.top-1]);  }
         break;
       case 89: // CalculationPropertyKpiStatusExpression -> KWKPISTATUSEXPRESSION error 
-#line 256 "../../GeneratorSource/parser.y"
+#line 255 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 90: // CalculationPropertyKpiTrendGraphic -> KWKPITRENDGRAPHIC EQ CalculationPropertyDescriptionContent 
-#line 260 "../../GeneratorSource/parser.y"
+#line 259 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiTrendGraphic(location_stack.array[location_stack.top-1]);  }
         break;
       case 91: // CalculationPropertyKpiTrendGraphic -> KWKPITRENDGRAPHIC error 
-#line 261 "../../GeneratorSource/parser.y"
+#line 260 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 92: // CalculationPropertyKpiTrendDescription -> KWKPITRENDDESCRIPTION EQ CalculationPropertyDescriptionContent 
-#line 265 "../../GeneratorSource/parser.y"
+#line 264 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiTrendDescription(location_stack.array[location_stack.top-1]);  }
         break;
       case 93: // CalculationPropertyKpiTrendDescription -> KWKPITRENDDESCRIPTION error 
-#line 266 "../../GeneratorSource/parser.y"
+#line 265 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 94: // CalculationPropertyKpiTrendExpression -> KWKPITRENDEXPRESSION EQ Expression 
-#line 270 "../../GeneratorSource/parser.y"
+#line 269 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiTrendExpression(location_stack.array[location_stack.top-1]);  }
         break;
       case 95: // CalculationPropertyKpiTrendExpression -> KWKPITRENDEXPRESSION error 
-#line 271 "../../GeneratorSource/parser.y"
+#line 270 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 96: // CalculationPropertyKpiAnnotations -> KWKPIANNOTATIONS EQ ESCAPEDTABLENAME 
-#line 275 "../../GeneratorSource/parser.y"
+#line 274 "../../GeneratorSource/parser.y"
 			{ SpecifyCalcPropKpiAnnotations(location_stack.array[location_stack.top-1]);  }
         break;
       case 97: // CalculationPropertyKpiAnnotations -> KWKPIANNOTATIONS error 
-#line 276 "../../GeneratorSource/parser.y"
+#line 275 "../../GeneratorSource/parser.y"
 			{ CallHdlr("'=' is not specified", location_stack.array[location_stack.top-1]); }
         break;
       case 100: // VarDeclaration -> KWVAR error EQ Expression 
-#line 285 "../../GeneratorSource/parser.y"
+#line 284 "../../GeneratorSource/parser.y"
 			{ CallHdlr("Var name expected", location_stack.array[location_stack.top-3]); }
         break;
       case 141: // CalculationProperty -> KWCALCULATION KWPROPERTY error 
-#line 338 "../../GeneratorSource/parser.y"
+#line 337 "../../GeneratorSource/parser.y"
 			{ CallHdlr("Wrong calculation property type.  Expected types: General, NumberDecimal, NumberWhole, Percentage, Scientific, Currency, DateTimeCustom, Visible, Description, DisplayFolder", location_stack.array[location_stack.top-2]); }
         break;
       case 147: // ParamSeparator -> ',' 
-#line 353 "../../GeneratorSource/parser.y"
+#line 352 "../../GeneratorSource/parser.y"
 			{ NextParameter(location_stack.array[location_stack.top-1]); }
         break;
       case 148: // ParenthesisParameters -> StartArg EndArg 
-#line 357 "../../GeneratorSource/parser.y"
+#line 356 "../../GeneratorSource/parser.y"
 			{ Match(location_stack.array[location_stack.top-2], location_stack.array[location_stack.top-1]); }
         break;
       case 149: // ParenthesisParameters -> StartArg Params1 EndArg 
-#line 358 "../../GeneratorSource/parser.y"
+#line 357 "../../GeneratorSource/parser.y"
 			{ Match(location_stack.array[location_stack.top-3], location_stack.array[location_stack.top-1]); }
         break;
       case 150: // ParenthesisParameters -> StartArg Params1 error 
-#line 359 "../../GeneratorSource/parser.y"
+#line 358 "../../GeneratorSource/parser.y"
 			{ CallHdlr("unmatched parentheses", location_stack.array[location_stack.top-1]); }
         break;
       case 151: // ParenthesisParameters -> StartArg error EndArg 
-#line 360 "../../GeneratorSource/parser.y"
+#line 359 "../../GeneratorSource/parser.y"
 			{ yyval = value_stack.array[value_stack.top-1];
                                              CallHdlr("error in parameters", location_stack.array[location_stack.top-2]); }
         break;
       case 152: // MeasureName -> TableRef ColumnRef 
-#line 365 "../../GeneratorSource/parser.y"
+#line 364 "../../GeneratorSource/parser.y"
 			{ CreateNewMeasure(location_stack.array[location_stack.top-2], location_stack.array[location_stack.top-1]); }
         break;
       case 180: // DataTableFunction -> DataTable 
-#line 432 "../../GeneratorSource/parser.y"
+#line 431 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 196: // RankXFunction -> RankX 
-#line 463 "../../GeneratorSource/parser.y"
+#line 462 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 197: // MeasureExpression -> Expression 
-#line 467 "../../GeneratorSource/parser.y"
+#line 466 "../../GeneratorSource/parser.y"
 			{ SpecifyMeasureExpression(location_stack.array[location_stack.top-1]); }
         break;
       case 234: // ParenthesisExpression -> '(' ')' 
-#line 518 "../../GeneratorSource/parser.y"
+#line 517 "../../GeneratorSource/parser.y"
 			{ Match(location_stack.array[location_stack.top-2], location_stack.array[location_stack.top-1]); }
         break;
       case 235: // ParenthesisExpression -> '(' Params1 ')' 
-#line 519 "../../GeneratorSource/parser.y"
+#line 518 "../../GeneratorSource/parser.y"
 			{ Match(location_stack.array[location_stack.top-3], location_stack.array[location_stack.top-1]); }
         break;
       case 236: // ParenthesisExpression -> '(' Params1 error 
-#line 520 "../../GeneratorSource/parser.y"
+#line 519 "../../GeneratorSource/parser.y"
 			{ CallHdlr("unmatched parentheses", location_stack.array[location_stack.top-1]); }
         break;
       case 241: // FunctionName -> FUNCTION 
-#line 531 "../../GeneratorSource/parser.y"
+#line 530 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 242: // FunctionName -> KWCALCULATE 
-#line 532 "../../GeneratorSource/parser.y"
+#line 531 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 243: // FunctionName -> KWTRUE 
-#line 533 "../../GeneratorSource/parser.y"
+#line 532 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 244: // FunctionName -> KWFALSE 
-#line 534 "../../GeneratorSource/parser.y"
+#line 533 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 245: // FunctionName -> KWYEAR 
-#line 535 "../../GeneratorSource/parser.y"
+#line 534 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 246: // FunctionName -> KWDAY 
-#line 536 "../../GeneratorSource/parser.y"
+#line 535 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 247: // FunctionName -> KWMONTH 
-#line 537 "../../GeneratorSource/parser.y"
+#line 536 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 248: // FunctionName -> KWFORMAT 
-#line 538 "../../GeneratorSource/parser.y"
+#line 537 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 249: // FunctionName -> KWNOT 
-#line 539 "../../GeneratorSource/parser.y"
+#line 538 "../../GeneratorSource/parser.y"
 			{ StartFunction(location_stack.array[location_stack.top-1], value_stack.array[value_stack.top-1].str); }
         break;
       case 252: // StartArg -> '(' 
-#line 550 "../../GeneratorSource/parser.y"
+#line 549 "../../GeneratorSource/parser.y"
 			{
         StartParameters(location_stack.array[location_stack.top-1]);
     }
         break;
       case 253: // EndArg -> ')' 
-#line 557 "../../GeneratorSource/parser.y"
+#line 556 "../../GeneratorSource/parser.y"
 			{
         EndParameters(location_stack.array[location_stack.top-1]);
     }
@@ -1072,7 +1072,7 @@ public partial class Parser: ShiftReduceParser<LexValue, LexLocation>
       return CharToString((char)terminal);
   }
 
-#line 562 "../../GeneratorSource/parser.y"
+#line 561 "../../GeneratorSource/parser.y"
 
 
 

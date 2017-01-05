@@ -139,14 +139,12 @@ CubeName
     ;
 
 CreateMeasure
-    : KWCREATE KWMEASURE CubeName '.' MeasureName EQ MeasureExpression       { SpecifyFullMeasureText(@1, @7); }
-    | KWCREATE KWMEASURE CubeName '.' MeasureName EQ MeasureExpression CalculationProperty
-                                                                                     { SpecifyFullMeasureText(@1, @7); }
-    | KWCREATE KWMEASURE error '.' MeasureName EQ MeasureExpression          { CallHdlr("Cube name expected before '.'", @3); }
-    | KWCREATE KWMEASURE MeasureName EQ MeasureExpression                    { SpecifyFullMeasureText(@1, @5); }
-    | KWCREATE KWMEASURE MeasureName EQ MeasureExpression  CalculationProperty
-                                                                                     { SpecifyFullMeasureText(@1, @5); }
-    | KWCREATE KWMEASURE error EQ MeasureExpression                          { CallHdlr("Measure name expected", @3); }
+    : KWCREATE KWMEASURE CubeName '.' MeasureName EQ MeasureExpression                          { SpecifyFullMeasureText(@1, @7); }
+    | KWCREATE KWMEASURE CubeName '.' MeasureName EQ MeasureExpression CalculationProperty      { SpecifyFullMeasureText(@1, @7); }
+    | KWCREATE KWMEASURE error '.' MeasureName EQ MeasureExpression                             { CallHdlr("Cube name expected before '.'", @3); }
+    | KWCREATE KWMEASURE MeasureName EQ MeasureExpression                                       { SpecifyFullMeasureText(@1, @5); }
+    | KWCREATE KWMEASURE MeasureName EQ MeasureExpression  CalculationProperty                  { SpecifyFullMeasureText(@1, @5); }
+    | KWCREATE KWMEASURE error EQ MeasureExpression                                             { CallHdlr("Measure name expected", @3); }
     ;
 
 CreateKpi
@@ -453,10 +451,10 @@ RankXValue
     ;
 
 RankX
-    : KWRANKX '(' TableExpression ',' ScalarExpression ')'                                                
-    | KWRANKX '(' TableExpression ',' ScalarExpression ',' RankXValue ')'                                
-    | KWRANKX '(' TableExpression ',' ScalarExpression ',' RankXValue ',' RankXOrder ')'                
-    | KWRANKX '(' TableExpression ',' ScalarExpression ',' RankXValue ',' RankXOrder ',' RankXTies ')'
+    : KWRANKX '(' TableExpression ',' Expression ')'                                                
+    | KWRANKX '(' TableExpression ',' Expression ',' RankXValue ')'                                
+    | KWRANKX '(' TableExpression ',' Expression ',' RankXValue ',' RankXOrder ')'                
+    | KWRANKX '(' TableExpression ',' Expression ',' RankXValue ',' RankXOrder ',' RankXTies ')'
     ;
 
 RankXFunction
