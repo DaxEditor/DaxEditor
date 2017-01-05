@@ -31,7 +31,13 @@ namespace DaxEditor
         public bool? ThousandSeparator { get; set; }
         public string CalculationType { get; set; }
         public string CustomFormat { get; set; }
-        public KPI KPI { get; set; }
+
+        public KPI KPI
+        {
+            get { return Measure.KPI; }
+            set { Measure.KPI = value; }
+        }
+
         public Measure Measure { get; set; }
         
         private static readonly string _defaultCalculationType = "Member";
@@ -136,25 +142,7 @@ namespace DaxEditor
             rv.Measure.DisplayFolder = measure.DisplayFolder?.Replace("'", "`");
             rv.Measure.IsHidden = measure.IsHidden;
             rv.Measure.Description = measure.Description?.Replace("'", "`");
-
-            if (measure.KPI != null)
-            {
-                rv.KPI = new KPI();
-                rv.KPI.Description = measure.KPI.Description;
-                rv.KPI.TargetFormatString = measure.KPI.TargetFormatString;
-                rv.KPI.TargetDescription = measure.KPI.TargetDescription;
-                rv.KPI.TargetExpression = measure.KPI.TargetExpression;
-                rv.KPI.StatusGraphic = measure.KPI.StatusGraphic;
-                rv.KPI.StatusDescription = measure.KPI.StatusDescription;
-                rv.KPI.StatusExpression = measure.KPI.StatusExpression;
-                rv.KPI.TrendGraphic = measure.KPI.TrendGraphic;
-                rv.KPI.TrendDescription = measure.KPI.TrendDescription;
-                rv.KPI.TrendExpression = measure.KPI.TrendExpression;
-                foreach (var annotation in measure.KPI.Annotations)
-                {
-                    rv.KPI.Annotations.Add(annotation.Clone());
-                }
-            }
+            rv.KPI = measure.KPI?.Clone();
 
             var formatValueString = measure.Annotations?.
                 FirstOrDefault(i => string.Equals(i.Name, "Format"))?.Value?.ToString();
@@ -398,19 +386,7 @@ namespace DaxEditor
 
         public void ToJsonMeasure(ref Measure measure, string measureName)
         {
-            //var nameAnnotation = new Annotation();
-            //nameAnnotation.Name = "Type";
-            //nameAnnotation.Value = "User";
-            //measure.Annotations = measure.Annotations ?? new List<Annotation>();
-            //measure.Annotations.Add(nameAnnotation);
-
             measure.IsHidden = Measure.IsHidden;
-
-            //var annotation = new Annotation();
-            //annotation.Name = "IsPrivate";
-            //annotation.Value = new Json.Tabular.String("True");
-            //measure.Annotations = measure.Annotations ?? new List<Annotation>();
-            //measure.Annotations.Add(annotation);
 
             var formatAnnotationValue = produceFormatXmlString();
             if (!string.IsNullOrWhiteSpace(formatAnnotationValue))
@@ -418,7 +394,6 @@ namespace DaxEditor
                 var annotation = new Annotation();
                 annotation.Name = "Format";
                 annotation.Value = formatAnnotationValue;
-                //measure.Annotations = measure.Annotations ?? new List<Annotation>();
                 measure.Annotations.Add(annotation);
             }
 
@@ -434,25 +409,7 @@ namespace DaxEditor
                 measure.Description = Measure.Description.Trim('\'').Replace("`","'");
             }
 
-            if (KPI != null)
-            {
-                measure.KPI = new KPI();
-                measure.KPI.Description = KPI.Description;
-                measure.KPI.TargetFormatString = KPI.TargetFormatString;
-                measure.KPI.TargetDescription = KPI.TargetDescription;
-                measure.KPI.TargetExpression = KPI.TargetExpression;
-                measure.KPI.StatusGraphic = KPI.StatusGraphic;
-                measure.KPI.StatusDescription = KPI.StatusDescription;
-                measure.KPI.StatusExpression = KPI.StatusExpression;
-                measure.KPI.TrendGraphic = KPI.TrendGraphic;
-                measure.KPI.TrendDescription = KPI.TrendDescription;
-                measure.KPI.TrendExpression = KPI.TrendExpression;
-                measure.KPI.Annotations.Clear();
-                foreach (var annotation in KPI.Annotations)
-                {
-                    measure.KPI.Annotations.Add(annotation.Clone());
-                }
-            }
+            measure.KPI = KPI?.Clone();
         }
     }
 }
