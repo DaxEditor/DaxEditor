@@ -1584,7 +1584,7 @@
             "name": "Total Current Quarter Sales Performance",
             "expression": "IFERROR([Total Current Quarter Sales]/[Total Previous Quarter Sales Proportion to QTD],BLANK())",
             "kpi": {
-              "targetExpression": "1,1",
+              "targetExpression": "1.1",
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Sales Territory'[Total Current Quarter Sales Performance]),BLANK(),",
@@ -1630,7 +1630,7 @@
             "name": "Total Current Quarter Gross Profit Performance",
             "expression": "IF([Total Previous Quarter Gross Profit Proportion to QTD]<>0,([Total Current Quarter Gross Profit]-[Total Previous Quarter Gross Profit Proportion to QTD])/[Total Previous Quarter Gross Profit Proportion to QTD],BLANK())",
             "kpi": {
-              "targetExpression": "1,25",
+              "targetExpression": "1.25",
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Sales Territory'[Total Current Quarter Gross Profit Performance]),BLANK(),",
@@ -5053,7 +5053,7 @@
             "name": "Internet Current Quarter Sales Performance",
             "expression": "IFERROR([Internet Current Quarter Sales]/[Internet Previous Quarter Sales Proportion to QTD],BLANK())",
             "kpi": {
-              "targetExpression": "1,1",
+              "targetExpression": "1.1",
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Internet Sales'[Internet Current Quarter Sales Performance]),BLANK(),",
@@ -5099,7 +5099,7 @@
             "name": "Internet Current Quarter Gross Profit Performance",
             "expression": "IF([Internet Previous Quarter Gross Profit Proportion to QTD]<>0,([Internet Current Quarter Gross Profit]-[Internet Previous Quarter Gross Profit Proportion to QTD])/[Internet Previous Quarter Gross Profit Proportion to QTD],BLANK())",
             "kpi": {
-              "targetExpression": "1,25",
+              "targetExpression": "1.25",
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Internet Sales'[Internet Current Quarter Gross Profit Performance]),BLANK(),",
@@ -6542,7 +6542,7 @@
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Product Inventory'[Products OverStocked]),BLANK(),",
-                "                    If('Product Inventory'[Products OverStocked]<1,1,",
+                "                    If('Product Inventory'[Products OverStocked]<1.1,",
                 "\t                If('Product Inventory'[Products OverStocked]<5,0,-1)",
                 "                )",
                 "            )",
@@ -6634,7 +6634,7 @@
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Product Inventory'[Products with Negative Stock]),BLANK(),",
-                "                    If('Product Inventory'[Products with Negative Stock]<0.1,1,",
+                "                    If('Product Inventory'[Products with Negative Stock]<0.1.1,",
                 "\t                If('Product Inventory'[Products with Negative Stock]<5,0,-1)",
                 "                )",
                 "            )",
@@ -10161,7 +10161,7 @@
             "name": "Reseller Current Quarter Sales Performance",
             "expression": "IFERROR([Reseller Current Quarter Sales]/[Reseller Previous Quarter Sales Proportion to QTD],BLANK())",
             "kpi": {
-              "targetExpression": "1,1",
+              "targetExpression": "1.1",
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Reseller Sales'[Reseller Current Quarter Sales Performance]),BLANK(),",
@@ -10207,7 +10207,7 @@
             "name": "Reseller Current Quarter Gross Profit Performance",
             "expression": "IF([Reseller Previous Quarter Gross Profit Proportion to QTD]<>0,([Reseller Current Quarter Gross Profit]-[Reseller Previous Quarter Gross Profit Proportion to QTD])/[Reseller Previous Quarter Gross Profit Proportion to QTD],BLANK())",
             "kpi": {
-              "targetExpression": "1,25",
+              "targetExpression": "1.25",
               "statusGraphic": "Three Symbols UnCircled Colored",
               "statusExpression": [
                 "if(ISBLANK('Reseller Sales'[Reseller Current Quarter Gross Profit Performance]),BLANK(),",
