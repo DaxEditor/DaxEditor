@@ -82,7 +82,7 @@ Start
     | DaxScript
     | Empty
     ;
-
+    
 Order
     : KWASC
     | KWDESC
@@ -136,6 +136,10 @@ Empty
 CubeName
     : TABLENAME
     | COLUMNNAME
+    ;
+
+MeasureExpression
+    : Expression                    { SpecifyMeasureExpression(@1); }
     ;
 
 CreateMeasure
@@ -280,7 +284,7 @@ VarName
 
 VarDeclaration
     : KWVAR VarName EQ Expression
-    | KWVAR error EQ Expression            { CallHdlr("Var name expected", @2); }
+    | KWVAR error EQ Expression            { CallHdlr("Invalid var name", @2); }
     ;
 
 VarDeclarations
@@ -331,10 +335,15 @@ CalculationPropertyParams
     | CalculationPropertyKpiAnnotations
     | CalculationPropertyKpiAnnotations CalculationPropertyParams
     ;
+
 CalculationProperty
     : KWCALCULATION KWPROPERTY CalculationPropertyFormatType
     | KWCALCULATION KWPROPERTY error                                                    { CallHdlr("Wrong calculation property type.  Expected types: General, NumberDecimal, NumberWhole, Percentage, Scientific, Currency, DateTimeCustom, Visible, Description, DisplayFolder", @2); }
     | KWCALCULATION KWPROPERTY CalculationPropertyFormatType CalculationPropertyParams
+    ;
+
+QueryMeasureExpression
+    : Expression
     ;
 
 Definitions
@@ -342,49 +351,91 @@ Definitions
     | KWMEASURE QueryMeasureName EQ QueryMeasureExpression Definitions
     ;
 
-Params1
-    : Params1 ParamSeparator Expression
-    | Expression
-    ;
-
 ParamSeparator
     : ','                                { NextParameter(@1); }
     ;
 
+ParamExpression
+    : Expression
+    ;
+
+Params1
+    : ParamExpression
+    | Params1 ParamSeparator ParamExpression
+    ;
+
+StartArg
+    : '('                                 { StartParameters(@1); }
+    ;
+    
+EndArg
+    : ')'                                 { EndParameters(@1); }
+    ;
+
 ParenthesisParameters
-    :  StartArg EndArg                   { Match(@1, @2); }
-    |  StartArg Params1 EndArg           { Match(@1, @3); }
-    |  StartArg Params1 error            { CallHdlr("unmatched parentheses", @3); }
-    |  StartArg error EndArg             { $$ = $3;
-                                             CallHdlr("error in parameters", @2); }
+    :  StartArg EndArg                    { Match(@1, @2); }
+    |  StartArg Params1 EndArg            { Match(@1, @3); }
+    |  StartArg Params1 error             { CallHdlr("unmatched parentheses", @3); }
+    |  StartArg error EndArg              { $$ = $3;
+                                            CallHdlr("error in parameters", @2); }
     ;
 
-MeasureName
-    : TableRef ColumnRef                { CreateNewMeasure(@1, @2); }
+FunctionArgs
+    : ParenthesisParameters
     ;
 
-QueryMeasureName
-    : TableRef ColumnRef
+FunctionName
+    : FUNCTION                            { StartFunction(@1, $1.str); }
+    | KWCALCULATE                         { StartFunction(@1, $1.str); }
+    | KWTRUE                              { StartFunction(@1, $1.str); }
+    | KWFALSE                             { StartFunction(@1, $1.str); }
+    | KWYEAR                              { StartFunction(@1, $1.str); }
+    | KWDAY                               { StartFunction(@1, $1.str); }
+    | KWMONTH                             { StartFunction(@1, $1.str); }
+    | KWFORMAT                            { StartFunction(@1, $1.str); }
+    | KWNOT                               { StartFunction(@1, $1.str); }
     ;
 
-ColMeasureRef
-    : TableRef ColumnRef
-    | ColumnRef
+RankXTies
+    : /* empty */
+    | KWSKIP
+    | KWDENSE
+    ;
+
+RankXOrder
+    : /* empty */
+    | NUMBER
+    | KWTRUE
+    | KWFALSE
+	| KWASC
+	| KWDESC
+    ;
+
+RankXValue
+    : /* empty */
+    | ScalarExpression
+    ;
+
+RankX
+    : KWRANKX '(' Expression ',' Expression ')'                                                
+    | KWRANKX '(' Expression ',' Expression ',' RankXValue ')'                                
+    | KWRANKX '(' Expression ',' Expression ',' RankXValue ',' RankXOrder ')'                
+    | KWRANKX '(' Expression ',' Expression ',' RankXValue ',' RankXOrder ',' RankXTies ')'
+    ;
+
+RankXFunction
+    : RankX                         { StartFunction(@1, $1.str); }
+    ;
+
+FunctionCall
+    : FunctionName FunctionArgs
+    | RankXFunction
+    | KWNOT FunctionName FunctionArgs
+    | KWNOT RankXFunction
     ;
 
 ColumnRef
     : COLUMNNAME
-    ;
-
-TableRef
-    : TABLENAME 
-    | ESCAPEDTABLENAME
-    | FUNCTION  /* Very special case when a table name is the same as function name, but it is not wrapped in quotes */
-    | DataTableFunction
-    ;
-
-TableExpression
-    : TableRef
     ;
 
 DataTableValue
@@ -428,86 +479,28 @@ DataTableFunction
     : DataTable                     { StartFunction(@1, $1.str); }
     ;
 
-RankXTies
-    : /* empty */
-    | KWSKIP
-    | KWDENSE
+TableRef
+    : TABLENAME 
+    | ESCAPEDTABLENAME
+    | FUNCTION  /* Very special case when a table name is the same as function name, but it is not wrapped in quotes */
+    | DataTableFunction
     ;
 
-RankXOrder
-    : /* empty */
-    | NUMBER
-    | KWTRUE
-    | KWFALSE
-	| KWASC
-	| KWDESC
+TableExpression
+    : TableRef
     ;
 
-RankXValue
-    : /* empty */
-    | ScalarExpression
+MeasureName
+    : TableRef ColumnRef                { CreateNewMeasure(@1, @2); }
     ;
 
-RankX
-    : KWRANKX '(' Expression ',' Expression ')'                                                
-    | KWRANKX '(' Expression ',' Expression ',' RankXValue ')'                                
-    | KWRANKX '(' Expression ',' Expression ',' RankXValue ',' RankXOrder ')'                
-    | KWRANKX '(' Expression ',' Expression ',' RankXValue ',' RankXOrder ',' RankXTies ')'
+QueryMeasureName
+    : TableRef ColumnRef
     ;
 
-RankXFunction
-    : RankX                         { StartFunction(@1, $1.str); }
-    ;
-
-MeasureExpression
-    : Expression                    { SpecifyMeasureExpression(@1); }
-    ;
-
-QueryMeasureExpression
-    : Expression
-    ;
-
-ScalarExpression
-    : ColMeasureRef
-    | FunctionCall
-    | ParenthesisExpression
-    | CalculateShortcut
-    | NUMBER
-    | STRING
-    | UnaryExpression
-    | BinaryExpression
-    | KWTRUE
-    | KWFALSE
-    | KWDAY
-    | KWMONTH
-    | KWYEAR
-    ;
-
-Expression
-    : TableExpression 
-	| ScalarExpression
-    | VarExpression
-    ;
-
-UnaryExpression
-    : UnaryOperator Expression
-    ;
-
-UnaryOperator
-    : '!' | '-'| '+'
-    ;
-
-BinaryExpression
-    : Expression BinaryOperator Expression
-    ;
-
-BinaryOperator
-    : '+' | '-' | '*'| '/'| AMPAMP | BARBAR | '&'
-    | GT | GTE | LT | LTE | EQ | NEQ
-    ;
-
-CalculateShortcut
-    :   ColMeasureRef ParenthesisExpression
+ColMeasureRef
+    : TableRef ColumnRef
+    | ColumnRef
     ;
 
 ParenthesisExpression
@@ -516,43 +509,51 @@ ParenthesisExpression
     |  '(' Params1 error         { CallHdlr("unmatched parentheses", @3); }
     ;
 
-FunctionCall
-    : FunctionName FunctionArgs
-    | RankXFunction
-    | KWNOT FunctionName FunctionArgs
-    | KWNOT RankXFunction
+CalculateShortcut
+    :   ColMeasureRef ParenthesisExpression
     ;
 
-FunctionName
-    : FUNCTION                            { StartFunction(@1, $1.str); }
-    | KWCALCULATE                         { StartFunction(@1, $1.str); }
-    | KWTRUE                              { StartFunction(@1, $1.str); }
-    | KWFALSE                             { StartFunction(@1, $1.str); }
-    | KWYEAR                              { StartFunction(@1, $1.str); }
-    | KWDAY                               { StartFunction(@1, $1.str); }
-    | KWMONTH                             { StartFunction(@1, $1.str); }
-    | KWFORMAT                            { StartFunction(@1, $1.str); }
-    | KWNOT                               { StartFunction(@1, $1.str); }
+PrimaryExpression
+    : ColMeasureRef
+    | FunctionCall
+    | ParenthesisExpression
+    | CalculateShortcut
+    | NUMBER
+    | STRING
+    | KWTRUE
+    | KWFALSE
+    | KWDAY
+    | KWMONTH
+    | KWYEAR
+    | TableExpression
     ;
 
-FunctionArgs
-    : StartArg
-	| ParenthesisParameters
+UnaryOperator
+    : '!' | '-'| '+'
     ;
 
-
-StartArg
-    : '('
-    {
-        StartParameters(@1);
-    }
+UnaryExpression
+    : PrimaryExpression
+    | UnaryOperator UnaryExpression
     ;
-    
-EndArg
-    : ')'
-    {
-        EndParameters(@1);
-    }
+
+BinaryOperator
+    : '+' | '-' | '*'| '/'| AMPAMP | BARBAR | '&'
+    | GT | GTE | LT | LTE | EQ | NEQ
+    ;
+
+BinaryExpression
+    : UnaryExpression
+    | BinaryExpression BinaryOperator UnaryExpression
+    ;
+
+ScalarExpression
+    : BinaryExpression
+    ;
+
+Expression
+    : ScalarExpression
+    | VarExpression
     ;
 
 %%
