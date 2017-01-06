@@ -390,7 +390,7 @@
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" Condition="false" />
   <PropertyGroup>
-    <PreBuildEvent>"../../GeneratorSource/mppg.exe" /mplex ../../GeneratorSource/parser.y &gt; ../../GeneratorSource/parser.cs
+    <PreBuildEvent>"../../GeneratorSource/mppg.exe" /no-lines /mplex ../../GeneratorSource/parser.y &gt; ../../GeneratorSource/parser.cs
 "../../GeneratorSource/mplex.exe" /out:../../GeneratorSource/lexer.cs ../../GeneratorSource/lexer.lex
 FOR /r %25%25I IN ($(TargetDir)..\..\obj\$(ConfigurationName)\*.cs) DO DEL "%25I"
 </PreBuildEvent>

@@ -384,13 +384,11 @@ TableRef
     ;
 
 TableExpression
-    : FunctionCall 
-    | TableRef
+    : TableRef
     ;
 
 DataTableValue
     : /* empty */
-    | FunctionCall
     | ScalarExpression
     ;
 
@@ -451,10 +449,10 @@ RankXValue
     ;
 
 RankX
-    : KWRANKX '(' TableExpression ',' Expression ')'                                                
-    | KWRANKX '(' TableExpression ',' Expression ',' RankXValue ')'                                
-    | KWRANKX '(' TableExpression ',' Expression ',' RankXValue ',' RankXOrder ')'                
-    | KWRANKX '(' TableExpression ',' Expression ',' RankXValue ',' RankXOrder ',' RankXTies ')'
+    : KWRANKX '(' Expression ',' Expression ')'                                                
+    | KWRANKX '(' Expression ',' Expression ',' RankXValue ')'                                
+    | KWRANKX '(' Expression ',' Expression ',' RankXValue ',' RankXOrder ')'                
+    | KWRANKX '(' Expression ',' Expression ',' RankXValue ',' RankXOrder ',' RankXTies ')'
     ;
 
 RankXFunction
