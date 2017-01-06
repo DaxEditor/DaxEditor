@@ -315,8 +315,8 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
         public void ParseVeryBigFile()
         {
             var text = Utils.ReadFileFromResources("VeryBigFile.dax");
-            //var parser = ParseText(text);
-            //Console.WriteLine(parser.Measures.Count);
+            var parser = ParseText(text, false);
+            Console.WriteLine(parser.Measures.Count);
         }
 
         [TestMethod]
@@ -673,12 +673,12 @@ return
             Assert.AreEqual(@"166", measure1.CalcProperty.KPI.Annotations["KpiThreshold_3"].Value);
         }
 
-        private static Babel.Parser.Parser ParseText(string text)
+        private static Babel.Parser.Parser ParseText(string text, bool trace = true)
         {
             Babel.Parser.ErrorHandler handler = new Babel.Parser.ErrorHandler();
             Babel.Lexer.Scanner scanner = new Babel.Lexer.Scanner();
             Babel.Parser.Parser parser = new Babel.Parser.Parser();  // use noarg constructor
-            parser.Trace = true;
+            parser.Trace = trace;
             parser.scanner = scanner;
             scanner.Handler = handler;
             parser.SetHandler(handler);
