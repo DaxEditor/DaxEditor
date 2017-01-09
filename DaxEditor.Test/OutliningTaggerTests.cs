@@ -119,9 +119,14 @@ CREATE MEASURE T[M2] = 2
 
         private static ITextBufferFactoryService GetTextBufferFactoryService()
         {
-            var container = new CompositionContainer(new AssemblyCatalog(Assembly.LoadFrom("Microsoft.VisualStudio.Platform.VSEditor.dll")));
-            Assert.IsNotNull(container, "Assembly Container is null");
-            var service = container?.GetExportedValue<ITextBufferFactoryService>();
+            //Worked only with Microsoft.VisualStudio.Platform.VSEditor.Interop.dll in folder
+            var assembly = Assembly.LoadFrom("Microsoft.VisualStudio.Platform.VSEditor.dll");
+            Assert.IsNotNull(assembly, "Assembly is null");
+            var catalog = new AssemblyCatalog(assembly);
+            Assert.IsNotNull(catalog, "Assembly catalog is null");
+            var container = new CompositionContainer(catalog);
+            Assert.IsNotNull(container, "Assembly container is null");
+            var service = container.GetExportedValue<ITextBufferFactoryService>();
             Assert.IsNotNull(service, "TextBufferFactoryService is null");
             return service;
         }
