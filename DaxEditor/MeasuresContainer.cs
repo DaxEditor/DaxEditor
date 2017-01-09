@@ -183,6 +183,7 @@ Message: {exception.Message}
                         sb.Append(calcPropertyDax);
                     }
                 }
+                sb.AppendLine();
                 sb.Append(';');
                 sb.AppendLine();
                 sb.AppendLine();
