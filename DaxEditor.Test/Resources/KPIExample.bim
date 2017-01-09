@@ -1,0 +1,1567 @@
+<Alter AllowCreate="true" ObjectExpansion="ExpandFull" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <Object>
+    <DatabaseID>SemanticModel</DatabaseID>
+  </Object>
+  <ObjectDefinition>
+    <Database xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>SemanticModel</ID>
+      <Name>SemanticModel</Name>
+      <Annotations>
+        <Annotation>
+          <Name>ClientCompatibilityLevel</Name>
+          <Value>300</Value>
+        </Annotation>
+      </Annotations>
+      <ddl200:CompatibilityLevel>1103</ddl200:CompatibilityLevel>
+      <ddl200_200:StorageEngineUsed>InMemory</ddl200_200:StorageEngineUsed>
+      <Language>1033</Language>
+      <DataSourceImpersonationInfo>
+        <ImpersonationMode>Default</ImpersonationMode>
+      </DataSourceImpersonationInfo>
+      <Dimensions>
+        <Dimension>
+          <ID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</ID>
+          <Name>DimCurrency</Name>
+          <Annotations>
+            <Annotation>
+              <Name>IsQueryEditorUsed</Name>
+              <Value>False</Value>
+            </Annotation>
+            <Annotation>
+              <Name>QueryEditorSerialization</Name>
+            </Annotation>
+            <Annotation>
+              <Name>TableWidgetSerialization</Name>
+            </Annotation>
+            <Annotation>
+              <Name>DataMarketWebBaseUrl</Name>
+            </Annotation>
+            <Annotation>
+              <Name>DataMarketWebQueryUrl</Name>
+            </Annotation>
+          </Annotations>
+          <Source xsi:type="DataSourceViewBinding">
+            <DataSourceViewID>Sandbox</DataSourceViewID>
+          </Source>
+          <UnknownMember valuens="ddl200_200">AutomaticNull</UnknownMember>
+          <ErrorConfiguration>
+            <KeyNotFound>IgnoreError</KeyNotFound>
+            <KeyDuplicate>ReportAndStop</KeyDuplicate>
+            <NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+          </ErrorConfiguration>
+          <StorageMode valuens="ddl200_200">InMemory</StorageMode>
+          <Language>1033</Language>
+          <UnknownMemberName>Unknown</UnknownMemberName>
+          <Attributes>
+            <Attribute>
+              <ID>__XL_RowNumber</ID>
+              <Name>__XL_RowNumber</Name>
+              <Type valuens="ddl200_200">RowNumber</Type>
+              <Usage>Key</Usage>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Error</NullProcessing>
+                  <DataType>Integer</DataType>
+                  <DataSize>4</DataSize>
+                  <Source xsi:type="ddl200_200:RowNumberBinding" />
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>4</DataSize>
+                <Source xsi:type="ddl200_200:RowNumberBinding" />
+              </NameColumn>
+              <AttributeRelationships>
+                <AttributeRelationship>
+                  <AttributeID>CurrencyKey</AttributeID>
+                  <OverrideBehavior>None</OverrideBehavior>
+                  <Name>CurrencyKey</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>CurrencyLabel</AttributeID>
+                  <OverrideBehavior>None</OverrideBehavior>
+                  <Name>CurrencyLabel</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>CurrencyName</AttributeID>
+                  <OverrideBehavior>None</OverrideBehavior>
+                  <Name>CurrencyName</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>CurrencyDescription</AttributeID>
+                  <OverrideBehavior>None</OverrideBehavior>
+                  <Name>CurrencyDescription</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>ETLLoadID</AttributeID>
+                  <OverrideBehavior>None</OverrideBehavior>
+                  <Name>ETLLoadID</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>LoadDate</AttributeID>
+                  <OverrideBehavior>None</OverrideBehavior>
+                  <Name>LoadDate</Name>
+                </AttributeRelationship>
+                <AttributeRelationship>
+                  <AttributeID>UpdateDate</AttributeID>
+                  <OverrideBehavior>None</OverrideBehavior>
+                  <Name>UpdateDate</Name>
+                </AttributeRelationship>
+              </AttributeRelationships>
+              <OrderBy>Key</OrderBy>
+              <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+            </Attribute>
+            <Attribute>
+              <Annotations>
+                <Annotation>
+                  <Name>Format</Name>
+                  <Value>
+                    <Format Format="General" xmlns="" />
+                  </Value>
+                </Annotation>
+              </Annotations>
+              <ID>CurrencyKey</ID>
+              <Name>CurrencyKey</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Preserve</NullProcessing>
+                  <DataType>BigInt</DataType>
+                  <DataSize>-1</DataSize>
+                  <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    <ColumnID>CurrencyKey</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>-1</DataSize>
+                <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                  <ColumnID>CurrencyKey</ColumnID>
+                </Source>
+              </NameColumn>
+              <OrderBy>Key</OrderBy>
+            </Attribute>
+            <Attribute>
+              <Annotations>
+                <Annotation>
+                  <Name>Format</Name>
+                  <Value>
+                    <Format Format="Text" xmlns="" />
+                  </Value>
+                </Annotation>
+              </Annotations>
+              <ID>CurrencyLabel</ID>
+              <Name>CurrencyLabel</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Preserve</NullProcessing>
+                  <DataType>WChar</DataType>
+                  <DataSize>32766</DataSize>
+                  <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    <ColumnID>CurrencyLabel</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>32766</DataSize>
+                <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                  <ColumnID>CurrencyLabel</ColumnID>
+                </Source>
+              </NameColumn>
+              <OrderBy>Key</OrderBy>
+            </Attribute>
+            <Attribute>
+              <Annotations>
+                <Annotation>
+                  <Name>Format</Name>
+                  <Value>
+                    <Format Format="Text" xmlns="" />
+                  </Value>
+                </Annotation>
+              </Annotations>
+              <ID>CurrencyName</ID>
+              <Name>CurrencyName</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Preserve</NullProcessing>
+                  <DataType>WChar</DataType>
+                  <DataSize>32766</DataSize>
+                  <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    <ColumnID>CurrencyName</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>32766</DataSize>
+                <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                  <ColumnID>CurrencyName</ColumnID>
+                </Source>
+              </NameColumn>
+              <OrderBy>Key</OrderBy>
+            </Attribute>
+            <Attribute>
+              <Annotations>
+                <Annotation>
+                  <Name>Format</Name>
+                  <Value>
+                    <Format Format="Text" xmlns="" />
+                  </Value>
+                </Annotation>
+              </Annotations>
+              <ID>CurrencyDescription</ID>
+              <Name>CurrencyDescription</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Preserve</NullProcessing>
+                  <DataType>WChar</DataType>
+                  <DataSize>32766</DataSize>
+                  <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    <ColumnID>CurrencyDescription</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>32766</DataSize>
+                <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                  <ColumnID>CurrencyDescription</ColumnID>
+                </Source>
+              </NameColumn>
+              <OrderBy>Key</OrderBy>
+            </Attribute>
+            <Attribute>
+              <Annotations>
+                <Annotation>
+                  <Name>Format</Name>
+                  <Value>
+                    <Format Format="General" xmlns="" />
+                  </Value>
+                </Annotation>
+              </Annotations>
+              <ID>ETLLoadID</ID>
+              <Name>ETLLoadID</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Preserve</NullProcessing>
+                  <DataType>BigInt</DataType>
+                  <DataSize>-1</DataSize>
+                  <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    <ColumnID>ETLLoadID</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>-1</DataSize>
+                <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                  <ColumnID>ETLLoadID</ColumnID>
+                </Source>
+              </NameColumn>
+              <OrderBy>Key</OrderBy>
+            </Attribute>
+            <Attribute>
+              <Annotations>
+                <Annotation>
+                  <Name>Format</Name>
+                  <Value>
+                    <Format Format="DateTimeGeneral" xmlns="" />
+                  </Value>
+                </Annotation>
+              </Annotations>
+              <ID>LoadDate</ID>
+              <Name>LoadDate</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Preserve</NullProcessing>
+                  <DataType>Date</DataType>
+                  <DataSize>-1</DataSize>
+                  <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    <ColumnID>LoadDate</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>-1</DataSize>
+                <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                  <ColumnID>LoadDate</ColumnID>
+                </Source>
+              </NameColumn>
+              <OrderBy>Key</OrderBy>
+              <ddl300_300:FormatString>General Date</ddl300_300:FormatString>
+            </Attribute>
+            <Attribute>
+              <Annotations>
+                <Annotation>
+                  <Name>Format</Name>
+                  <Value>
+                    <Format Format="DateTimeGeneral" xmlns="" />
+                  </Value>
+                </Annotation>
+              </Annotations>
+              <ID>UpdateDate</ID>
+              <Name>UpdateDate</Name>
+              <KeyColumns>
+                <KeyColumn>
+                  <NullProcessing>Preserve</NullProcessing>
+                  <DataType>Date</DataType>
+                  <DataSize>-1</DataSize>
+                  <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                  <Source xsi:type="ColumnBinding">
+                    <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    <ColumnID>UpdateDate</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <NameColumn>
+                <NullProcessing>ZeroOrBlank</NullProcessing>
+                <DataType>WChar</DataType>
+                <DataSize>-1</DataSize>
+                <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                  <ColumnID>UpdateDate</ColumnID>
+                </Source>
+              </NameColumn>
+              <OrderBy>Key</OrderBy>
+              <ddl300_300:FormatString>General Date</ddl300_300:FormatString>
+            </Attribute>
+          </Attributes>
+          <ProactiveCaching>
+            <SilenceInterval>-PT1S</SilenceInterval>
+            <Latency>-PT1S</Latency>
+            <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+            <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+            <Source xsi:type="ProactiveCachingInheritedBinding" />
+          </ProactiveCaching>
+        </Dimension>
+      </Dimensions>
+      <Cubes>
+        <Cube>
+          <ID>Model</ID>
+          <Name>Model</Name>
+          <Annotations>
+            <Annotation>
+              <Name>DefaultMeasure</Name>
+              <Value>__No measures defined</Value>
+            </Annotation>
+          </Annotations>
+          <Language>1033</Language>
+          <Dimensions>
+            <Dimension>
+              <ID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</ID>
+              <Name>DimCurrency</Name>
+              <DimensionID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</DimensionID>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>__XL_RowNumber</AttributeID>
+                  <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>CurrencyKey</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>CurrencyLabel</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>CurrencyName</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>CurrencyDescription</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>ETLLoadID</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>LoadDate</AttributeID>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>UpdateDate</AttributeID>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+          </Dimensions>
+          <MeasureGroups>
+            <MeasureGroup>
+              <ID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</ID>
+              <Name>DimCurrency</Name>
+              <Measures>
+                <Measure>
+                  <ID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</ID>
+                  <Name>__XL_Count DimCurrency</Name>
+                  <AggregateFunction>Count</AggregateFunction>
+                  <DataType>BigInt</DataType>
+                  <Source>
+                    <DataType>BigInt</DataType>
+                    <DataSize>8</DataSize>
+                    <Source xsi:type="RowBinding">
+                      <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                    </Source>
+                  </Source>
+                  <Visible>false</Visible>
+                </Measure>
+              </Measures>
+              <StorageMode valuens="ddl200_200">InMemory</StorageMode>
+              <ErrorConfiguration>
+                <KeyNotFound>IgnoreError</KeyNotFound>
+                <KeyDuplicate>ReportAndStop</KeyDuplicate>
+                <NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+              </ErrorConfiguration>
+              <ProcessingMode>Regular</ProcessingMode>
+              <Dimensions>
+                <Dimension xsi:type="DegenerateMeasureGroupDimension">
+                  <CubeDimensionID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</CubeDimensionID>
+                  <Attributes>
+                    <Attribute>
+                      <AttributeID>__XL_RowNumber</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <DataType>Integer</DataType>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency</TableID>
+                            <ColumnID>__XL_RowNumber</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                      <Type>Granularity</Type>
+                    </Attribute>
+                    <Attribute>
+                      <AttributeID>CurrencyKey</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <NullProcessing>Preserve</NullProcessing>
+                          <DataType>BigInt</DataType>
+                          <DataSize>-1</DataSize>
+                          <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                            <ColumnID>CurrencyKey</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                    </Attribute>
+                    <Attribute>
+                      <AttributeID>CurrencyLabel</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <NullProcessing>Preserve</NullProcessing>
+                          <DataType>WChar</DataType>
+                          <DataSize>32766</DataSize>
+                          <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                            <ColumnID>CurrencyLabel</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                    </Attribute>
+                    <Attribute>
+                      <AttributeID>CurrencyName</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <NullProcessing>Preserve</NullProcessing>
+                          <DataType>WChar</DataType>
+                          <DataSize>32766</DataSize>
+                          <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                            <ColumnID>CurrencyName</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                    </Attribute>
+                    <Attribute>
+                      <AttributeID>CurrencyDescription</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <NullProcessing>Preserve</NullProcessing>
+                          <DataType>WChar</DataType>
+                          <DataSize>32766</DataSize>
+                          <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                            <ColumnID>CurrencyDescription</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                    </Attribute>
+                    <Attribute>
+                      <AttributeID>ETLLoadID</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <NullProcessing>Preserve</NullProcessing>
+                          <DataType>BigInt</DataType>
+                          <DataSize>-1</DataSize>
+                          <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                            <ColumnID>ETLLoadID</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                    </Attribute>
+                    <Attribute>
+                      <AttributeID>LoadDate</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <NullProcessing>Preserve</NullProcessing>
+                          <DataType>Date</DataType>
+                          <DataSize>-1</DataSize>
+                          <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                            <ColumnID>LoadDate</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                    </Attribute>
+                    <Attribute>
+                      <AttributeID>UpdateDate</AttributeID>
+                      <KeyColumns>
+                        <KeyColumn>
+                          <NullProcessing>Preserve</NullProcessing>
+                          <DataType>Date</DataType>
+                          <DataSize>-1</DataSize>
+                          <InvalidXmlCharacters>Remove</InvalidXmlCharacters>
+                          <Source xsi:type="ColumnBinding">
+                            <TableID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</TableID>
+                            <ColumnID>UpdateDate</ColumnID>
+                          </Source>
+                        </KeyColumn>
+                      </KeyColumns>
+                    </Attribute>
+                  </Attributes>
+                  <ddl200_200:ShareDimensionStorage>Shared</ddl200_200:ShareDimensionStorage>
+                </Dimension>
+              </Dimensions>
+              <Partitions>
+                <Partition>
+                  <ID>DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba</ID>
+                  <Name>DimCurrency</Name>
+                  <Annotations>
+                    <Annotation>
+                      <Name>IsQueryEditorUsed</Name>
+                      <Value>False</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>QueryEditorSerialization</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>TableWidgetSerialization</Name>
+                    </Annotation>
+                  </Annotations>
+                  <Source xsi:type="QueryBinding">
+                    <DataSourceID>20545fc2-7391-43a6-9abc-dc170be0c2b6</DataSourceID>
+                    <QueryDefinition>SELECT [dbo].[DimCurrency].* FROM [dbo].[DimCurrency]</QueryDefinition>
+                  </Source>
+                  <StorageMode valuens="ddl200_200">InMemory</StorageMode>
+                  <ProcessingMode>Regular</ProcessingMode>
+                  <ErrorConfiguration>
+                    <KeyNotFound>IgnoreError</KeyNotFound>
+                    <KeyDuplicate>ReportAndStop</KeyDuplicate>
+                    <NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+                  </ErrorConfiguration>
+                  <ProactiveCaching>
+                    <SilenceInterval>-PT1S</SilenceInterval>
+                    <Latency>-PT1S</Latency>
+                    <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                    <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                    <Source xsi:type="ProactiveCachingInheritedBinding" />
+                  </ProactiveCaching>
+                </Partition>
+              </Partitions>
+              <ProactiveCaching>
+                <SilenceInterval>-PT1S</SilenceInterval>
+                <Latency>-PT1S</Latency>
+                <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                <Source xsi:type="ProactiveCachingInheritedBinding" />
+              </ProactiveCaching>
+            </MeasureGroup>
+          </MeasureGroups>
+          <Source>
+            <DataSourceViewID>Sandbox</DataSourceViewID>
+          </Source>
+          <MdxScripts>
+            <MdxScript>
+              <ID>MdxScript</ID>
+              <Name>MdxScript</Name>
+              <Commands>
+                <Command>
+                  <Text>CALCULATE; 
+CREATE MEMBER CURRENTCUBE.Measures.[__No measures defined] AS 1, VISIBLE = 0; 
+ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__No measures defined]; </Text>
+                </Command>
+                <Command>
+                  <Text>----------------------------------------------------------
+-- PowerPivot measures command (do not modify manually) --
+----------------------------------------------------------
+
+
+CREATE MEASURE 'DimCurrency'[Budget]= 4;
+</Text>
+                  <Annotations>
+                    <Annotation>
+                      <Name>FullName</Name>
+                      <Value>Budget</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Table</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                  </Annotations>
+                </Command>
+                <Command>
+                  <Text>----------------------------------------------------------
+-- PowerPivot measures command (do not modify manually) --
+----------------------------------------------------------
+
+
+CREATE MEASURE 'DimCurrency'[Sales2]= SUM ( DimCurrency[CurrencyKey] ) / 2;
+CREATE MEASURE 'DimCurrency'[_Sales2 Goal] = 8; 
+CREATE MEASURE 'DimCurrency'[_Sales2 Status] = if(ISBLANK('DimCurrency'[Sales2]),BLANK(),
+                If('DimCurrency'[Sales2]&lt;3.2,
+	                If('DimCurrency'[Sales2]&lt;1.6,-2,-1),
+	                If('DimCurrency'[Sales2]&lt;4.8,0,
+		                If('DimCurrency'[Sales2]&lt;6.4,1,2)
+	                )
+                )
+            )
+            ; 
+CREATE KPI CURRENTCUBE.[Sales2] AS Measures.[Sales2], ASSOCIATED_MEASURE_GROUP = 'DimCurrency', GOAL = Measures.[_Sales2 Goal], STATUS = Measures.[_Sales2 Status], STATUS_GRAPHIC = 'Five Bars Colored';
+</Text>
+                  <Annotations>
+                    <Annotation>
+                      <Name>FullName</Name>
+                      <Value>Sales2</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Table</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                  </Annotations>
+                </Command>
+                <Command>
+                  <Text>----------------------------------------------------------
+-- PowerPivot measures command (do not modify manually) --
+----------------------------------------------------------
+
+
+CREATE MEASURE 'DimCurrency'[Sales1]= SUM ( DimCurrency[CurrencyKey] ) ;
+CREATE MEASURE 'DimCurrency'[_Sales1 Goal] = 'DimCurrency'[Budget]; 
+CREATE MEASURE 'DimCurrency'[_Sales1 Status] = if(ISBLANK('DimCurrency'[Sales1]/'DimCurrency'[_Sales1 Goal]),BLANK(),
+                    If('DimCurrency'[Sales1]/'DimCurrency'[_Sales1 Goal]&lt;0.4,-1,
+	                If('DimCurrency'[Sales1]/'DimCurrency'[_Sales1 Goal]&lt;0.8,0,1)
+                )
+            )
+            ; 
+CREATE KPI CURRENTCUBE.[Sales1] AS Measures.[Sales1], ASSOCIATED_MEASURE_GROUP = 'DimCurrency', GOAL = Measures.[_Sales1 Goal], STATUS = Measures.[_Sales1 Status], STATUS_GRAPHIC = 'Traffic Light - Single';
+</Text>
+                  <Annotations>
+                    <Annotation>
+                      <Name>FullName</Name>
+                      <Value>Sales1</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Table</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                  </Annotations>
+                </Command>
+                <Command>
+                  <Text>----------------------------------------------------------
+-- PowerPivot measures command (do not modify manually) --
+----------------------------------------------------------
+
+
+CREATE MEASURE 'DimCurrency'[Sales3]= SUM ( DimCurrency[CurrencyKey] ) / 3;
+CREATE MEASURE 'DimCurrency'[_Sales3 Goal] = 'DimCurrency'[Budget]; 
+CREATE MEASURE 'DimCurrency'[_Sales3 Status] = if(ISBLANK('DimCurrency'[Sales3]/'DimCurrency'[_Sales3 Goal]),BLANK(),
+                If('DimCurrency'[Sales3]/'DimCurrency'[_Sales3 Goal]&lt;0.67,
+	                If('DimCurrency'[Sales3]/'DimCurrency'[_Sales3 Goal]&lt;0.34,-1,0),
+	                If('DimCurrency'[Sales3]/'DimCurrency'[_Sales3 Goal]&lt;1.33,1,
+		                If('DimCurrency'[Sales3]/'DimCurrency'[_Sales3 Goal]&lt;1.66,0,-1)
+	                )
+                )
+            )
+            ; 
+CREATE KPI CURRENTCUBE.[Sales3] AS Measures.[Sales3], ASSOCIATED_MEASURE_GROUP = 'DimCurrency', GOAL = Measures.[_Sales3 Goal], STATUS = Measures.[_Sales3 Status], STATUS_GRAPHIC = 'Traffic Light - Single';
+</Text>
+                  <Annotations>
+                    <Annotation>
+                      <Name>FullName</Name>
+                      <Value>Sales3</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Table</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                  </Annotations>
+                </Command>
+                <Command>
+                  <Text>----------------------------------------------------------
+-- PowerPivot measures command (do not modify manually) --
+----------------------------------------------------------
+
+
+CREATE MEASURE 'DimCurrency'[Sales6]= SUM ( DimCurrency[CurrencyKey] ) / 6;
+CREATE MEASURE 'DimCurrency'[_Sales6 Goal] = 20; 
+CREATE MEASURE 'DimCurrency'[_Sales6 Status] = if(ISBLANK('DimCurrency'[Sales6]),BLANK(),
+                    If('DimCurrency'[Sales6]&lt;8,1,
+	                If('DimCurrency'[Sales6]&lt;22,0,-1)
+                )
+            )
+            ; 
+CREATE KPI CURRENTCUBE.[Sales6] AS Measures.[Sales6], ASSOCIATED_MEASURE_GROUP = 'DimCurrency', GOAL = Measures.[_Sales6 Goal], STATUS = Measures.[_Sales6 Status], STATUS_GRAPHIC = 'Traffic Light - Single';
+</Text>
+                  <Annotations>
+                    <Annotation>
+                      <Name>FullName</Name>
+                      <Value>Sales6</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Table</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                  </Annotations>
+                </Command>
+                <Command>
+                  <Text>----------------------------------------------------------
+-- PowerPivot measures command (do not modify manually) --
+----------------------------------------------------------
+
+
+CREATE MEASURE 'DimCurrency'[Sales5]= SUM ( DimCurrency[CurrencyKey] ) / 5;
+CREATE MEASURE 'DimCurrency'[_Sales5 Goal] = 'DimCurrency'[Budget]; 
+CREATE MEASURE 'DimCurrency'[_Sales5 Status] = if(ISBLANK('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]),BLANK(),
+                If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;0.8,
+	                If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;0.4,
+		                If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;0.2,-2,-1),
+		                    If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;0.6,0,1)
+	                    ),
+	                    If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;1.4,
+		                    If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;1.2,2,1),
+		                        If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;1.6,0,
+			                        If('DimCurrency'[Sales5]/'DimCurrency'[_Sales5 Goal]&lt;1.8,-1,-2)
+		                )
+	                )
+                )
+            )
+            ; 
+CREATE KPI CURRENTCUBE.[Sales5] AS Measures.[Sales5], ASSOCIATED_MEASURE_GROUP = 'DimCurrency', GOAL = Measures.[_Sales5 Goal], STATUS = Measures.[_Sales5 Status], STATUS_GRAPHIC = 'Five Bars Colored';
+</Text>
+                  <Annotations>
+                    <Annotation>
+                      <Name>FullName</Name>
+                      <Value>Sales5</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Table</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                  </Annotations>
+                </Command>
+              </Commands>
+              <CalculationProperties>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>User</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>IsPrivate</Name>
+                      <Value>False</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Format</Name>
+                      <Value>
+                        <Format Format="General" xmlns="" />
+                      </Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[Budget]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <FormatString>''</FormatString>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>Kpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>IsPrivate</Name>
+                      <Value>False</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Format</Name>
+                      <Value>
+                        <Format Format="General" xmlns="" />
+                      </Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalType</Name>
+                      <Value>StaticValue</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalValue</Name>
+                      <Value>8</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiStatusType</Name>
+                      <Value>Linear</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdType</Name>
+                      <Value>Absolute</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdOrdering</Name>
+                      <Value>Ascending</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdCount</Name>
+                      <Value>4</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_0</Name>
+                      <Value>1.6</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_1</Name>
+                      <Value>3.2</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>ValueDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>StatusDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>TrendDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_2</Name>
+                      <Value>4.8</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_3</Name>
+                      <Value>6.4</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[Sales2]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <FormatString>''</FormatString>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales2</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales2 Goal]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales2</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales2 Status]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportKpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales2</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>KPIs.[Sales2]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>Kpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>IsPrivate</Name>
+                      <Value>False</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Format</Name>
+                      <Value>
+                        <Format Format="General" xmlns="" />
+                      </Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiStatusType</Name>
+                      <Value>Linear</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdType</Name>
+                      <Value>Percentage</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdOrdering</Name>
+                      <Value>Ascending</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdCount</Name>
+                      <Value>2</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_0</Name>
+                      <Value>40</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_1</Name>
+                      <Value>80</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>ValueDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>StatusDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>TrendDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalMeasure</Name>
+                      <Value>Budget</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalMeasureTableName</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[Sales1]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <FormatString>''</FormatString>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales1</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales1 Goal]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales1</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales1 Status]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportKpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales1</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>KPIs.[Sales1]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>Kpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>IsPrivate</Name>
+                      <Value>False</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Format</Name>
+                      <Value>
+                        <Format Format="General" xmlns="" />
+                      </Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_2</Name>
+                      <Value>133</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiStatusType</Name>
+                      <Value>Centered</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdType</Name>
+                      <Value>Percentage</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdOrdering</Name>
+                      <Value>Ascending</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdCount</Name>
+                      <Value>4</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_0</Name>
+                      <Value>34</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_1</Name>
+                      <Value>67</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>ValueDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>StatusDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>TrendDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalMeasure</Name>
+                      <Value>Budget</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalMeasureTableName</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_3</Name>
+                      <Value>166</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[Sales3]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <FormatString>''</FormatString>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales3</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales3 Goal]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales3</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales3 Status]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportKpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales3</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>KPIs.[Sales3]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>Kpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>IsPrivate</Name>
+                      <Value>False</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Format</Name>
+                      <Value>
+                        <Format Format="General" xmlns="" />
+                      </Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalType</Name>
+                      <Value>StaticValue</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalValue</Name>
+                      <Value>20</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiStatusType</Name>
+                      <Value>LinearReversed</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdType</Name>
+                      <Value>Absolute</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdOrdering</Name>
+                      <Value>Ascending</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdCount</Name>
+                      <Value>2</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_0</Name>
+                      <Value>8</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_1</Name>
+                      <Value>22</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>ValueDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>StatusDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>TrendDescription</Name>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[Sales6]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <FormatString>''</FormatString>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales6</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales6 Goal]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales6</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales6 Status]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportKpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales6</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>KPIs.[Sales6]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>Kpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>IsPrivate</Name>
+                      <Value>False</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>Format</Name>
+                      <Value>
+                        <Format Format="General" xmlns="" />
+                      </Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_2</Name>
+                      <Value>60</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiStatusType</Name>
+                      <Value>Centered</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdType</Name>
+                      <Value>Percentage</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdOrdering</Name>
+                      <Value>Ascending</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThresholdCount</Name>
+                      <Value>8</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_0</Name>
+                      <Value>20</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_1</Name>
+                      <Value>40</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>ValueDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>StatusDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>TrendDescription</Name>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalMeasure</Name>
+                      <Value>Budget</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>GoalMeasureTableName</Name>
+                      <Value>DimCurrency</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_3</Name>
+                      <Value>80</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_4</Name>
+                      <Value>120</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_5</Name>
+                      <Value>140</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_6</Name>
+                      <Value>160</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>KpiThreshold_7</Name>
+                      <Value>180</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[Sales5]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <FormatString>''</FormatString>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales5</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales5 Goal]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportMdx</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales5</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>[_Sales5 Status]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <Annotations>
+                    <Annotation>
+                      <Name>Type</Name>
+                      <Value>SupportKpi</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectType</Name>
+                      <Value>Measure</Value>
+                    </Annotation>
+                    <Annotation>
+                      <Name>MainObjectName</Name>
+                      <Value>Sales5</Value>
+                    </Annotation>
+                  </Annotations>
+                  <CalculationReference>KPIs.[Sales5]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                </CalculationProperty>
+                <CalculationProperty>
+                  <CalculationReference>Measures.[__No measures defined]</CalculationReference>
+                  <CalculationType>Member</CalculationType>
+                  <Visible>false</Visible>
+                </CalculationProperty>
+              </CalculationProperties>
+            </MdxScript>
+          </MdxScripts>
+          <StorageMode valuens="ddl200_200">InMemory</StorageMode>
+          <ProactiveCaching>
+            <SilenceInterval>-PT1S</SilenceInterval>
+            <Latency>-PT1S</Latency>
+            <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+            <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+            <Source xsi:type="ProactiveCachingInheritedBinding" />
+          </ProactiveCaching>
+        </Cube>
+      </Cubes>
+      <DataSources>
+        <DataSource xsi:type="RelationalDataSource">
+          <ID>20545fc2-7391-43a6-9abc-dc170be0c2b6</ID>
+          <Name>SqlServer Demo ContosoDW</Name>
+          <Annotations>
+            <Annotation>
+              <Name>ConnectionEditUISource</Name>
+              <Value>SqlServer</Value>
+            </Annotation>
+          </Annotations>
+          <ConnectionString>Provider=SQLNCLI11;Data Source=Demo;Initial Catalog=ContosoDW;Integrated Security=SSPI;Persist Security Info=false</ConnectionString>
+          <ImpersonationInfo>
+            <ImpersonationMode>ImpersonateServiceAccount</ImpersonationMode>
+          </ImpersonationInfo>
+          <Timeout>PT0S</Timeout>
+        </DataSource>
+      </DataSources>
+      <DataSourceViews>
+        <DataSourceView>
+          <ID>Sandbox</ID>
+          <Name>Sandbox</Name>
+          <DataSourceID>20545fc2-7391-43a6-9abc-dc170be0c2b6</DataSourceID>
+          <Schema>
+            <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+              <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-US">
+                <xs:complexType>
+                  <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba" msdata:Locale="" msprop:IsLogical="True" msprop:FriendlyName="DimCurrency" msprop:DbSchemaName="dbo" msprop:DbTableName="DimCurrency" msprop:TableType="View" msprop:Description="DimCurrency" msprop:QueryDefinition=" SELECT [dbo].[DimCurrency].* FROM [dbo].[DimCurrency] ">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="CurrencyKey" msprop:DbColumnName="CurrencyKey" msprop:FriendlyName="CurrencyKey" type="xs:long" />
+                          <xs:element name="CurrencyLabel" msprop:DbColumnName="CurrencyLabel" msprop:FriendlyName="CurrencyLabel" minOccurs="0">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="32766" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="CurrencyName" msprop:DbColumnName="CurrencyName" msprop:FriendlyName="CurrencyName" minOccurs="0">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="32766" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="CurrencyDescription" msprop:DbColumnName="CurrencyDescription" msprop:FriendlyName="CurrencyDescription" minOccurs="0">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:maxLength value="32766" />
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="ETLLoadID" msprop:DbColumnName="ETLLoadID" msprop:FriendlyName="ETLLoadID" type="xs:long" minOccurs="0" />
+                          <xs:element name="LoadDate" msprop:DbColumnName="LoadDate" msprop:FriendlyName="LoadDate" type="xs:dateTime" minOccurs="0" />
+                          <xs:element name="UpdateDate" msprop:DbColumnName="UpdateDate" msprop:FriendlyName="UpdateDate" type="xs:dateTime" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:choice>
+                </xs:complexType>
+                <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+                  <xs:selector xpath=".//DimCurrency_b05f3525-1331-4fdf-8330-a8c0d29fc4ba" />
+                  <xs:field xpath="CurrencyKey" />
+                </xs:unique>
+              </xs:element>
+            </xs:schema>
+            <NewDataSet xmlns="" />
+          </Schema>
+        </DataSourceView>
+      </DataSourceViews>
+    </Database>
+  </ObjectDefinition>
+</Alter>

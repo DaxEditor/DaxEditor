@@ -218,5 +218,45 @@ namespace DaxEditorSample.Test
             //Ignore empty lines. Parser not support whitespaces before expressions.
             WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
         }
+
+        [TestMethod]
+        public void KPIExample()
+        {
+            var text = Utils.ReadFileFromResources("KPIExample.bim");
+            var bim = MeasuresContainer.ParseText(text);
+            Assert.IsNotNull(bim.Measures);
+            var daxText = bim.GetDaxText();
+            Assert.IsNotNull(daxText);
+
+            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
+            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
+
+            var expected = text;
+            var actual = measuresFromDax.UpdateMeasures(text);
+            WindiffAssert.AreEqualNormalizedXmla(expected, actual);
+        }
+
+        [TestMethod]
+        public void KPIExample_Json()
+        {
+            var text = Utils.ReadFileFromResources("KPIExample_JSON.bim");
+            var bim = MeasuresContainer.ParseText(text);
+            Assert.IsNotNull(bim.Measures);
+            var daxText = bim.GetDaxText();
+            Assert.IsNotNull(daxText);
+
+            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
+            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
+
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
+            var document = JsonUtilities.Deserialize(expected);
+            expected = JsonUtilities.Serialize(document);
+
+            var actual = measuresFromDax.UpdateMeasures(text);
+            //Ignore empty lines. Parser not support whitespaces before expressions.
+            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
+        }
     }
 }
