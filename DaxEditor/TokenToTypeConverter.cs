@@ -21,7 +21,7 @@ namespace DaxEditor
                 case Tokens.FUNCTION:
                 case Tokens.KWDATATABLE:
                 case Tokens.KWRANKX:
-                case Tokens.KWFORMAT:
+                //case Tokens.KWFORMAT:
                     return DaxTokenTypes.Function;
 
                 case Tokens.NUMBER:
@@ -81,8 +81,19 @@ namespace DaxEditor
                 case Tokens.KWVISIBLE:
                 case Tokens.KWDESCRIPTION:
                 case Tokens.KWDISPLAYFOLDER:
-                //case Tokens.KWFORMAT:
+                case Tokens.KWFORMAT:
                 case Tokens.KWADDITIONALINFO:
+                case Tokens.KWKPIANNOTATIONS:
+                case Tokens.KWKPIDESCRIPTION:
+                case Tokens.KWKPISTATUSDESCRIPTION:
+                case Tokens.KWKPISTATUSEXPRESSION:
+                case Tokens.KWKPISTATUSGRAPHIC:
+                case Tokens.KWKPITARGETDESCRIPTION:
+                case Tokens.KWKPITARGETEXPRESSION:
+                case Tokens.KWKPITARGETFORMATSTRING:
+                case Tokens.KWKPITRENDDESCRIPTION:
+                case Tokens.KWKPITRENDEXPRESSION:
+                case Tokens.KWKPITRENDGRAPHIC:
                     return DaxTokenTypes.SpecialFormat;
 
                 case Tokens.EQ:

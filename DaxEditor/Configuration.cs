@@ -62,7 +62,21 @@ namespace Babel
             ColorToken((int)Tokens.COLUMNNAME, TokenType.Identifier, TokenColor.Text, TokenTriggers.None);
             ColorToken((int)Tokens.PARTIALTABLENAME, TokenType.Identifier, TokenColor.Text, TokenTriggers.None);
             ColorToken((int)Tokens.PARTIALCOLUMNNAME, TokenType.Identifier, TokenColor.Text, TokenTriggers.None);
+            ColorToken((int)Tokens.KWACCURACY, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWADDITIONALINFO, TokenType.Identifier, functionColor, TokenTriggers.None);
 
+            //KPI
+            ColorToken((int)Tokens.KWKPIANNOTATIONS, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPIDESCRIPTION, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPISTATUSDESCRIPTION, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPISTATUSEXPRESSION, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPISTATUSGRAPHIC, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPITARGETDESCRIPTION, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPITARGETEXPRESSION, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPITARGETFORMATSTRING, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPITRENDDESCRIPTION, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPITRENDEXPRESSION, TokenType.Identifier, functionColor, TokenTriggers.None);
+            ColorToken((int)Tokens.KWKPITRENDGRAPHIC, TokenType.Identifier, functionColor, TokenTriggers.None);
 
             ColorToken((int)Tokens.NUMBER, TokenType.Literal, TokenColor.String, TokenTriggers.None);
             ColorToken((int)Tokens.STRING, TokenType.Literal, TokenColor.String, TokenTriggers.None);

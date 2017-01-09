@@ -209,7 +209,7 @@ namespace DaxEditor
             //Delete ToSystemEnding() after support consistent lines in xml format
             if (!string.IsNullOrWhiteSpace(value))
             {
-                text += $" {name}={quote}{value.ToSystemEnding()}{quote}";
+                text += $"{Environment.NewLine}    {name.ToUpperInvariant()} = {quote}{value.ToSystemEnding()}{quote}";
             }
 
             return text;
@@ -241,15 +241,15 @@ namespace DaxEditor
                 case FormatType.Text:
                 case FormatType.DateTimeShortDatePattern:
                 case FormatType.DateTimeGeneral:
-                    result = "CALCULATION PROPERTY " + Format.ToString();
+                    result = "CALCULATION PROPERTY " + Format.ToString().ToUpperInvariant();
                     if (Measure.IsHidden)
-                        result += " Visible=False";
+                        result = AppendIfNotEmpty(result, "Visible", "False");
 
                     if (Accuracy.HasValue)
-                        result += " Accuracy=" + Accuracy.Value;
+                        result = AppendIfNotEmpty(result, "Accuracy", Accuracy.Value.ToString());
 
                     if (ThousandSeparator.HasValue && ThousandSeparator.Value == true)
-                        result += " ThousandSeparator=True";
+                        result = AppendIfNotEmpty(result, "ThousandSeparator", "True");
 
                     result = AppendIfNotEmpty(result, "Format", Measure.FormatString, "\'");
                     result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, "\'");
@@ -283,7 +283,7 @@ namespace DaxEditor
                 }
                 if (KPI.Annotations.Count > 0)
                 {
-                    result += $" KpiAnnotations = '{string.Join(", ", texts)}'";
+                    result = AppendIfNotEmpty(result, "KpiAnnotations", string.Join(", ", texts), "\'");
                 }
             }
 
