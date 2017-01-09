@@ -51,37 +51,23 @@ namespace DaxEditor
 
         public IEnumerable<ITagSpan<DaxTokenTag>> GetTags(NormalizedSnapshotSpanCollection spans)
         {
-            foreach (SnapshotSpan curSpan in spans)
+            foreach (var span in spans)
             {
-                var scanner = new LineScanner();
-                ITextSnapshotLine containingLine = curSpan.Start.GetContainingLine();
-                int curLoc = containingLine.Start.Position;
+                var line = span.Start.GetContainingLine();
+                var scanner = new TokenScanner(
+                    line.GetText(),
+                    line.Start.Position, 
+                    t => t.Token == Tokens.LEX_WHITE
+                    );
 
-
-                foreach (TokenLocation tokenLocation in new TokenScanner(containingLine.GetText(), curLoc, t => t.Token == Tokens.LEX_WHITE))
+                foreach (var location in scanner)
                 {
-                    var tokenSpan = new SnapshotSpan(curSpan.Snapshot, new Microsoft.VisualStudio.Text.Span(tokenLocation.Location, tokenLocation.Length));
-                    if (tokenSpan.IntersectsWith(curSpan))
-                        yield return new TagSpan<DaxTokenTag>(tokenSpan, new DaxTokenTag(TokenToTypeConverter.Convert(tokenLocation.Token)));
+                    var textSpan = new Microsoft.VisualStudio.Text.Span(location.Location, location.Length);
+                    var tokenSpan = new SnapshotSpan(span.Snapshot, textSpan);
+                    if (tokenSpan.IntersectsWith(span))
+                        yield return new TagSpan<DaxTokenTag>(tokenSpan, new DaxTokenTag(TokenToTypeConverter.Convert(location.Token)));
                 }
-
-                //string[] tokens = containingLine.GetText().ToLower().Split(' ');
-
-                //foreach (string ookToken in tokens)
-                //{
-                //    if (_ookTypes.ContainsKey(ookToken))
-                //    {
-                //        var tokenSpan = new SnapshotSpan(curSpan.Snapshot, new Span(curLoc, ookToken.Length));
-                //        if (tokenSpan.IntersectsWith(curSpan))
-                //            yield return new TagSpan<DaxTokenTag>(tokenSpan,
-                //                                                  new DaxTokenTag(_ookTypes[ookToken]));
-                //    }
-
-                //    //add an extra char location because of the space
-                //    curLoc += ookToken.Length + 1;
-                //}
             }
-
         }
     }
 }
