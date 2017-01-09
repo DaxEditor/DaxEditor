@@ -170,6 +170,7 @@
     <Compile Include="ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GeneratorSource\lexer.cs" />
     <Compile Include="GeneratorSource\parser.cs" />
     <Compile Include="ICompletionDataSnaphotProvider.cs" />

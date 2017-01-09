@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using DaxEditor.StringExtensions;
 
 namespace DaxEditor
 {
@@ -205,9 +206,10 @@ namespace DaxEditor
 
         private string AppendIfNotEmpty(string text, string name, string value, string quote = "")
         {
+            //Delete ToSystemEnding() after support consistent lines in xml format
             if (!string.IsNullOrWhiteSpace(value))
             {
-                text += $" {name}={quote}{value}{quote}";
+                text += $" {name}={quote}{value.ToSystemEnding()}{quote}";
             }
 
             return text;

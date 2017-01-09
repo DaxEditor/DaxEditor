@@ -9,6 +9,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 ***************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.TextManager.Interop;
@@ -63,7 +64,7 @@ namespace Babel
         public override void ReformatSpan(EditArray mgr, TextSpan span)
         {
             Babel.LanguageService langService = this.LanguageService as Babel.LanguageService;
-            DaxFormatter formatter = new DaxFormatter(this, mgr, span, "\r\n" , this.LanguageService.Preferences, langService.FormattingPage.IndentDepthInFunctions, langService.FormattingPage.FormatterType);
+            DaxFormatter formatter = new DaxFormatter(this, mgr, span, Environment.NewLine, this.LanguageService.Preferences, langService.FormattingPage.IndentDepthInFunctions, langService.FormattingPage.FormatterType);
             formatter.Format();
         }
 

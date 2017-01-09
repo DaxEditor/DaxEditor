@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using DaxEditor.StringExtensions;
 
 namespace DaxEditorSample.Test
 {
@@ -47,7 +48,10 @@ namespace DaxEditorSample.Test
 
                 string winDiffCommandLine = string.Format(@"Windiff.exe ""{0}"" ""{1}""", expectedFileName, actualFileName);
                 string winDiffCommandLineForNormalized = string.Format(@"Windiff.exe ""{0}"" ""{1}""", expectedNormalizedFileName, actualNormalizedFileName);
-                var failMessage = "Different XMLA.  Normalized diff: \r\n" + winDiffCommandLineForNormalized + Environment.NewLine + "Different XMLA.  Actual diff: \r\n" + winDiffCommandLine;
+                var failMessage = $@"Different XMLA.  Normalized diff:
+                {winDiffCommandLineForNormalized}
+                Different XMLA.  Actual diff:
+{winDiffCommandLine}";
                 Assert.Fail(failMessage);
             }
         }
@@ -122,12 +126,12 @@ namespace DaxEditorSample.Test
                 return input;
 
             var result = input;
-            result = result.Replace(ServerCommandProducer.DoNotModify1100, "-- normalized header\r\n");
-            result = result.Replace(ServerCommandProducer.DoNotModify1103, "-- normalized header\r\n");
+            result = result.Replace(ServerCommandProducer.DoNotModify1100, $"-- normalized header{Environment.NewLine}");
+            result = result.Replace(ServerCommandProducer.DoNotModify1103, $"-- normalized header{Environment.NewLine}");
             var calculateNormalizeCandidates = new List<string>() { ServerCommandProducer.CommonCommandText1100, ServerCommandProducer.CommonCommandText1103, ServerCommandProducer.CommonCommandTextUnknownVersion };
             foreach(var calculateNormalizeCandidate in calculateNormalizeCandidates)
             {
-                result = result.Replace(calculateNormalizeCandidate, "CALCULATE; -- normalized CALCULATE\r\n");
+                result = result.Replace(calculateNormalizeCandidate, $"CALCULATE; -- normalized CALCULATE{Environment.NewLine}");
             }
 
             result = result.Replace("<CalculationReference>Measures.[__No measures defined]</CalculationReference>", "<CalculationReference>-- normalized</CalculationReference>");
@@ -143,19 +147,18 @@ namespace DaxEditorSample.Test
         /// <returns>Normalized string</returns>
         private static string NormalizeWhitespacesInText(string input)
         {
-            if (null == input)
-                return input;
-
-            var workString = input.Replace("\r\n", "\n");
-            workString = workString.Replace("\r", "\n");
-            var lines = workString.Split('\n');
-            var sbResult = new StringBuilder();
-            foreach (var line in lines)
+            if (input == null)
             {
-                sbResult.AppendLine(line.TrimStart(new char[] { ' ', '\t' }));
+                return input;
             }
 
-            return sbResult.ToString();
+            var builder = new StringBuilder();
+            foreach (var line in input.ToLines())
+            {
+                builder.AppendLine(line.TrimStart(new char[] { ' ', '\t' }));
+            }
+
+            return builder.ToString();
         }
     }
 }

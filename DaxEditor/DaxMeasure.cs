@@ -44,14 +44,10 @@ namespace DaxEditor
             }
             set
             {
-                if (value != null)
-                {
-                    // Normalize EOF as '\r\n'
-                    value = value.Replace("\r\n", "\n").Replace('\r', '\n').Replace("\n", "\r\n");
-                }
                 _fullText = value;
             }
         }
+
         public string NameInBrackets
         {
             get

@@ -18,6 +18,7 @@ using DaxEditor;
 using Babel.ParserGenerator;
 using System.Linq;
 using System.Diagnostics;
+using DaxEditor.StringExtensions;
 using Microsoft.AnalysisServices.Tabular;
 
 namespace Babel.Parser
@@ -80,10 +81,15 @@ namespace Babel.Parser
             Sink.AddHiddenRegion(span);
         }
 
+        private string GetConsistentText(LexLocation location)
+        {
+            return scanner.GetText(location).ToSystemEnding();
+        }
+
         public void CreateNewMeasure(LexLocation tableRefLocation, LexLocation measureNameLocation)
         {
-            var tableName = scanner.GetText(tableRefLocation);
-            var measureName = scanner.GetText(measureNameLocation);
+            var tableName = GetConsistentText(tableRefLocation);
+            var measureName = GetConsistentText(measureNameLocation);
 
             if (tableName.StartsWith("'") && tableName.EndsWith("'"))
                 tableName = tableName.Substring(1, tableName.Length - 2);
@@ -115,7 +121,7 @@ namespace Babel.Parser
             {
                 var line = i == s.sLin ?
                     scanner.GetText(new LexLocation(i, 0, i, s.sCol)) : 
-                    scanner.GetText(new LexLocation(i, 0, i + 1, 0));
+                    GetLineText(i);
                 var index = line.LastIndexOf('=');
                 if (index != -1)
                 {
@@ -191,7 +197,7 @@ namespace Babel.Parser
                 Debug.WriteLine(e.StackTrace);
             }
 
-            lastMeasure.Expression = scanner.GetText(s);
+            lastMeasure.Expression = GetConsistentText(s);
         }
 
         public void SpecifyFullMeasureText(LexLocation startLocation, LexLocation endLocation)
@@ -199,14 +205,14 @@ namespace Babel.Parser
             var completeLocation = startLocation.Merge(endLocation);
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure.FullText == null);
-            lastMeasure.FullText = scanner.GetText(completeLocation);
+            lastMeasure.FullText = GetConsistentText(completeLocation);
         }
 
         public void SpecifyCalculationProperty(LexLocation location)
         {
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure.FullText == null);
-            var formatTypeText = scanner.GetText(location);
+            var formatTypeText = GetConsistentText(location);
             try
             {
                 var formatType = (DaxCalcProperty.FormatType)Enum.Parse(typeof(DaxCalcProperty.FormatType), formatTypeText, true);
@@ -224,7 +230,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            var accuracyText = scanner.GetText(location);
+            var accuracyText = GetConsistentText(location);
             lastMeasure.CalcProperty.Accuracy = int.Parse(accuracyText);
         }
 
@@ -239,7 +245,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.Measure.Description = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.Measure.Description = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiDescription(LexLocation location)
@@ -248,7 +254,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.Description = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.Description = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiTargetFormatString(LexLocation location)
@@ -257,7 +263,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TargetFormatString = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.TargetFormatString = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiTargetDescription(LexLocation location)
@@ -266,7 +272,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TargetDescription = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.TargetDescription = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiTargetExpression(LexLocation location)
@@ -296,7 +302,7 @@ namespace Babel.Parser
             }
             */
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TargetExpression = scanner.GetText(location);
+            lastMeasure.CalcProperty.KPI.TargetExpression = GetConsistentText(location);
         }
 
         public void SpecifyCalcPropKpiStatusGraphic(LexLocation location)
@@ -305,7 +311,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.StatusGraphic = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.StatusGraphic = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiStatusDescription(LexLocation location)
@@ -314,7 +320,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.StatusDescription = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.StatusDescription = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiStatusExpression(LexLocation location)
@@ -344,7 +350,7 @@ namespace Babel.Parser
             }
             */
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.StatusExpression = scanner.GetText(location);
+            lastMeasure.CalcProperty.KPI.StatusExpression = GetConsistentText(location);
         }
 
         public void SpecifyCalcPropKpiTrendGraphic(LexLocation location)
@@ -353,7 +359,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TrendGraphic = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.TrendGraphic = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiTrendDescription(LexLocation location)
@@ -362,7 +368,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TrendDescription = scanner.GetText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.TrendDescription = GetConsistentText(location).Trim('\"');
         }
 
         public void SpecifyCalcPropKpiTrendExpression(LexLocation location)
@@ -392,7 +398,7 @@ namespace Babel.Parser
             }
             */
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TrendExpression = scanner.GetText(location);
+            lastMeasure.CalcProperty.KPI.TrendExpression = GetConsistentText(location);
         }
 
         public void SpecifyCalcPropKpiAnnotations(LexLocation location)
@@ -403,7 +409,7 @@ namespace Babel.Parser
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
 
             //'GoalType=""Measure"", KpiStatusType= ""Linear"", KpiThresholdType=""Percentage"", KpiThresholdOrdering=""Ascending"", KpiThresholdCount=""2"", KpiThreshold_0=""40"",KpiThreshold_1 =""80""'
-            var text = scanner.GetText(location).Trim('\'');
+            var text = GetConsistentText(location).Trim('\'');
             var propertiesData = text.Split(',');
 
             foreach (var propertyData in propertiesData)
@@ -426,7 +432,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.Measure.DisplayFolder = scanner.GetText(location);
+            lastMeasure.CalcProperty.Measure.DisplayFolder = GetConsistentText(location);
         }
 
         public void SpecifyCalcPropThousandSeparator(bool hasThousandSeparator)
@@ -442,7 +448,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.Measure.FormatString = scanner.GetText(location).Trim('\'');
+            lastMeasure.CalcProperty.Measure.FormatString = GetConsistentText(location).Trim('\'');
         }
 
         public void SpecifyCalcPropAdditionalInfo(LexLocation location)
@@ -450,7 +456,7 @@ namespace Babel.Parser
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
-            lastMeasure.CalcProperty.CustomFormat = scanner.GetText(location).Trim('\'');
+            lastMeasure.CalcProperty.CustomFormat = GetConsistentText(location).Trim('\'');
         }
 
         // error reporting

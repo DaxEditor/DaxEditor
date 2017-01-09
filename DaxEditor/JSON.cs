@@ -554,7 +554,7 @@ namespace DaxEditor.Json
                 var jsonString = value as string;
                 if (jsonString != null)
                 {
-                    var array = jsonString.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
+                    var array = jsonString.ToLines();
                     jsonValue = array.Length > 1 ? (object)array : jsonString;
                 }
                 serializer.Serialize(writer, jsonValue ?? value);

@@ -1,7 +1,7 @@
 ﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
 
 using DaxEditor.Json;
-//using DaxEditor.Json.Tabular;
+using DaxEditor.StringExtensions;
 using Microsoft.AnalysisServices.Tabular;
 using Microsoft.VisualStudio.Package;
 using System;
@@ -23,6 +23,30 @@ namespace DaxEditor
         private MeasuresContainer(IList<DaxMeasure> measures)
         {
             Measures = measures;
+        }
+
+        public static Measure ToEnding(Measure measure, string ending)
+        {
+            //Replace all endings to selected endings. Now only for expressions
+            measure.Expression = measure.Expression.ToEnding(ending);
+            if (measure.KPI != null)
+            {
+                measure.KPI.TargetExpression = measure.KPI.TargetExpression.ToEnding(ending);
+                measure.KPI.StatusExpression = measure.KPI.StatusExpression.ToEnding(ending);
+                measure.KPI.TrendExpression = measure.KPI.TrendExpression.ToEnding(ending);
+            }
+
+            return measure;
+        }
+
+        public static Measure ToSystemEnding(Measure measure)
+        {
+            return ToEnding(measure, Environment.NewLine);
+        }
+
+        public static Measure ToUnixEnding(Measure measure)
+        {
+            return ToEnding(measure, "\n");
         }
 
         public static MeasuresContainer ParseText(string text)
@@ -82,8 +106,9 @@ Message: {exception.Message}
             var measures = new List<DaxMeasure>();
             foreach (var table in database.Model.Tables)
             {
-                foreach (var measure in table.Measures)
+                foreach (var tableMeasure in table.Measures)
                 {
+                    var measure = ToSystemEnding(tableMeasure);
                     var newMeasure = new DaxMeasure();
                     newMeasure.Name = measure.Name;
                     newMeasure.Expression = measure.Expression;
@@ -195,19 +220,22 @@ Message: {exception.Message}
             }
 
             var dictionary = new Dictionary<string, IList<Measure>>();
-            measures.ForEach(measure =>
+            foreach (var measure in measures)
             {
                 var jsonMeasure = new Measure();
                 jsonMeasure.Name = measure.Name;
-                jsonMeasure.Expression = measure.Expression.Replace("\r\n", "\n");
+                jsonMeasure.Expression = measure.Expression;
+                measure.CalcProperty?.ToJsonMeasure(ref jsonMeasure, measure.Name);
+
+                //JsonSerializer does not support /r/n endings.
+                jsonMeasure = ToUnixEnding(jsonMeasure);
+
                 if (!dictionary.ContainsKey(measure.TableName))
                 {
                     dictionary[measure.TableName] = new List<Measure>();
                 }
-
-                measure.CalcProperty?.ToJsonMeasure(ref jsonMeasure, measure.Name);
                 dictionary[measure.TableName].Add(jsonMeasure);
-            });
+            }
 
             return dictionary;
         }

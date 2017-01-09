@@ -182,7 +182,7 @@ namespace DaxEditor
                 var tokenInfoEOL = new TokenInfo() { Type = TokenType.WhiteSpace };
                 var teEOL = new TokenEdit() { TokenInfo = tokenInfoEOL };
                 teEOL.TextSpan = new TextSpan() { iStartLine = line, iStartIndex = lineEnd, iEndLine = line + 1, iEndIndex = 0 };
-                teEOL.OriginalText = "\r\n";
+                teEOL.OriginalText = Environment.NewLine;
                 _tokenEdits.AddLast(teEOL);
             }
 
