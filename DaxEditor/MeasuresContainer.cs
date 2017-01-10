@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.IO;
+using System.Xml;
 
 namespace DaxEditor
 {
@@ -56,7 +58,7 @@ namespace DaxEditor
                 return ParseJson(text);
             }
 
-            return ParseXmlaAsText(text);
+            return ParseXmla(text);
         }
 
         public static MeasuresContainer ParseJson(string text)
@@ -71,24 +73,40 @@ namespace DaxEditor
             catch (Exception exception)
             {
                 throw new DaxException(
-                    $@"Error while parsing Json:
+$@"Error while parsing Json:
 Message: {exception.Message}
-{text}", exception);
+Input text: {text}", exception);
             }
         }
 
-        public static MeasuresContainer ParseXmlaAsText(string xmlaText)
+        public static string GetXmlDatabaseText(string text)
+        {
+            var alter = XDocument.Parse(text);
+            var database = alter.Descendants(NS + "Database").First();
+            database.Add(new XAttribute("xmlns", NS.Trim('{', '}')));
+
+            return database.ToString();
+        }
+
+        public static MeasuresContainer ParseXmla(string text)
         {
             try
             {
-                var alterScriptDoc = XDocument.Parse(xmlaText);
-                var mdxScript = alterScriptDoc.Descendants(NS + "MdxScript");
-                Debug.Assert(1 == mdxScript.Count());
-                return ParseXmlaAsXElement(mdxScript.First());
+                text = GetXmlDatabaseText(text);
+                using (var reader = new XmlTextReader(new StringReader(text)))
+                {
+                    var database = new Microsoft.AnalysisServices.Database();
+                    database = Microsoft.AnalysisServices.Utils.Deserialize(reader, database) as Microsoft.AnalysisServices.Database;
+                    
+                    return CreateFromXmlDatabase(database);
+                }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                throw new DaxException(string.Format("Error while parsing xmlaScript:{0}{2}{0}{1}", Environment.NewLine, xmlaText, e.Message), e);
+                throw new DaxException(
+$@"Error while parsing Xmla.
+Message: {exception.Message}
+Input text: {text}" , exception);
             }
         }
 
@@ -124,18 +142,35 @@ Message: {exception.Message}
             return new MeasuresContainer(measures);
         }
 
-        public static MeasuresContainer ParseXmlaAsXElement(XElement mdxScript)
+        public static MeasuresContainer CreateFromXmlDatabase(Microsoft.AnalysisServices.Database database)
         {
-            var allMeasures = new List<DaxMeasure>();
-            foreach (var mdxCommand in mdxScript.Element(NS + "Commands").Elements(NS + "Command"))
+            if (database == null)
             {
-                var commandText = mdxCommand.Element(NS + "Text").Value;
-                var measures = ParseDaxScript(commandText);
-                foreach (var measure in measures.Measures)
+                throw new ArgumentNullException(nameof(database));
+            }
+
+            var allMeasures = new List<DaxMeasure>();
+            foreach (Microsoft.AnalysisServices.Cube cube in database.Cubes)
+            {
+                foreach (Microsoft.AnalysisServices.MdxScript script in cube.MdxScripts)
                 {
-                    var calcProperty = mdxScript.Element(NS + "CalculationProperties").Elements().FirstOrDefault(i => i.Element(NS + "CalculationReference").Value == measure.NameInBrackets);
-                    measure.CalcProperty = DaxCalcProperty.CreateFromXElement(calcProperty);
-                    allMeasures.Add(measure);
+                    foreach (Microsoft.AnalysisServices.Command command in script.Commands)
+                    {
+                        var measures = ParseDaxScript(command.Text);
+                        foreach (var measure in measures.Measures)
+                        {
+                            foreach (Microsoft.AnalysisServices.CalculationProperty property in script.CalculationProperties)
+                            {
+                                if (property.CalculationReference != measure.NameInBrackets)
+                                {
+                                    continue;
+                                }
+
+                                measure.CalcProperty = DaxCalcProperty.CreateFromXmlProperty(property);
+                                allMeasures.Add(measure);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -202,6 +237,16 @@ Message: {exception.Message}
         {
             if (string.IsNullOrEmpty(inputXmla))
                 throw new ArgumentException("input");
+
+
+            /*
+            var stream = new MemoryStream();
+            var writer = new XmlTextWriter(stream, Encoding.UTF8);
+            var db = new Microsoft.AnalysisServices.Database();
+            Microsoft.AnalysisServices.Utils.Serialize(writer, db, true);
+            stream.Position = 0;
+            Console.WriteLine(new StreamReader(stream).ReadToEnd());
+            //*/
 
             var serverCommandProducer = new ServerCommandProducer(inputXmla);
             var newMdxScript = serverCommandProducer.ProduceAlterScriptElement(Measures);

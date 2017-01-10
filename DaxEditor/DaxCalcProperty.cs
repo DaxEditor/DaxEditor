@@ -127,6 +127,74 @@ namespace DaxEditor
             return rv;
         }
 
+        public static DaxCalcProperty CreateFromXmlProperty(Microsoft.AnalysisServices.CalculationProperty property)
+        {
+            if (property == null)
+            {
+                throw new ArgumentNullException(nameof(property));
+            }
+
+            var rv = CreateDefaultCalculationProperty();
+            rv.Measure.FormatString = property.FormatString?.Trim('\'');
+            rv.Measure.DisplayFolder = property.DisplayFolder;
+            rv.Measure.IsHidden = !property.Visible;
+            rv.Measure.Description = property.Description;
+
+            var annotations = property.Annotations;
+            if (annotations == null )
+            {
+                return rv;
+            }
+
+            var formatAnnotation = annotations["Format"];
+            if (formatAnnotation == null)
+            {
+                return rv;
+            }
+
+            var formatValueElement = formatAnnotation.Value;
+            Debug.Assert(formatValueElement != null);
+            Debug.Assert(formatValueElement.Attributes != null);
+
+            var formatString = formatValueElement?.Attributes["Format"]?.Value;
+            Debug.Assert(formatString != null);
+            rv.Format = (FormatType)Enum.Parse(typeof(FormatType), formatString);
+
+            switch (rv.Format)
+            {
+                case FormatType.General:
+                case FormatType.NumberWhole:
+                case FormatType.NumberDecimal:
+                case FormatType.Percentage:
+                case FormatType.Scientific:
+                case FormatType.Currency:
+                case FormatType.DateTimeCustom:
+                case FormatType.DateTimeShortDatePattern:
+                case FormatType.DateTimeGeneral:
+                    var accuracyAttribute = formatValueElement?.Attributes["Accuracy"];
+                    if (accuracyAttribute != null)
+                        rv.Accuracy = int.Parse(accuracyAttribute.Value);
+
+                    var thousandSeparatorAttribute = formatValueElement?.Attributes["ThousandSeparator"];
+                    if (thousandSeparatorAttribute != null)
+                        rv.ThousandSeparator = bool.Parse(thousandSeparatorAttribute.Value);
+
+                    if (formatValueElement?.FirstChild != null)
+                        rv.CustomFormat = InitCustomFormatString(XElement.Parse(formatValueElement.FirstChild.OuterXml));
+
+                    break;
+
+                 case FormatType.Text:
+                    break;
+
+                 default:
+                    Debug.Assert(false, "Not reachable");
+                    break;
+            }
+
+            return rv;
+        }
+
         public static DaxCalcProperty CreateFromJsonMeasure(Measure measure)
         {
             if (measure == null)
@@ -142,8 +210,12 @@ namespace DaxEditor
             rv.Measure.Description = measure.Description?.Replace("'", "`");
             rv.KPI = measure.KPI?.Clone();
 
-            var formatValueString = measure.Annotations?.
-                FirstOrDefault(i => string.Equals(i.Name, "Format"))?.Value?.ToString();
+            if (!measure.Annotations.ContainsName("Format"))
+            {
+                return rv;
+            }
+
+            var formatValueString = measure.Annotations["Format"].Value;
             if (string.IsNullOrWhiteSpace(formatValueString))
             {
                 return rv;
