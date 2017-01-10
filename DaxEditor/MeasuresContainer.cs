@@ -271,7 +271,7 @@ Input text: {text}" , exception);
                 var jsonMeasure = new Measure();
                 jsonMeasure.Name = measure.Name;
                 jsonMeasure.Expression = measure.Expression;
-                measure.CalcProperty?.ToJsonMeasure(ref jsonMeasure, measure.Name);
+                measure.CalcProperty?.ToJsonMeasure(ref jsonMeasure);
 
                 //JsonSerializer does not support /r/n endings.
                 jsonMeasure = ToUnixEnding(jsonMeasure);

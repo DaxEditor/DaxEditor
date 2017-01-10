@@ -455,7 +455,7 @@ namespace DaxEditor
             return builder.ToString();
         }
 
-        public void ToJsonMeasure(ref Measure measure, string measureName)
+        public void ToJsonMeasure(ref Measure measure)
         {
             measure.IsHidden = Measure.IsHidden;
 
