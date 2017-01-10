@@ -324,7 +324,7 @@ namespace DaxEditor
                         result = AppendIfNotEmpty(result, "ThousandSeparator", "True");
 
                     result = AppendIfNotEmpty(result, "Format", Measure.FormatString, "\'");
-                    result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, "\'");
+                    result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, "\'"); 
                     result = AppendIfNotEmpty(result, "DisplayFolder", Measure.DisplayFolder, "\'");
                     result = AppendIfNotEmpty(result, "Description", Measure.Description, "\'");
 
@@ -355,7 +355,7 @@ namespace DaxEditor
                 }
                 if (KPI.Annotations.Count > 0)
                 {
-                    result = AppendIfNotEmpty(result, "KpiAnnotations", string.Join(", ", texts), "\'");
+                    result = AppendIfNotEmpty(result, "KpiAnnotations", string.Join(", ", texts), "\'"); // Special format (include other strings)
                 }
             }
 
