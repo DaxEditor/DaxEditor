@@ -90,20 +90,17 @@ namespace DaxEditorSample.Test
         }
 
         /// <summary>
-        ///  Without normalization
+        /// Сomparison without normalization
         /// </summary>
-        /// <param name="expected">Expected JSON</param>
-        /// <param name="actual">Actual JSON</param>
+        /// <param name="expected">Expected text</param>
+        /// <param name="actual">Actual text</param>
         public static void AreEqual(string expected, string actual)
         {
             if (!string.Equals(expected, actual))
             {
-                var failMessage = "Different JSON." + Environment.NewLine;
-                var diff = GetFCDiff(expected, actual);
-                if (!string.IsNullOrWhiteSpace(diff)) {
-                    failMessage += "  Actual diff:" + Environment.NewLine + diff;
-                }
-                Assert.Fail(failMessage);
+                Assert.Fail($@"
+Different texts. Diff:
+{GetFCDiff(expected, actual)}");
             }
         }
 
