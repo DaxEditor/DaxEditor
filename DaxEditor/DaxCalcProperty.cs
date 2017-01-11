@@ -396,7 +396,7 @@ namespace DaxEditor
 
             return property;
         }
-
+        
         private string produceFormatXmlString()
         {
             var builder = new StringBuilder();
@@ -448,17 +448,12 @@ namespace DaxEditor
             }
 
             measure.FormatString = Measure.FormatString;
-            
-            if (!string.IsNullOrWhiteSpace(Measure.DisplayFolder))
-            {
-                measure.DisplayFolder = Measure.DisplayFolder.Trim('\'').Replace("`", "'");
-            }
-
-            if (!string.IsNullOrWhiteSpace(Measure.Description))
-            {
-                measure.Description = Measure.Description.Trim('\'').Replace("`","'");
-            }
-
+            measure.DisplayFolder = !string.IsNullOrWhiteSpace(Measure.DisplayFolder) ? 
+                Measure.DisplayFolder.Trim('\'').Replace("`", "'") :
+                measure.DisplayFolder;
+            measure.Description = !string.IsNullOrWhiteSpace(Measure.Description) ? 
+                Measure.Description.Trim('\'').Replace("`","'") :
+                measure.Description;
             measure.KPI = KPI?.Clone();
         }
     }
