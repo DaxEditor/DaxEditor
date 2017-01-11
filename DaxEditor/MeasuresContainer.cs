@@ -19,7 +19,7 @@ namespace DaxEditor
     {
         public const string NS = "{http://schemas.microsoft.com/analysisservices/2003/engine}";
         public const string NS200 = "{http://schemas.microsoft.com/analysisservices/2010/engine/200}";
-        
+
         public IList<DaxMeasure> Measures { get; private set; }
 
         private MeasuresContainer(IList<DaxMeasure> measures)
@@ -67,7 +67,7 @@ namespace DaxEditor
             {
                 var database = JsonUtilities.Deserialize(text);
                 Debug.Assert(database != null);
-                
+
                 return CreateFromDatabase(database);
             }
             catch (Exception exception)
@@ -97,7 +97,7 @@ Input text: {text}", exception);
                 {
                     var database = new Microsoft.AnalysisServices.Database();
                     database = Microsoft.AnalysisServices.Utils.Deserialize(reader, database) as Microsoft.AnalysisServices.Database;
-                    
+
                     return CreateFromXmlDatabase(database);
                 }
             }
@@ -106,7 +106,7 @@ Input text: {text}", exception);
                 throw new DaxException(
 $@"Error while parsing Xmla.
 Message: {exception.Message}
-Input text: {text}" , exception);
+Input text: {text}", exception);
             }
         }
 
@@ -133,7 +133,7 @@ Input text: {text}" , exception);
                     newMeasure.TableName = table.Name;
                     newMeasure.CalcProperty = DaxCalcProperty.CreateFromJsonMeasure(measure);
                     newMeasure.FullText =
-                        $"CREATE MEASURE '{newMeasure.TableName ?? ""}'[{newMeasure.Name ?? ""}] = {newMeasure.Expression ?? ""}";
+    $"CREATE MEASURE '{newMeasure.TableName ?? ""}'[{newMeasure.Name ?? ""}] = {newMeasure.Expression ?? ""}";
 
                     measures.Add(newMeasure);
                 }
@@ -204,40 +204,38 @@ Input text: {text}" , exception);
 
         public string GetDaxText()
         {
-            var sb = new StringBuilder();
+            var builder = new StringBuilder();
             foreach (var measure in Measures)
             {
-                var measureText = measure.FullText;
-                sb.Append(measure.FullText);
-                if (measure.CalcProperty != null)
+                builder.Append(measure.FullText);
+                var propertyDax = measure.CalcProperty?.ToDax();
+                if (!string.IsNullOrWhiteSpace(propertyDax))
                 {
-                    var calcPropertyDax = measure.CalcProperty.ToDax();
-                    if (!string.IsNullOrEmpty(calcPropertyDax))
-                    {
-                        sb.AppendLine();
-                        sb.Append(calcPropertyDax);
-                    }
+                    builder.AppendLine();
+                    builder.Append(propertyDax);
                 }
-                sb.AppendLine();
-                sb.Append(';');
-                sb.AppendLine();
-                sb.AppendLine();
+                builder.AppendLine();
+                builder.Append(';');
+                builder.AppendLine();
+                builder.AppendLine();
             }
-            sb.AppendLine();
+            builder.AppendLine();
 
-            return sb.ToString();
+            return builder.ToString();
         }
 
         /// <summary>
         /// Update input XMLA with the measures of this object.
         /// </summary>
-        /// <param name="inputXmla">input XMLA</param>
+        /// <param name="text">input XMLA text</param>
+        /// <exception cref="ArgumentException">Exception if text is null or whitespace</exception>
         /// <returns>updated XMLA with measures from this object</returns>
-        public string UpdateMeasuresInXmla(string inputXmla)
+        public string UpdateMeasuresInXmla(string text)
         {
-            if (string.IsNullOrEmpty(inputXmla))
-                throw new ArgumentException("input");
-
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                throw new ArgumentException(nameof(text) + " is empty");
+            }
 
             /*
             var stream = new MemoryStream();
@@ -248,17 +246,17 @@ Input text: {text}" , exception);
             Console.WriteLine(new StreamReader(stream).ReadToEnd());
             //*/
 
-            var serverCommandProducer = new ServerCommandProducer(inputXmla);
-            var newMdxScript = serverCommandProducer.ProduceAlterScriptElement(Measures);
-            var inputDocument = XDocument.Parse(inputXmla);
+            var producer = new ServerCommandProducer(text);
+            var document = XDocument.Parse(text);
 
-            var actualMdxScriptDocument = XDocument.Parse(newMdxScript);
-            inputDocument.Descendants(MeasuresContainer.NS + "MdxScript").First().ReplaceWith(actualMdxScriptDocument.Root);
+            var newScript = producer.ProduceAlterScriptElement(Measures);
+            var newScriptDocument = XDocument.Parse(newScript);
+            document.Descendants(NS + "MdxScript").First().ReplaceWith(newScriptDocument.Root);
 
-            return inputDocument.ToString(System.Xml.Linq.SaveOptions.OmitDuplicateNamespaces);
+            return document.ToString(System.Xml.Linq.SaveOptions.OmitDuplicateNamespaces);
         }
 
-        public static IDictionary<string, IList<Measure>> MeasuresToJsonMeasures(IList<DaxMeasure> measures)
+        public static IDictionary<string, IList<Measure>> ToJsonMeasures(IList<DaxMeasure> measures)
         {
             if (measures == null)
             {
@@ -289,33 +287,35 @@ Input text: {text}" , exception);
         /// <summary>
         /// Update input Json with the measures of this object.
         /// </summary>
-        /// <param name="inputJson">input Json</param>
+        /// <param name="text">Input Json text</param>
+        /// <exception cref="ArgumentException">Exception if text is null or whitespace</exception>
         /// <returns>updated Json with measures from this object</returns>
-        public string UpdateMeasuresInJson(string inputJson)
+        public string UpdateMeasuresInJson(string text)
         {
-            if (string.IsNullOrWhiteSpace(inputJson))
-                throw new ArgumentException("inputJson");
-
-            var document = JsonUtilities.Deserialize(inputJson);
-            var jsonMeasures = MeasuresToJsonMeasures(Measures);
-
-            Debug.Assert(document?.Model != null);
-
-            var tables = document.Model.Tables;
-            if (tables != null)
+            if (string.IsNullOrWhiteSpace(text))
             {
-                foreach (var table in tables)
-                {
-                    table.Measures.Clear();
-                    if (!jsonMeasures.ContainsKey(table.Name))
-                    {
-                        continue;
-                    }
+                throw new ArgumentException(nameof(text) + " is empty");
+            }
 
-                    foreach (var measure in jsonMeasures[table.Name])
-                    {
-                        table.Measures.Add(measure.Clone());
-                    }
+            var document = JsonUtilities.Deserialize(text);
+            var tables = document?.Model?.Tables;
+            if (tables == null)
+            {
+                return text;
+            }
+
+            var jsonMeasures = ToJsonMeasures(Measures);
+            foreach (var table in tables)
+            {
+                table.Measures.Clear();
+                if (!jsonMeasures.ContainsKey(table.Name))
+                {
+                    continue;
+                }
+
+                foreach (var measure in jsonMeasures[table.Name])
+                {
+                    table.Measures.Add(measure.Clone());
                 }
             }
 
@@ -359,7 +359,7 @@ Input text: {text}" , exception);
                     culture.ObjectTranslations.Add(newObject);
                 }
             }
-            
+
             return JsonUtilities.Serialize(document);
         }
 
