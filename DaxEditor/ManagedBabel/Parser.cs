@@ -240,6 +240,53 @@ namespace Babel.Parser
             lastMeasure.CalcProperty.Measure.IsHidden = isHidden;
         }
 
+        public void GetLastKpiMeasure()
+        {
+            return measures.Where(i => !i.StartWith("_")).Last();
+        }
+	    
+	public void SpecifyCalcPropExpr1(LexLocation location)
+	{
+	    var lastMeasure = GetLastKpiMeasure();
+	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
+            lastMeasure.KPI.TargetExpression = GetConsistentText(location);
+	}
+	 
+	public void SpecifyCalcPropExpr2(LexLocation location)
+	{
+	    var lastMeasure = GetLastKpiMeasure();
+	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
+            lastMeasure.KPI.StatusExpression = GetConsistentText(location);
+	}
+	 
+	public void SpecifyCalcPropDesc1(LexLocation location)
+	{
+	    var lastMeasure = GetLastKpiMeasure();
+	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
+            lastMeasure.KPI.Description = GetConsistentText(location);
+	}
+	    
+	public void SpecifyCalcPropDesc2(LexLocation location)
+	{
+	    var lastMeasure = GetLastKpiMeasure();
+	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
+            lastMeasure.KPI.StatusDescription = GetConsistentText(location);
+	}
+	    
+	public void SpecifyCalcPropGraphic1(LexLocation location)
+	{
+	    var lastMeasure = GetLastKpiMeasure();
+	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
+            lastMeasure.KPI.StatusGraphic = GetConsistentText(location);
+	}
+	    
+	public void SpecifyCalcPropGraphic2(LexLocation location)
+	{
+	    var lastMeasure = GetLastKpiMeasure();
+	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
+            lastMeasure.KPI.TargetGraphic = GetConsistentText(location);
+	}
+
         public void SpecifyCalcPropDescription(LexLocation location)
         {
             var lastMeasure = measures.Last();
