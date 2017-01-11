@@ -5,9 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using DaxEditor.StringExtensions;
+using Microsoft.AnalysisServices;
+using Annotation = Microsoft.AnalysisServices.Tabular.Annotation;
+using Measure = Microsoft.AnalysisServices.Tabular.Measure;
 
 namespace DaxEditor
 {
@@ -49,6 +53,7 @@ namespace DaxEditor
         public static DaxCalcProperty CreateDefaultCalculationProperty()
         {
             var rv = new DaxCalcProperty();
+            rv.Format = FormatType.General;
             return rv;
         }
 
@@ -127,7 +132,7 @@ namespace DaxEditor
             return rv;
         }
 
-        public static DaxCalcProperty CreateFromXmlProperty(Microsoft.AnalysisServices.CalculationProperty property)
+        public static DaxCalcProperty CreateFromXmlProperty(CalculationProperty property)
         {
             if (property == null)
             {
@@ -362,94 +367,69 @@ namespace DaxEditor
             return result;
         }
 
-        public void ToXml(XmlWriter writer, string measureName)
+        public CalculationProperty ToXmlCalculationProperty(string measureName)
         {
-            writer.WriteStartElement("CalculationProperty");
-            writer.WriteStartElement("Annotations");
+            var property = new CalculationProperty();
 
-            writer.WriteStartElement("Annotation");
-            writer.WriteElementString("Name", "Type");
-            writer.WriteElementString("Value", "User");
-            writer.WriteEndElement(); // Annotation
+            property.Annotations.Insert(0, "Type", "User");
+            property.Annotations.Insert(1, "IsPrivate", Measure.IsHidden ? "True" : "False");
 
-            writer.WriteStartElement("Annotation");
-            writer.WriteElementString("Name", "IsPrivate");
-            writer.WriteElementString("Value", Measure.IsHidden ? "True" : "False");
-            writer.WriteEndElement(); // Annotation
-
-            writer.WriteStartElement("Annotation");
-            writer.WriteElementString("Name", "Format");
-
-            writer.WriteStartElement("Value");
-
-            writeFormatToXml(writer);
-
-            writer.WriteEndElement(); // Value
-            
-            writer.WriteEndElement(); // Annotation
-
-            writer.WriteEndElement(); // Annotations
-            writer.WriteElementString("CalculationReference", measureName);
-            writer.WriteElementString("CalculationType", "Member");
-            writer.WriteElementString("FormatString", $"\'{Measure.FormatString}\'");
-            if (Measure.IsHidden) {
-                writer.WriteElementString("Visible", "false");
-            }
-            if (!string.IsNullOrEmpty(Measure.DisplayFolder)) {
-                writer.WriteElementString("DisplayFolder", Measure.DisplayFolder.Trim('\'').Replace("`", "'"));
-            }
-
-            if (!string.IsNullOrEmpty(Measure.Description))
-                writer.WriteElementString("Description", Measure.Description.Trim('\'').Replace("`", "'"));
-            
-
-            writer.WriteEndElement(); // CalculationProperty
-        }
-
-        private void writeFormatToXml(XmlWriter writer)
-        {
-
-            writer.WriteStartElement("Format", "");
-            writer.WriteAttributeString("Format", Format.ToString());
-            if (Accuracy.HasValue)
-                writer.WriteAttributeString("Accuracy", Accuracy.Value.ToString());
-            if (ThousandSeparator.HasValue && ThousandSeparator.Value == true)
-                writer.WriteAttributeString("ThousandSeparator", "True");
-
-            if (!string.IsNullOrEmpty(CustomFormat))
+            var formatAnnotationValue = produceFormatXmlString();
+            if (!string.IsNullOrWhiteSpace(formatAnnotationValue))
             {
-                if (Format == FormatType.Currency)
-                {
-                    writer.WriteRaw("<Currency ");
-                    writer.WriteRaw(CustomFormat);
-                    writer.WriteRaw(" />");
-                }
-                else if (Format == FormatType.DateTimeCustom)
-                {
-                    writer.WriteStartElement("DateTimes");
-                    writer.WriteRaw("<DateTime ");
-                    writer.WriteRaw(CustomFormat);
-                    writer.WriteRaw(" />");
-                    writer.WriteEndElement();
-                }
-                // No additional format code in case there is a format string for other format types
+                property.Annotations.Insert(2, "Format", "");
+                var document = new XmlDocument();
+                document.LoadXml(formatAnnotationValue);
+                property.Annotations["Format"].Value = document;
             }
-            writer.WriteEndElement(); // Format
+
+            property.CalculationReference = measureName;
+            property.CalculationType = CalculationType.Member;
+            property.FormatString = $"\'{Measure.FormatString}\'";
+            property.Visible = !Measure.IsHidden;
+            property.DisplayFolder = !string.IsNullOrWhiteSpace(Measure.DisplayFolder) ? 
+                Measure.DisplayFolder.Trim('\'').Replace("`", "'") : 
+                property.DisplayFolder;
+            property.Description = !string.IsNullOrWhiteSpace(Measure.Description) ? 
+                Measure.Description.Trim('\'').Replace("`", "'") :
+                property.Description;
+
+            return property;
         }
 
         private string produceFormatXmlString()
         {
-            if (Format == FormatType.General)
-            {
-                return string.Empty;
-            }
-
-            var builder = new System.Text.StringBuilder();
+            var builder = new StringBuilder();
             var settings = new XmlWriterSettings();
             settings.OmitXmlDeclaration = true;
-            using (var writer = XmlWriter.Create(builder,settings))
+            using (var writer = XmlWriter.Create(builder, settings))
             {
-                writeFormatToXml(writer);
+                writer.WriteStartElement("Format", "");
+                writer.WriteAttributeString("Format", Format.ToString());
+                if (Accuracy.HasValue)
+                    writer.WriteAttributeString("Accuracy", Accuracy.Value.ToString());
+                if (ThousandSeparator.HasValue && ThousandSeparator.Value == true)
+                    writer.WriteAttributeString("ThousandSeparator", "True");
+
+                if (!string.IsNullOrEmpty(CustomFormat))
+                {
+                    if (Format == FormatType.Currency)
+                    {
+                        writer.WriteRaw("<Currency ");
+                        writer.WriteRaw(CustomFormat);
+                        writer.WriteRaw(" />");
+                    }
+                    else if (Format == FormatType.DateTimeCustom)
+                    {
+                        writer.WriteStartElement("DateTimes");
+                        writer.WriteRaw("<DateTime ");
+                        writer.WriteRaw(CustomFormat);
+                        writer.WriteRaw(" />");
+                        writer.WriteEndElement();
+                    }
+                    // No additional format code in case there is a format string for other format types
+                }
+                writer.WriteEndElement(); // Format
             }
 
             return builder.ToString();
@@ -459,12 +439,11 @@ namespace DaxEditor
         {
             measure.IsHidden = Measure.IsHidden;
 
-            var formatAnnotationValue = produceFormatXmlString();
-            if (!string.IsNullOrWhiteSpace(formatAnnotationValue))
+            if (Format != FormatType.General)
             {
                 var annotation = new Annotation();
                 annotation.Name = "Format";
-                annotation.Value = formatAnnotationValue;
+                annotation.Value = produceFormatXmlString();
                 measure.Annotations.Add(annotation);
             }
 

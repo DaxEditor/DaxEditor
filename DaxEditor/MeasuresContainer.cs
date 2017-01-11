@@ -2,7 +2,6 @@
 
 using DaxEditor.Json;
 using DaxEditor.StringExtensions;
-using Microsoft.AnalysisServices.Tabular;
 using Microsoft.VisualStudio.Package;
 using System;
 using System.Collections.Generic;
@@ -10,8 +9,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using System.IO;
-using System.Xml;
+using Microsoft.AnalysisServices;
+using Database = Microsoft.AnalysisServices.Tabular.Database;
+using Measure = Microsoft.AnalysisServices.Tabular.Measure;
+using ObjectTranslation = Microsoft.AnalysisServices.Tabular.ObjectTranslation;
+using ObjectType = Microsoft.AnalysisServices.Tabular.ObjectType;
 
 namespace DaxEditor
 {
@@ -22,7 +24,7 @@ namespace DaxEditor
 
         public IList<DaxMeasure> Measures { get; private set; }
 
-        private MeasuresContainer(IList<DaxMeasure> measures)
+        public MeasuresContainer(IList<DaxMeasure> measures)
         {
             Measures = measures;
         }
@@ -79,27 +81,14 @@ Input text: {text}", exception);
             }
         }
 
-        public static string GetXmlDatabaseText(string text)
-        {
-            var alter = XDocument.Parse(text);
-            var database = alter.Descendants(NS + "Database").First();
-            database.Add(new XAttribute("xmlns", NS.Trim('{', '}')));
-
-            return database.ToString();
-        }
-
         public static MeasuresContainer ParseXmla(string text)
         {
             try
             {
-                text = GetXmlDatabaseText(text);
-                using (var reader = new XmlTextReader(new StringReader(text)))
-                {
-                    var database = new Microsoft.AnalysisServices.Database();
-                    database = Microsoft.AnalysisServices.Utils.Deserialize(reader, database) as Microsoft.AnalysisServices.Database;
+                var database = ServerCommandProducer.GetDatabase(text);
+                Debug.Assert(database != null);
 
-                    return CreateFromXmlDatabase(database);
-                }
+                return CreateFromXmlDatabase(database);
             }
             catch (Exception exception)
             {
@@ -150,16 +139,16 @@ Input text: {text}", exception);
             }
 
             var allMeasures = new List<DaxMeasure>();
-            foreach (Microsoft.AnalysisServices.Cube cube in database.Cubes)
+            foreach (Cube cube in database.Cubes)
             {
-                foreach (Microsoft.AnalysisServices.MdxScript script in cube.MdxScripts)
+                foreach (MdxScript script in cube.MdxScripts)
                 {
-                    foreach (Microsoft.AnalysisServices.Command command in script.Commands)
+                    foreach (Command command in script.Commands)
                     {
                         var measures = ParseDaxScript(command.Text);
                         foreach (var measure in measures.Measures)
                         {
-                            foreach (Microsoft.AnalysisServices.CalculationProperty property in script.CalculationProperties)
+                            foreach (CalculationProperty property in script.CalculationProperties)
                             {
                                 if (property.CalculationReference != measure.NameInBrackets)
                                 {
@@ -175,6 +164,61 @@ Input text: {text}", exception);
             }
 
             return new MeasuresContainer(allMeasures);
+        }
+
+        public MdxScript ToMdxScript(int compatibilityLevel)
+        {
+            var script = new MdxScript();
+            script.ID = "MdxScript";
+            script.Name = "MdxScript";
+
+            var firstCommand = new Command();
+            firstCommand.Text = compatibilityLevel < 1103 ? 
+                ServerCommandProducer.CommonCommandText1100 :
+                ServerCommandProducer.CommonCommandText1103;
+            script.Commands.Add(firstCommand);
+
+            if (compatibilityLevel < 1103)
+            {
+                //Add all measures full text in one command
+                var command = new Command();
+                command.Text = ServerCommandProducer.DoNotModify1100 + string.Concat(
+                                   Measures.Select(i => i.FullText + ";" + Environment.NewLine)
+                               );
+                script.Commands.Add(command);
+            }
+            else
+            {
+                foreach (var measure in Measures)
+                {
+                    var command = new Command();
+                    command.Text = ServerCommandProducer.DoNotModify1103 + measure.FullText + ";" + Environment.NewLine;
+                    command.Annotations.Insert(0, "FullName", measure.Name);
+                    command.Annotations.Insert(1, "Table", measure.TableName);
+
+                    script.Commands.Add(command);
+                }
+            }
+
+
+            foreach (var measure in Measures)
+            {
+                var property = measure.CalcProperty != null ?
+                    measure.CalcProperty.ToXmlCalculationProperty(measure.NameInBrackets) :
+                    DaxCalcProperty.CreateDefaultCalculationProperty().ToXmlCalculationProperty(measure.NameInBrackets);
+                
+                script.CalculationProperties.Add(property);
+            }
+
+            var lastProperty = new CalculationProperty();
+            lastProperty.CalculationReference = compatibilityLevel < 1103 ? 
+                "Measures.[__No measures defined]" :
+                "[__XL_Count of Models]";
+            lastProperty.CalculationType = CalculationType.Member;
+            lastProperty.Visible = false;
+            script.CalculationProperties.Add(lastProperty);
+
+            return script;
         }
 
         /// <summary>
@@ -237,26 +281,17 @@ Input text: {text}", exception);
                 throw new ArgumentException(nameof(text) + " is empty");
             }
 
-            /*
-            var stream = new MemoryStream();
-            var writer = new XmlTextWriter(stream, Encoding.UTF8);
-            var db = new Microsoft.AnalysisServices.Database();
-            Microsoft.AnalysisServices.Utils.Serialize(writer, db, true);
-            stream.Position = 0;
-            Console.WriteLine(new StreamReader(stream).ReadToEnd());
-            //*/
-
-            var producer = new ServerCommandProducer(text);
             var document = XDocument.Parse(text);
 
+            var producer = new ServerCommandProducer(text);
             var newScript = producer.ProduceAlterScriptElement(Measures);
             var newScriptDocument = XDocument.Parse(newScript);
             document.Descendants(NS + "MdxScript").First().ReplaceWith(newScriptDocument.Root);
 
-            return document.ToString(System.Xml.Linq.SaveOptions.OmitDuplicateNamespaces);
+            return document.ToString(SaveOptions.OmitDuplicateNamespaces);
         }
 
-        public static IDictionary<string, IList<Measure>> ToJsonMeasures(IList<DaxMeasure> measures)
+        public static IDictionary<string, IList<Measure>> ToJsonMeasures(IEnumerable<DaxMeasure> measures)
         {
             if (measures == null)
             {

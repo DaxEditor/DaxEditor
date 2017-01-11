@@ -1,11 +1,13 @@
 ﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Microsoft.AnalysisServices;
 
 namespace DaxEditor
 {
@@ -57,15 +59,12 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
             _cubeId = cubeId;
         }
 
-        public ServerCommandProducer(string bimFileContent)
+        public ServerCommandProducer(string text)
         {
-            var bimFileDocument = XDocument.Parse(bimFileContent);
-            var databaseElement = bimFileDocument.Descendants(MeasuresContainer.NS + "Database").First();
-            _databaseId = databaseElement.Element(MeasuresContainer.NS + "ID").Value;
-            var compatibilityLevelElement = databaseElement.Element(MeasuresContainer.NS200 + "CompatibilityLevel");
-            _dbCompatibilityLevel = int.Parse(compatibilityLevelElement.Value);
-            var cubeIdElement = databaseElement.Element(MeasuresContainer.NS + "Cubes").Element(MeasuresContainer.NS + "Cube").Element(MeasuresContainer.NS + "ID");
-            _cubeId = cubeIdElement.Value;
+            var database = GetDatabase(text);
+            _databaseId = database.ID;
+            _dbCompatibilityLevel = database.CompatibilityLevel;
+            _cubeId = database.Cubes.Count > 0 ? database.Cubes[0].ID : null;
         }
 
         public string ProduceBeginTransaction()
@@ -85,8 +84,8 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
 
         public string ProduceProcessRecalc()
         {
-            var sb = new StringBuilder();
-            using (var writer = XmlWriter.Create(sb, _settings))
+            var builder = new StringBuilder();
+            using (var writer = XmlWriter.Create(builder, _settings))
             {
                 writer.WriteStartElement("Process", "http://schemas.microsoft.com/analysisservices/2003/engine");
                 writer.WriteElementString("Type", "ProcessRecalc");
@@ -95,23 +94,53 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
                 writer.WriteEndElement(); // Object
                 writer.WriteEndElement(); // Process
             }
-            return sb.ToString();
+            return builder.ToString();
         }
 
-        public string ProduceAlterScriptElement(IEnumerable<DaxMeasure> daxMeasures)
+        public static string GetDatabaseText(string text)
         {
-            var sb = new StringBuilder();
-            using (var writer = XmlWriter.Create(sb, _settings))
+            var alter = XDocument.Parse(text);
+            var database = alter.Descendants(MeasuresContainer.NS + "Database").First();
+            database.Add(new XAttribute("xmlns", MeasuresContainer.NS.Trim('{', '}')));
+
+            return database.ToString();
+        }
+
+        public static Database GetDatabase(string text)
+        {
+            text = GetDatabaseText(text);
+            using (var reader = new XmlTextReader(new System.IO.StringReader(text)))
             {
-                WriteMdxScript(daxMeasures, writer);
-            }
+                var database = new Database();
 
-            return sb.ToString();
+                return Utils.Deserialize(reader, database) as Database;
+            }
         }
-        public string ProduceAlterMdxScript(IEnumerable<DaxMeasure> daxMeasures)
+
+        public string ProduceAlterScriptElement(IList<DaxMeasure> measures)
         {
-            var sb = new StringBuilder();
-            using (var writer = XmlWriter.Create(sb, _settings))
+            var container = new MeasuresContainer(measures);
+            var stream = new MemoryStream();
+            var writer = new XmlTextWriter(stream, Encoding.UTF8);
+            var obj = container.ToMdxScript(_dbCompatibilityLevel);
+            Utils.Serialize(writer, obj, true);
+            stream.Position = 0;
+
+            var text = new StreamReader(stream).ReadToEnd();
+
+            //Delete default nodes
+            var document = XDocument.Parse(text);
+            document.Descendants(MeasuresContainer.NS + "CreatedTimestamp").Remove();
+            document.Descendants(MeasuresContainer.NS + "LastSchemaUpdate").Remove();
+            document.Element(MeasuresContainer.NS + "MdxScript").RemoveAttributes();
+
+            return document.ToString(SaveOptions.OmitDuplicateNamespaces);
+        }
+
+        public string ProduceAlterMdxScript(IList<DaxMeasure> measures)
+        {
+            var builder = new StringBuilder();
+            using (var writer = XmlWriter.Create(builder, _settings))
             {
                 writer.WriteStartElement("Alter", "http://schemas.microsoft.com/analysisservices/2003/engine");
                 writer.WriteAttributeString("ObjectExpansion", "ExpandFull");
@@ -121,97 +150,19 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
                 writer.WriteElementString("MdxScriptID", "MdxScript");
                 writer.WriteEndElement(); // Object
                 writer.WriteStartElement("ObjectDefinition");
-                WriteMdxScript(daxMeasures, writer);
                 writer.WriteEndElement(); // ObjectDefinition
                 writer.WriteEndElement(); // Alter
             }
 
-            return sb.ToString();
-        }
+            var template = builder.ToString();
+            var templateDocument = XDocument.Parse(template);
 
-        private void WriteMdxScript(IEnumerable<DaxMeasure> daxMeasures, XmlWriter writer)
-        {
-            writer.WriteStartElement("MdxScript", "http://schemas.microsoft.com/analysisservices/2003/engine");
-            writer.WriteElementString("ID", "MdxScript");
-            writer.WriteElementString("Name", "MdxScript");
-            writer.WriteStartElement("Commands");
-            // The fist command that is always the same
-            writer.WriteStartElement("Command");
-            writer.WriteStartElement("Text");
+            var script = ProduceAlterScriptElement(measures);
+            var document = XDocument.Parse(script);
+            templateDocument.Descendants(MeasuresContainer.NS + "ObjectDefinition").
+                First().Add(document.Root);
 
-            if (_dbCompatibilityLevel < 1103)
-                writer.WriteValue(CommonCommandText1100);
-            else
-                writer.WriteValue(CommonCommandText1103);
-
-            writer.WriteEndElement(); // Text
-            writer.WriteEndElement(); // Command
-
-            if (_dbCompatibilityLevel < 1103)
-            {
-                WriteMeasuresCommand1100(daxMeasures, writer);
-            }
-            else
-            {
-                foreach (var measure in daxMeasures)
-                {
-                    WriteMeasureCommand1103(measure, writer);
-                }
-            }
-
-            writer.WriteEndElement(); // Commands
-
-            writer.WriteStartElement("CalculationProperties");
-
-            foreach (var measure in daxMeasures)
-            {
-                if (measure.CalcProperty != null)
-                    measure.CalcProperty.ToXml(writer, measure.NameInBrackets);
-                else
-                    DaxCalcProperty.CreateDefaultCalculationProperty().ToXml(writer, measure.NameInBrackets);
-            }
-
-            writer.WriteStartElement("CalculationProperty");
-            if (_dbCompatibilityLevel < 1103)
-                writer.WriteElementString("CalculationReference", "Measures.[__No measures defined]");
-            else
-                writer.WriteElementString("CalculationReference", "[__XL_Count of Models]");
-            writer.WriteElementString("CalculationType", "Member");
-            writer.WriteElementString("Visible", "false");
-            writer.WriteEndElement(); // CalculationProperty
-
-            writer.WriteEndElement(); // CalculationProperties
-
-            writer.WriteEndElement(); // MdxScript
-        }
-
-        private void WriteMeasuresCommand1100(IEnumerable<DaxMeasure> measures, XmlWriter writer)
-        {
-            string measuresText = string.Concat(measures.Select(i => i.FullText + ";" + Environment.NewLine));
-            writer.WriteStartElement("Command");
-            writer.WriteStartElement("Text");
-            writer.WriteString(DoNotModify1100 + measuresText);
-            writer.WriteEndElement(); // Text
-            writer.WriteEndElement(); // Command
-        }
-
-        private void WriteMeasureCommand1103(DaxMeasure measure, XmlWriter writer)
-        {
-            writer.WriteStartElement("Command");
-            writer.WriteStartElement("Text");
-            writer.WriteString(DoNotModify1103 + measure.FullText + ";" + Environment.NewLine);
-            writer.WriteEndElement(); // Text
-            writer.WriteStartElement("Annotations");
-            writer.WriteStartElement("Annotation");
-            writer.WriteElementString("Name", "FullName");
-            writer.WriteElementString("Value", measure.Name);
-            writer.WriteEndElement(); // Annotation
-            writer.WriteStartElement("Annotation");
-            writer.WriteElementString("Name", "Table");
-            writer.WriteElementString("Value", measure.TableName);
-            writer.WriteEndElement(); // Annotation
-            writer.WriteEndElement(); // Annotations
-            writer.WriteEndElement(); // Command
+            return templateDocument.ToString(SaveOptions.OmitDuplicateNamespaces);
         }
     }
 }

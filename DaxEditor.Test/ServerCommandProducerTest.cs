@@ -130,10 +130,10 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
             };
             var cmdProducer = new ServerCommandProducer("de", 1103, "Model");
             var actualResult = cmdProducer.ProduceAlterMdxScript(measures);
-            var formattedExpectedResult = XDocument.Parse(expectedResultText).ToString(SaveOptions.None);
-            var formatedActualResult = XDocument.Parse(actualResult).ToString(SaveOptions.None);
+            var expected = XDocument.Parse(expectedResultText).ToString(SaveOptions.None);
+            var actual = XDocument.Parse(actualResult).ToString(SaveOptions.None);
 
-            WindiffAssert.AreEqualNormalizedXmla(formattedExpectedResult, formatedActualResult);
+            WindiffAssert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -227,10 +227,10 @@ CREATE MEASURE 'Quantities'[Sum of Qty Consumed 2]=SUM([Qty Consumed]);
             };
             var cmdProducer = new ServerCommandProducer("de", 1100, "Model");
             var actualResult = cmdProducer.ProduceAlterMdxScript(measures);
-            var formattedExpectedResult = XDocument.Parse(expectedResultText).ToString(SaveOptions.None);
-            var formatedActualResult = XDocument.Parse(actualResult).ToString(SaveOptions.None);
+            var expected = XDocument.Parse(expectedResultText).ToString(SaveOptions.None);
+            var actual = XDocument.Parse(actualResult).ToString(SaveOptions.None);
 
-            WindiffAssert.AreEqualNormalizedXmla(formattedExpectedResult, formatedActualResult);
+            WindiffAssert.AreEqual(expected, actual);
         }
 
 
