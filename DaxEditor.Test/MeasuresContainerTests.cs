@@ -52,7 +52,9 @@ namespace DaxEditorSample.Test
             string input = Utils.ReadFileFromResources("M1.bim");
             var bim = MeasuresContainer.ParseText(input);
             Assert.IsNotNull(bim.Measures);
-            Assert.AreEqual(88, bim.Measures.Count);
+            Assert.AreEqual(68, bim.Measures.Count);
+            Assert.AreEqual(20, bim.SupportingMeasures.Count);
+            Assert.AreEqual(88, bim.AllMeasures.Count);
             var daxText = bim.GetDaxText();
             Assert.IsNotNull(daxText);
 
@@ -227,12 +229,18 @@ namespace DaxEditorSample.Test
             Assert.IsNotNull(bim.Measures);
             var daxText = bim.GetDaxText();
             Assert.IsNotNull(daxText);
+            Assert.AreEqual(6, bim.Measures.Count, "bim.Measures.Count != 6");
+            Assert.AreEqual(10, bim.SupportingMeasures.Count, "bim.SupportingMeasures.Count != 10");
+            Assert.AreEqual(16, bim.AllMeasures.Count, "bim.AllMeasures.Count != 16");
 
             var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
+            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count, "bim.Measures.Count != measuresFromDax.Measures.Count");
+            Assert.AreEqual(bim.SupportingMeasures.Count, measuresFromDax.SupportingMeasures.Count, "bim.SupportingMeasures.Count != measuresFromDax.SupportingMeasures.Count");
+            Assert.AreEqual(bim.AllMeasures.Count, measuresFromDax.AllMeasures.Count, "bim.AllMeasures.Count != measuresFromDax.AllMeasures.Count");
 
             var expected = text;
             var actual = measuresFromDax.UpdateMeasures(text);
+            System.IO.File.WriteAllText("test.bim", actual);
             WindiffAssert.AreEqualNormalizedXmla(expected, actual);
         }
 

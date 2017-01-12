@@ -226,8 +226,29 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
         [TestMethod]
         public void ParseKPI()
         {
-            var text = @"CREATE KPI CURRENTCUBE.[Products with Negative Stock] AS Measures.[Products with Negative Stock], ASSOCIATED_MEASURE_GROUP = 'Product Inventory', GOAL = Measures.[_Products with Negative Stock Goal], STATUS = Measures.[_Products with Negative Stock Status], STATUS_GRAPHIC = 'Three Symbols UnCircled Colored';";
+            var text = @"
+CREATE MEASURE 'Product Inventory'[Products with Negative Stock]=1;
+CREATE MEASURE 'Product Inventory'[_Products with Negative Stock Goal]=1;
+CREATE MEASURE 'Product Inventory'[_Products with Negative Stock Status]=1;
+CREATE KPI CURRENTCUBE.[Products with Negative Stock] AS Measures.[Products with Negative Stock], ASSOCIATED_MEASURE_GROUP = 'Product Inventory', GOAL = Measures.[_Products with Negative Stock Goal], STATUS = Measures.[_Products with Negative Stock Status], STATUS_GRAPHIC = 'Three Symbols UnCircled Colored';";
             var parser = ParseText(text);
+            Assert.AreEqual(1, parser.Measures.Count);
+            Assert.AreEqual("Products with Negative Stock", parser.Measures[0].Name);
+            Assert.AreEqual(2, parser.SupportingMeasures.Count);
+            Assert.AreEqual("_Products with Negative Stock Goal", parser.SupportingMeasures[0].Name);
+            Assert.AreEqual("_Products with Negative Stock Status", parser.SupportingMeasures[1].Name);
+
+            var measure = parser.Measures[0];
+            var expected = @"CREATE MEASURE 'Product Inventory'[Products with Negative Stock]=1
+CALCULATION PROPERTY GENERAL
+    KPITARGETEXPRESSION = 1
+    KPISTATUSGRAPHIC = ""'Three Symbols UnCircled Colored'""
+    KPISTATUSEXPRESSION = 1
+;
+
+";
+            var actual = measure.ToDax();
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
