@@ -49,8 +49,18 @@ namespace Babel.Parser
 
         public IList<DaxMeasure> Measures
         {
+            get { return this.measures.Where(i => !i.Name.StartsWith("_")).ToList(); }
+        }
+
+        public IList<DaxMeasure> SupportingMeasures {
+            get { return this.measures.Where(i => i.Name.StartsWith("_")).ToList(); }
+        }
+
+        public IList<DaxMeasure> AllMeasures {
             get { return this.measures; }
         }
+
+        private string KpiMeasureName { get; set; }
 
         public AuthoringSink Sink
         {
@@ -97,7 +107,8 @@ namespace Babel.Parser
             if (measureName.StartsWith("[") && measureName.EndsWith("]"))
                 measureName = measureName.Substring(1, measureName.Length - 2);
 
-            measures.Add(new DaxMeasure() { TableName = tableName, Name = measureName });
+            var measure = new DaxMeasure() {TableName = tableName, Name = measureName};
+            measures.Add(measure);
         }
 
         public int GetFirstNonEmptyIndex(string str, int startIndex = 0)
@@ -205,6 +216,14 @@ namespace Babel.Parser
             var completeLocation = startLocation.Merge(endLocation);
             var lastMeasure = measures.Last();
             Debug.Assert(lastMeasure.FullText == null);
+            var line = GetLineText(completeLocation.eLin);
+            if (!line.Contains("CALCULATION"))
+            {
+                completeLocation.eCol = Math.Max(
+                    completeLocation.eCol,
+                    line.Contains(";") ? line.IndexOf(";") : line.LastIndexOf(" ") + 1
+                    );
+            }
             lastMeasure.FullText = GetConsistentText(completeLocation);
         }
 
@@ -240,52 +259,78 @@ namespace Babel.Parser
             lastMeasure.CalcProperty.Measure.IsHidden = isHidden;
         }
 
-        public void GetLastKpiMeasure()
+        public void SetKpiMeasureName(LexLocation location)
         {
-            return measures.Where(i => !i.StartWith("_")).Last();
+            var measureName = GetConsistentText(location);
+
+            if (measureName.StartsWith("[") && measureName.EndsWith("]"))
+            {
+                measureName = measureName.Substring(1, measureName.Length - 2);
+            }
+
+            KpiMeasureName = measureName;
+            Debug.WriteLine("SetKpiMeasureName: " + KpiMeasureName);
         }
-	    
-	public void SpecifyCalcPropExpr1(LexLocation location)
-	{
-	    var lastMeasure = GetLastKpiMeasure();
-	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
-            lastMeasure.KPI.TargetExpression = GetConsistentText(location);
-	}
-	 
-	public void SpecifyCalcPropExpr2(LexLocation location)
-	{
-	    var lastMeasure = GetLastKpiMeasure();
-	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
-            lastMeasure.KPI.StatusExpression = GetConsistentText(location);
-	}
-	 
-	public void SpecifyCalcPropDesc1(LexLocation location)
-	{
-	    var lastMeasure = GetLastKpiMeasure();
-	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
-            lastMeasure.KPI.Description = GetConsistentText(location);
-	}
-	    
-	public void SpecifyCalcPropDesc2(LexLocation location)
-	{
-	    var lastMeasure = GetLastKpiMeasure();
-	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
-            lastMeasure.KPI.StatusDescription = GetConsistentText(location);
-	}
-	    
-	public void SpecifyCalcPropGraphic1(LexLocation location)
-	{
-	    var lastMeasure = GetLastKpiMeasure();
-	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
-            lastMeasure.KPI.StatusGraphic = GetConsistentText(location);
-	}
-	    
-	public void SpecifyCalcPropGraphic2(LexLocation location)
-	{
-	    var lastMeasure = GetLastKpiMeasure();
-	    lastMeasure.KPI = lastMeasure.KPI ?? new KPI();
-            lastMeasure.KPI.TargetGraphic = GetConsistentText(location);
-	}
+
+        public DaxMeasure GetMeasure(string name)
+        {
+            return measures.Where(i => i.Name == name).FirstOrDefault();
+        }
+
+        public DaxMeasure GetSupportMeasure(string name)
+        {
+            name = name.Substring(name.IndexOf('.') + 1);
+            return SupportingMeasures.Where(i => name == i.NameInBrackets).FirstOrDefault();
+        }
+
+        public DaxMeasure GetMeasureWithKpi()
+        {
+            var measure = GetMeasure(KpiMeasureName);
+            measure.CalcProperty = measure.CalcProperty ?? DaxCalcProperty.CreateDefaultCalculationProperty();
+            measure.CalcProperty.KPI = measure.CalcProperty.KPI ?? new KPI();
+            return measure;
+        }
+
+        public void SpecifyCalcPropAssociatedMeasureGroup(LexLocation location)
+        {
+            return;
+        }
+
+        public void SpecifyCalcPropGoal(LexLocation location)
+        {
+            var measure = GetMeasureWithKpi();
+            var measureName = GetConsistentText(location);
+            var targetMeasure = GetSupportMeasure(measureName);
+            measure.CalcProperty.KPI.TargetExpression = targetMeasure?.Expression;
+        }
+
+        public void SpecifyCalcPropStatus(LexLocation location)
+        {
+            var measure = GetMeasureWithKpi();
+            var measureName = GetConsistentText(location);
+            var statusMeasure = GetSupportMeasure(measureName);
+            measure.CalcProperty.KPI.StatusExpression = statusMeasure?.Expression;
+        }
+
+        public void SpecifyCalcPropStatusGraphic(LexLocation location)
+        {
+            var measure = GetMeasureWithKpi();
+            measure.CalcProperty.KPI.StatusGraphic = GetConsistentText(location);
+        }
+
+        public void SpecifyCalcPropTrend(LexLocation location)
+        {
+            var measure = GetMeasureWithKpi();
+            var measureName = GetConsistentText(location);
+            var trendMeasure = GetSupportMeasure(measureName);
+            measure.CalcProperty.KPI.TrendExpression = trendMeasure?.Expression;
+        }
+
+        public void SpecifyCalcPropTrendGraphic(LexLocation location)
+        {
+            var measure = GetMeasureWithKpi();
+            measure.CalcProperty.KPI.TrendGraphic = GetConsistentText(location);
+        }
 
         public void SpecifyCalcPropDescription(LexLocation location)
         {

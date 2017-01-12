@@ -146,18 +146,29 @@ namespace DaxEditor
             rv.Measure.Description = property.Description;
 
             var annotations = property.Annotations;
-            if (annotations == null )
+            if (annotations["Type"].Value.Value == "Kpi")
+            {
+                rv.KPI = rv.KPI ?? new KPI();
+                foreach (Microsoft.AnalysisServices.Annotation annotation in annotations)
+                {
+                    if (annotation.Name != "Type" &&
+                        annotation.Name != "IsPrivate" &&
+                        annotation.Name != "Format")
+                    {
+                        var newAnnotation = new Annotation();
+                        newAnnotation.Name = annotation.Name;
+                        newAnnotation.Value = annotation.Value?.Value;
+                        rv.KPI.Annotations.Add(newAnnotation);
+                    }
+                }
+            }
+
+            if (!annotations.Contains("Format"))
             {
                 return rv;
             }
 
-            var formatAnnotation = annotations["Format"];
-            if (formatAnnotation == null)
-            {
-                return rv;
-            }
-
-            var formatValueElement = formatAnnotation.Value;
+            var formatValueElement = annotations["Format"].Value;
             Debug.Assert(formatValueElement != null);
             Debug.Assert(formatValueElement.Attributes != null);
 
@@ -371,16 +382,26 @@ namespace DaxEditor
         {
             var property = new CalculationProperty();
 
-            property.Annotations.Insert(0, "Type", "User");
+            property.Annotations.Insert(0, "Type", Measure.KPI != null ? "Kpi" : "User");
             property.Annotations.Insert(1, "IsPrivate", Measure.IsHidden ? "True" : "False");
 
-            var formatAnnotationValue = produceFormatXmlString();
-            if (!string.IsNullOrWhiteSpace(formatAnnotationValue))
+            property.Annotations.Insert(2, "Format", "");
+            var document = new XmlDocument();
+            document.LoadXml(produceFormatXmlString());
+            property.Annotations["Format"].Value = document;
+
+            if (Measure.KPI != null)
             {
-                property.Annotations.Insert(2, "Format", "");
-                var document = new XmlDocument();
-                document.LoadXml(formatAnnotationValue);
-                property.Annotations["Format"].Value = document;
+                var i = 3;
+                foreach (var annotation in Measure.KPI.Annotations)
+                {
+                    property.Annotations.Insert(i, annotation.Name, annotation.Value);
+                    ++i;
+                }
+                //property.Annotations.Insert(i, "ValueDescription", Measure.KPI.Description ?? "");
+                //property.Annotations.Insert(i + 1, "GoalDescription", Measure.KPI.TargetDescription ?? "");
+                //property.Annotations.Insert(i + 2, "StatusDescription", Measure.KPI.StatusDescription ?? "");
+                //property.Annotations.Insert(i + 3, "TrendDescription", Measure.KPI.TrendDescription ?? "");
             }
 
             property.CalculationReference = measureName;
@@ -396,7 +417,58 @@ namespace DaxEditor
 
             return property;
         }
-        
+
+        public IList<CalculationProperty> GetKpiProperties(string measureName)
+        {
+            var properties = new List<CalculationProperty>();
+            if (!string.IsNullOrWhiteSpace(Measure.KPI?.TargetExpression))
+            {
+                var property = new CalculationProperty();
+                property.Annotations.Insert(0, "Type", "SupportMdx");
+                property.Annotations.Insert(1, "MainObjectType", "Measure");
+                property.Annotations.Insert(2, "MainObjectName", measureName);
+                property.CalculationReference = "[_" + measureName + " Goal]";
+                property.CalculationType = CalculationType.Member;
+                property.Visible = false;
+                properties.Add(property);
+            }
+
+            if (!string.IsNullOrWhiteSpace(Measure.KPI?.StatusExpression))
+            {
+                var property = new CalculationProperty();
+                property.Annotations.Insert(0, "Type", "SupportMdx");
+                property.Annotations.Insert(1, "MainObjectType", "Measure");
+                property.Annotations.Insert(2, "MainObjectName", measureName);
+                property.CalculationReference = "[_" + measureName + " Status]";
+                property.CalculationType = CalculationType.Member;
+                property.Visible = false;
+                properties.Add(property);
+            }
+
+            if (!string.IsNullOrWhiteSpace(Measure.KPI?.TrendExpression))
+            {
+                var property = new CalculationProperty();
+                property.Annotations.Insert(0, "Type", "SupportMdx");
+                property.Annotations.Insert(1, "MainObjectType", "Measure");
+                property.Annotations.Insert(2, "MainObjectName", measureName);
+                property.CalculationReference = "[_" + measureName + " Trend]";
+                property.CalculationType = CalculationType.Member;
+                property.Visible = false;
+                properties.Add(property);
+            }
+
+            var lastProperty = new CalculationProperty();
+            lastProperty.Annotations.Insert(0, "Type", "SupportKpi");
+            lastProperty.Annotations.Insert(1, "MainObjectType", "Measure");
+            lastProperty.Annotations.Insert(2, "MainObjectName", measureName);
+            lastProperty.CalculationReference = "KPIs.[" + measureName + "]";
+            lastProperty.CalculationType = CalculationType.Member;
+            properties.Add(lastProperty);
+
+            return properties;
+        }
+
+
         private string produceFormatXmlString()
         {
             var builder = new StringBuilder();

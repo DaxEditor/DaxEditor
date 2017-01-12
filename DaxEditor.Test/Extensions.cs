@@ -13,49 +13,6 @@ namespace DaxEditorSample.Test
 {
     public static class WindiffAssert
     {
-        private static string _tempLogFolder = null;
-        private static int _counter = 0;
-
-        /// <summary>
-        ///  Normalizes expected and actual string by removing whitespaces in the beggining of lines for all element before comparison
-        /// </summary>
-        /// <param name="expected">Expected XMLA</param>
-        /// <param name="actual">Actual XMLA</param>
-        public static void AreEqualNormalizedXmla(string expected, string actual)
-        {
-            string normalizedExpected = NormalizeWhitespacesInText(NormalizeXmla(expected));
-            string normalizedActual = NormalizeWhitespacesInText(NormalizeXmla(actual));
-
-            if (!string.Equals(normalizedExpected, normalizedActual))
-            {
-                if(_tempLogFolder == null)
-                {
-                    _tempLogFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-                    Directory.CreateDirectory(_tempLogFolder);
-                }
-
-                _counter++;
-
-                string expectedFileName = Path.Combine(_tempLogFolder, _counter.ToString("00") + "_expected.txt");
-                File.WriteAllText(expectedFileName, expected);
-                string actualFileName = Path.Combine(_tempLogFolder, _counter.ToString("00") + "_actual.txt");
-                File.WriteAllText(actualFileName, actual);
-
-                string expectedNormalizedFileName = Path.Combine(_tempLogFolder, _counter.ToString("00") + "_expectedNormalized.txt");
-                File.WriteAllText(expectedNormalizedFileName, normalizedExpected);
-                string actualNormalizedFileName = Path.Combine(_tempLogFolder, _counter.ToString("00") + "_actualNormalized.txt");
-                File.WriteAllText(actualNormalizedFileName, normalizedActual);
-
-                string winDiffCommandLine = string.Format(@"Windiff.exe ""{0}"" ""{1}""", expectedFileName, actualFileName);
-                string winDiffCommandLineForNormalized = string.Format(@"Windiff.exe ""{0}"" ""{1}""", expectedNormalizedFileName, actualNormalizedFileName);
-                var failMessage = $@"Different XMLA.  Normalized diff:
-                {winDiffCommandLineForNormalized}
-                Different XMLA.  Actual diff:
-{winDiffCommandLine}";
-                Assert.Fail(failMessage);
-            }
-        }
-
         public static string GetFCDiff(string expected, string actual)
         {
             try
@@ -87,6 +44,24 @@ namespace DaxEditorSample.Test
             }
             catch { }
             return string.Empty;
+        }
+
+        /// <summary>
+        ///  Normalizes expected and actual string by removing whitespaces in the beggining of lines for all element before comparison
+        /// </summary>
+        /// <param name="expected">Expected XMLA</param>
+        /// <param name="actual">Actual XMLA</param>
+        public static void AreEqualNormalizedXmla(string expected, string actual)
+        {
+            var normalizedExpected = NormalizeWhitespacesInText(NormalizeXmla(expected));
+            var normalizedActual = NormalizeWhitespacesInText(NormalizeXmla(actual));
+
+            if (!string.Equals(normalizedExpected, normalizedActual))
+            {
+                Assert.Fail($@"
+Different texts. Diff:
+{GetFCDiff(normalizedExpected, normalizedActual)}");
+            }
         }
 
         /// <summary>
@@ -125,7 +100,7 @@ Different texts. Diff:
             var result = input;
             result = result.Replace(ServerCommandProducer.DoNotModify1100, $"-- normalized header{Environment.NewLine}");
             result = result.Replace(ServerCommandProducer.DoNotModify1103, $"-- normalized header{Environment.NewLine}");
-            var calculateNormalizeCandidates = new List<string>() { ServerCommandProducer.CommonCommandText1100, ServerCommandProducer.CommonCommandText1103, ServerCommandProducer.CommonCommandTextUnknownVersion };
+            var calculateNormalizeCandidates = new List<string>() { ServerCommandProducer.CommonCommandText1100, ServerCommandProducer.CommonCommandText1103, ServerCommandProducer.CommonCommandTextUnknownVersion, ServerCommandProducer.CommonCommandTextUnknownVersion2 };
             foreach(var calculateNormalizeCandidate in calculateNormalizeCandidates)
             {
                 result = result.Replace(calculateNormalizeCandidate, $"CALCULATE; -- normalized CALCULATE{Environment.NewLine}");

@@ -46,6 +46,10 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
                     ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count of Models];
                   ";
 
+        public const string CommonCommandTextUnknownVersion2 = @"CALCULATE; 
+CREATE MEMBER CURRENTCUBE.Measures.[__No measures defined] AS 1, VISIBLE = 0; 
+ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__No measures defined]; ";
+
         private const string _beginTransaction = @"<BeginTransaction xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"" />";
         private const string _commitTransaction = @"<CommitTransaction xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"" />";
         private const string _rollbackTransaction = @"<RollbackTransaction xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"" />";
@@ -117,9 +121,8 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
             }
         }
 
-        public string ProduceAlterScriptElement(IList<DaxMeasure> measures)
+        public string ProduceAlterScriptElement(MeasuresContainer container)
         {
-            var container = new MeasuresContainer(measures);
             var stream = new MemoryStream();
             var writer = new XmlTextWriter(stream, Encoding.UTF8);
             var obj = container.ToMdxScript(_dbCompatibilityLevel);
@@ -132,6 +135,7 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
             var document = XDocument.Parse(text);
             document.Descendants(MeasuresContainer.NS + "CreatedTimestamp").Remove();
             document.Descendants(MeasuresContainer.NS + "LastSchemaUpdate").Remove();
+            document.Descendants(MeasuresContainer.NS + "Value").Where(i=>i.IsEmpty).Remove();
             document.Element(MeasuresContainer.NS + "MdxScript").RemoveAttributes();
 
             return document.ToString(SaveOptions.OmitDuplicateNamespaces);
@@ -157,7 +161,7 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
             var template = builder.ToString();
             var templateDocument = XDocument.Parse(template);
 
-            var script = ProduceAlterScriptElement(measures);
+            var script = ProduceAlterScriptElement(new MeasuresContainer(measures));
             var document = XDocument.Parse(script);
             templateDocument.Descendants(MeasuresContainer.NS + "ObjectDefinition").
                 First().Add(document.Root);

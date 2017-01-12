@@ -4,56 +4,59 @@ namespace DaxEditor
 {
     public class DaxMeasure
     {
+        public DaxMeasure()
+        {}
+
+        public DaxMeasure(string name, string tableName, string expression)
+        {
+            Name = name;
+            TableName = tableName;
+            Expression = expression;
+            FullText = $"CREATE MEASURE '{TableName ?? ""}'[{Name ?? ""}] = {Expression ?? ""}";
+        }
+
         /// <summary>
         /// Name of the table where measure belongs to.  TableName should be escaped if it is required.
         /// </summary>
         public string TableName { get; set; }
 
-
-        private string _name;
         /// <summary>
         /// Measure name, without brackets
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                System.Diagnostics.Debug.Assert(value != null && !value.StartsWith("[") && !value.EndsWith("]"));
-                _name = value;
-            }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Measure expression - text that goes after = in the measure definition.
         /// </summary>
         public string Expression { get; set; }
 
-        private string _fullText;
         /// <summary>
         /// Full text of a measure, starting with CREATE MEASURE. Does not include ';'.
         /// </summary>
-        public string FullText
-        {
-            get
-            {
-                return _fullText;
-            }
-            set
-            {
-                _fullText = value;
+        public string FullText { get; set; }
+
+        public string NameInBrackets {
+            get {
+                return "[" + Name + "]";
             }
         }
 
-        public string NameInBrackets
+        public string ToDax()
         {
-            get
+            var builder = new System.Text.StringBuilder();
+            builder.Append(FullText);
+            var propertyDax = CalcProperty?.ToDax();
+            if (!string.IsNullOrWhiteSpace(propertyDax))
             {
-                return "[" + Name + "]";
+                builder.AppendLine();
+                builder.Append(propertyDax);
             }
+            builder.AppendLine();
+            builder.Append(';');
+            builder.AppendLine();
+            builder.AppendLine();
+
+            return builder.ToString();
         }
 
         /// <summary>

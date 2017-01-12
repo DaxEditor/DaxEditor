@@ -59,6 +59,13 @@ namespace DaxEditor.GeneratorSource
       this.Add(new DaxKeywordDescription() { Name = @"SKIP", Description = @"RANKX Ties Enum Element"});
       this.Add(new DaxKeywordDescription() { Name = @"DENSE", Description = @"RANKX Ties Enum Element"});
       this.Add(new DaxKeywordDescription() { Name = @"NOT", Description = @"NOT operator"});
+      this.Add(new DaxKeywordDescription() { Name = @"AS", Description = @"AS keyword"});
+      this.Add(new DaxKeywordDescription() { Name = @"ASSOCIATED_MEASURE_GROUP", Description = @"ASSOCIATED_MEASURE_GROUP Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"GOAL", Description = @"GOAL Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"STATUS", Description = @"STATUS Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"STATUS_GRAPHIC", Description = @"STATUS_GRAPHIC Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"TREND", Description = @"TREND Property"});
+      this.Add(new DaxKeywordDescription() { Name = @"TREND_GRAPHIC", Description = @"TREND_GRAPHIC Property"});
       this.Add(new DaxKeywordDescription() { Name = @"KPIDESCRIPTION", Description = @"Measure KpiDescription Property"});
       this.Add(new DaxKeywordDescription() { Name = @"KPITARGETFORMATSTRING", Description = @"Measure KpiTargetFormatString Property"});
       this.Add(new DaxKeywordDescription() { Name = @"KPITARGETDESCRIPTION", Description = @"Measure KpiTargetDescription Property"});
@@ -82,6 +89,10 @@ namespace DaxEditor.GeneratorSource
         }
     }
 }
+
+
+
+
 
 
 

@@ -49,6 +49,15 @@ $keyWords += New-Object object | add-member NoteProperty Name "RankX" -passThru 
 $keyWords += New-Object object | add-member NoteProperty Name "Skip" -passThru  | add-member NoteProperty Description "RANKX Ties Enum Element" -passThru
 $keyWords += New-Object object | add-member NoteProperty Name "Dense" -passThru  | add-member NoteProperty Description "RANKX Ties Enum Element" -passThru
 $keyWords += New-Object object | add-member NoteProperty Name "Not" -passThru  | add-member NoteProperty Description "NOT operator" -passThru
+# KPI Xml support
+$keyWords += New-Object object | add-member NoteProperty Name "AS" -passThru  | add-member NoteProperty Description "AS keyword" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "ASSOCIATED_MEASURE_GROUP" -passThru  | add-member NoteProperty Description "ASSOCIATED_MEASURE_GROUP Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "GOAL" -passThru  | add-member NoteProperty Description "GOAL Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "STATUS" -passThru  | add-member NoteProperty Description "STATUS Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "STATUS_GRAPHIC" -passThru  | add-member NoteProperty Description "STATUS_GRAPHIC Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "TREND" -passThru  | add-member NoteProperty Description "TREND Property" -passThru
+$keyWords += New-Object object | add-member NoteProperty Name "TREND_GRAPHIC" -passThru  | add-member NoteProperty Description "TREND_GRAPHIC Property" -passThru
+# KPI Json support
 $keyWords += New-Object object | add-member NoteProperty Name "KpiDescription" -passThru  | add-member NoteProperty Description "Measure KpiDescription Property" -passThru
 $keyWords += New-Object object | add-member NoteProperty Name "KpiTargetFormatString" -passThru  | add-member NoteProperty Description "Measure KpiTargetFormatString Property" -passThru
 $keyWords += New-Object object | add-member NoteProperty Name "KpiTargetDescription" -passThru  | add-member NoteProperty Description "Measure KpiTargetDescription Property" -passThru

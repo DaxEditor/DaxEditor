@@ -146,6 +146,13 @@ TableNameNotEscaped  [a-zA-Z_][a-zA-Z0-9_]
 [Ss][Kk][Ii][Pp]                                                                                        { return (int)Tokens.KWSKIP; }
 [Dd][Ee][Nn][Ss][Ee]                                                                                    { return (int)Tokens.KWDENSE; }
 [Nn][Oo][Tt]                                                                                            { return (int)Tokens.KWNOT; }
+[Aa][Ss]                                                                                                { return (int)Tokens.KWAS; }
+[Aa][Ss][Ss][Oo][Cc][Ii][Aa][Tt][Ee][Dd][__][Mm][Ee][Aa][Ss][Uu][Rr][Ee][__][Gg][Rr][Oo][Uu][Pp]        { return (int)Tokens.KWASSOCIATED_MEASURE_GROUP; }
+[Gg][Oo][Aa][Ll]                                                                                        { return (int)Tokens.KWGOAL; }
+[Ss][Tt][Aa][Tt][Uu][Ss]                                                                                { return (int)Tokens.KWSTATUS; }
+[Ss][Tt][Aa][Tt][Uu][Ss][__][Gg][Rr][Aa][Pp][Hh][Ii][Cc]                                                { return (int)Tokens.KWSTATUS_GRAPHIC; }
+[Tt][Rr][Ee][Nn][Dd]                                                                                    { return (int)Tokens.KWTREND; }
+[Tt][Rr][Ee][Nn][Dd][__][Gg][Rr][Aa][Pp][Hh][Ii][Cc]                                                    { return (int)Tokens.KWTREND_GRAPHIC; }
 [Kk][Pp][Ii][Dd][Ee][Ss][Cc][Rr][Ii][Pp][Tt][Ii][Oo][Nn]                                                { return (int)Tokens.KWKPIDESCRIPTION; }
 [Kk][Pp][Ii][Tt][Aa][Rr][Gg][Ee][Tt][Ff][Oo][Rr][Mm][Aa][Tt][Ss][Tt][Rr][Ii][Nn][Gg]                    { return (int)Tokens.KWKPITARGETFORMATSTRING; }
 [Kk][Pp][Ii][Tt][Aa][Rr][Gg][Ee][Tt][Dd][Ee][Ss][Cc][Rr][Ii][Pp][Tt][Ii][Oo][Nn]                        { return (int)Tokens.KWKPITARGETDESCRIPTION; }
@@ -222,6 +229,9 @@ TableNameNotEscaped  [a-zA-Z_][a-zA-Z0-9_]
 %%
 
 /* .... */
+
+
+
 
 
 

@@ -65,7 +65,7 @@ The project released under MS-PL license https://daxeditor.codeplex.com/license
 
 %token FUNCTION NUMBER STRING COLUMNNAME TABLENAME ESCAPEDTABLENAME PARTIALCOLUMNNAME PARTIALTABLENAME MDXCODE KWALTER KPI
 /* Begin generated list of tokens */
-%token KWEVALUATE KWDEFINE KWMEASURE KWORDER KWBY KWTRUE KWFALSE KWASC KWDESC KWDAY KWMONTH KWYEAR KWCREATE KWCALCULATE KWCALCULATION KWPROPERTY KWGENERAL KWNUMBERDECIMAL KWNUMBERWHOLE KWPERCENTAGE KWSCIENTIFIC KWCURRENCY KWDATETIMECUSTOM KWDATETIMESHORTDATEPATTERN KWDATETIMEGENERAL KWTEXT KWACCURACY KWTHOUSANDSEPARATOR KWFORMAT KWADDITIONALINFO KWKPI KWVISIBLE KWDESCRIPTION KWDISPLAYFOLDER KWVAR KWRETURN KWDATATABLE KWBOOLEAN KWDATETIME KWDOUBLE KWINTEGER KWSTRING KWRANKX KWSKIP KWDENSE KWNOT KWKPIDESCRIPTION KWKPITARGETFORMATSTRING KWKPITARGETDESCRIPTION KWKPITARGETEXPRESSION KWKPISTATUSGRAPHIC KWKPISTATUSDESCRIPTION KWKPISTATUSEXPRESSION KWKPITRENDGRAPHIC KWKPITRENDDESCRIPTION KWKPITRENDEXPRESSION KWKPIANNOTATIONS
+%token KWEVALUATE KWDEFINE KWMEASURE KWORDER KWBY KWTRUE KWFALSE KWASC KWDESC KWDAY KWMONTH KWYEAR KWCREATE KWCALCULATE KWCALCULATION KWPROPERTY KWGENERAL KWNUMBERDECIMAL KWNUMBERWHOLE KWPERCENTAGE KWSCIENTIFIC KWCURRENCY KWDATETIMECUSTOM KWDATETIMESHORTDATEPATTERN KWDATETIMEGENERAL KWTEXT KWACCURACY KWTHOUSANDSEPARATOR KWFORMAT KWADDITIONALINFO KWKPI KWVISIBLE KWDESCRIPTION KWDISPLAYFOLDER KWVAR KWRETURN KWDATATABLE KWBOOLEAN KWDATETIME KWDOUBLE KWINTEGER KWSTRING KWRANKX KWSKIP KWDENSE KWNOT KWAS KWASSOCIATED_MEASURE_GROUP KWGOAL KWSTATUS KWSTATUS_GRAPHIC KWTREND KWTREND_GRAPHIC KWKPIDESCRIPTION KWKPITARGETFORMATSTRING KWKPITARGETDESCRIPTION KWKPITARGETEXPRESSION KWKPISTATUSGRAPHIC KWKPISTATUSDESCRIPTION KWKPISTATUSEXPRESSION KWKPITRENDGRAPHIC KWKPITRENDDESCRIPTION KWKPITRENDEXPRESSION KWKPIANNOTATIONS
 /* End generated list of tokens */
 
 %token EQ NEQ GT GTE LT LTE POW AMPAMP BARBAR LEFTSQUAREBRACKET RIGHTSQUAREBRACKET
@@ -110,23 +110,19 @@ DaxQuery
     | KWEVALUATE Expression OrderBy
     | KWEVALUATE Expression
     ;
+	
+CreateExpression
+    : CreateMeasure
+    | CreateKpi
+    | CreateMember
+    | Calculate
+    | Alter
+    ;
 
 DaxScript
-    : CreateMeasure
-    | CreateMeasure ';'
-    | CreateMeasure ';' DaxScript
-    | CreateKpi
-    | CreateKpi ';'
-    | CreateKpi ';' DaxScript
-    | CreateMember
-    | CreateMember ';'
-    | CreateMember ';' DaxScript
-    | Calculate
-    | Calculate ';'
-    | Calculate ';' DaxScript
-    | Alter
-    | Alter ';'
-    | Alter ';' DaxScript
+    : CreateExpression
+    | CreateExpression ';'
+    | CreateExpression ';' DaxScript
     ;
 
 Empty
@@ -142,17 +138,64 @@ MeasureExpression
     : Expression                    { SpecifyMeasureExpression(@1); }
     ;
 
+MeasureFullName
+    : CubeName '.' MeasureName
+    | MeasureName
+    ;
+
 CreateMeasure
-    : KWCREATE KWMEASURE CubeName '.' MeasureName EQ MeasureExpression                          { SpecifyFullMeasureText(@1, @7); }
-    | KWCREATE KWMEASURE CubeName '.' MeasureName EQ MeasureExpression CalculationProperty      { SpecifyFullMeasureText(@1, @7); }
-    | KWCREATE KWMEASURE error '.' MeasureName EQ MeasureExpression                             { CallHdlr("Cube name expected before '.'", @3); }
-    | KWCREATE KWMEASURE MeasureName EQ MeasureExpression                                       { SpecifyFullMeasureText(@1, @5); }
-    | KWCREATE KWMEASURE MeasureName EQ MeasureExpression  CalculationProperty                  { SpecifyFullMeasureText(@1, @5); }
-    | KWCREATE KWMEASURE error EQ MeasureExpression                                             { CallHdlr("Measure name expected", @3); }
+    : KWCREATE KWMEASURE MeasureFullName EQ MeasureExpression                         { SpecifyFullMeasureText(@1, @5); }
+    | KWCREATE KWMEASURE MeasureFullName EQ MeasureExpression CalculationProperty     { SpecifyFullMeasureText(@1, @5); }
+    | KWCREATE KWMEASURE error EQ MeasureExpression                                   { CallHdlr("Measure name expected", @3); }
+    ;
+	
+KpiPropertyParams
+    : KpiPropertyAssociatedMeasureGroup
+    | KpiPropertyAssociatedMeasureGroup KpiPropertyParams
+    | KpiPropertyGoal
+    | KpiPropertyGoal KpiPropertyParams
+    | KpiPropertyStatus
+    | KpiPropertyStatus KpiPropertyParams
+    | KpiPropertyStatusGraphic
+    | KpiPropertyStatusGraphic KpiPropertyParams
+    | KpiPropertyTrend
+    | KpiPropertyTrend KpiPropertyParams
+    | KpiPropertyTrendGraphic
+    | KpiPropertyTrendGraphic KpiPropertyParams
+    ;
+
+KpiPropertyAssociatedMeasureGroup
+    : ',' KWASSOCIATED_MEASURE_GROUP EQ ESCAPEDTABLENAME                                        { SpecifyCalcPropAssociatedMeasureGroup(@4); }
+    ;
+
+KpiPropertyGoal
+    : ',' KWGOAL EQ Expression                                                                  { SpecifyCalcPropGoal(@4); }
+    ;
+
+KpiPropertyStatus
+    : ',' KWSTATUS EQ Expression                                                                { SpecifyCalcPropStatus(@4); }
+    ;
+
+KpiPropertyStatusGraphic
+    : ',' KWSTATUS_GRAPHIC EQ ESCAPEDTABLENAME                                                  { SpecifyCalcPropStatusGraphic(@4); }
+    ;
+
+KpiPropertyTrend
+    : ',' KWTREND EQ Expression                                                                { SpecifyCalcPropTrend(@4); }
+    ;
+
+KpiPropertyTrendGraphic
+    : ',' KWTREND_GRAPHIC EQ ESCAPEDTABLENAME                                                  { SpecifyCalcPropTrendGraphic(@4); }
+    ;
+
+KpiFullName
+    : CubeName '.' KpiName
+    | KpiName
     ;
 
 CreateKpi
-    : KWCREATE KWKPI
+    : KWCREATE KWKPI KpiFullName KWAS KpiFullName ';'
+    | KWCREATE KWKPI KpiFullName KWAS KpiFullName KpiPropertyParams ';'
     ;
 
 CreateMember
@@ -494,6 +537,10 @@ MeasureName
     : TableRef ColumnRef                { CreateNewMeasure(@1, @2); }
     ;
 
+KpiName
+    : TableRef ColumnRef                { SetKpiMeasureName(@2); }
+    ;
+
 QueryMeasureName
     : TableRef ColumnRef
     ;
@@ -557,6 +604,10 @@ Expression
     ;
 
 %%
+
+
+
+
 
 
 

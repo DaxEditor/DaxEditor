@@ -23,10 +23,14 @@ namespace DaxEditor
         public const string NS200 = "{http://schemas.microsoft.com/analysisservices/2010/engine/200}";
 
         public IList<DaxMeasure> Measures { get; private set; }
+        public IList<DaxMeasure> SupportingMeasures { get; private set; }
+        public IList<DaxMeasure> AllMeasures { get; private set; }
 
         public MeasuresContainer(IList<DaxMeasure> measures)
         {
-            Measures = measures;
+            AllMeasures = measures;
+            Measures = measures.Where(i => !i.Name.StartsWith("_")).ToList();
+            SupportingMeasures = measures.Where(i => i.Name.StartsWith("_")).ToList();
         }
 
         public static Measure ToEnding(Measure measure, string ending)
@@ -116,14 +120,9 @@ Input text: {text}", exception);
                 foreach (var tableMeasure in table.Measures)
                 {
                     var measure = ToSystemEnding(tableMeasure);
-                    var newMeasure = new DaxMeasure();
-                    newMeasure.Name = measure.Name;
-                    newMeasure.Expression = measure.Expression;
-                    newMeasure.TableName = table.Name;
+                    var newMeasure = new DaxMeasure(measure.Name, table.Name, measure.Expression);
                     newMeasure.CalcProperty = DaxCalcProperty.CreateFromJsonMeasure(measure);
-                    newMeasure.FullText =
-    $"CREATE MEASURE '{newMeasure.TableName ?? ""}'[{newMeasure.Name ?? ""}] = {newMeasure.Expression ?? ""}";
-
+                    
                     measures.Add(newMeasure);
                 }
             }
@@ -146,7 +145,7 @@ Input text: {text}", exception);
                     foreach (Command command in script.Commands)
                     {
                         var measures = ParseDaxScript(command.Text);
-                        foreach (var measure in measures.Measures)
+                        foreach (var measure in measures.AllMeasures)
                         {
                             foreach (CalculationProperty property in script.CalculationProperties)
                             {
@@ -155,7 +154,18 @@ Input text: {text}", exception);
                                     continue;
                                 }
 
-                                measure.CalcProperty = DaxCalcProperty.CreateFromXmlProperty(property);
+                                var kpi = measure.CalcProperty?.KPI.Clone();
+                                var newProperty = DaxCalcProperty.CreateFromXmlProperty(property);
+                                measure.CalcProperty = newProperty;
+                                if (newProperty.KPI != null)
+                                {
+                                    foreach (var annotation in newProperty.KPI.Annotations)
+                                    {
+                                        kpi.Annotations.Add(annotation.Clone());
+                                    }
+                                }
+                                measure.CalcProperty.KPI = kpi;
+
                                 allMeasures.Add(measure);
                             }
                         }
@@ -164,6 +174,11 @@ Input text: {text}", exception);
             }
 
             return new MeasuresContainer(allMeasures);
+        }
+
+        public DaxMeasure GetSupportMeasure(string name)
+        {
+            return SupportingMeasures.Where(i => name == i.Name).FirstOrDefault();
         }
 
         public MdxScript ToMdxScript(int compatibilityLevel)
@@ -193,6 +208,56 @@ Input text: {text}", exception);
                 {
                     var command = new Command();
                     command.Text = ServerCommandProducer.DoNotModify1103 + measure.FullText + ";" + Environment.NewLine;
+
+                    if (measure.CalcProperty?.KPI != null)
+                    {
+                        var goalName = "_" + measure.Name +" Goal";
+                        var goalMeasure = GetSupportMeasure(goalName);
+                        if (goalMeasure != null)
+                        {
+                            command.Text += goalMeasure.FullText + "; " + Environment.NewLine;
+                        }
+
+                        var statusName = "_" + measure.Name + " Status";
+                        var statusMeasure = GetSupportMeasure(statusName);
+                        if (statusMeasure != null)
+                        {
+                            command.Text += statusMeasure.FullText + Environment.NewLine + "; " + Environment.NewLine;
+                        }
+
+                        var trendName = "_" + measure.Name + " Trend";
+                        var trendMeasure = GetSupportMeasure(trendName);
+                        if (trendMeasure != null)
+                        {
+                            command.Text += trendMeasure.FullText + Environment.NewLine + "; " + Environment.NewLine;
+                        }
+
+                        //ASSOCIATED_MEASURE_GROUP = 'DimCurrency'
+                        command.Text += "CREATE KPI CURRENTCUBE." + measure.NameInBrackets +
+                            " AS Measures." + measure.NameInBrackets;
+                        command.Text += ", ASSOCIATED_MEASURE_GROUP = '" + measure.TableName + "'";
+                        if (goalMeasure != null)
+                        {
+                            command.Text += ", GOAL = Measures." + goalMeasure.NameInBrackets;
+                        }
+                        if (statusMeasure != null)
+                        {
+                            command.Text += ", STATUS = Measures." + statusMeasure.NameInBrackets;
+                        }
+                        if (!string.IsNullOrWhiteSpace(measure.CalcProperty.KPI.StatusGraphic))
+                        {
+                            command.Text += ", STATUS_GRAPHIC = " + measure.CalcProperty.KPI.StatusGraphic;
+                        }
+                        if (trendMeasure != null)
+                        {
+                            command.Text += ", TREND = Measures." + trendMeasure.NameInBrackets;
+                        }
+                        if (!string.IsNullOrWhiteSpace(measure.CalcProperty.KPI.TrendGraphic))
+                        {
+                            command.Text += ", TREND_GRAPHIC = " + measure.CalcProperty.KPI.TrendGraphic;
+                        }
+                        command.Text += ";" + Environment.NewLine;
+                    }
                     command.Annotations.Insert(0, "FullName", measure.Name);
                     command.Annotations.Insert(1, "Table", measure.TableName);
 
@@ -208,6 +273,15 @@ Input text: {text}", exception);
                     DaxCalcProperty.CreateDefaultCalculationProperty().ToXmlCalculationProperty(measure.NameInBrackets);
                 
                 script.CalculationProperties.Add(property);
+
+                if (measure.CalcProperty?.KPI != null)
+                {
+                    var kpiProperties = measure.CalcProperty.GetKpiProperties(measure.Name);
+                    foreach (var kpiProperty in kpiProperties)
+                    {
+                        script.CalculationProperties.Add(kpiProperty);
+                    }
+                }
             }
 
             var lastProperty = new CalculationProperty();
@@ -243,7 +317,52 @@ Input text: {text}", exception);
             if (handler.Errors)
                 throw DaxParsingException.FromHandler(handler, daxScript);
 
-            return new MeasuresContainer(parser.Measures);
+            //Add support measures if measure contains KPIs
+            var measures = parser.AllMeasures;
+            var supportMeasures = new List<DaxMeasure>();
+            var containsSupportMeasures = measures.Where(i => i.Name.StartsWith("_")).Count() != 0;
+            if (!containsSupportMeasures)
+            {
+                foreach (var measure in measures)
+                {
+                    if (measure.CalcProperty?.KPI == null)
+                    {
+                        continue;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(measure.CalcProperty.KPI.TargetExpression))
+                    {
+                        var newMeasure = new DaxMeasure(
+                            "_" + measure.Name + " Goal", 
+                            measure.TableName, 
+                            measure.CalcProperty.KPI.TargetExpression
+                            );
+                        supportMeasures.Add(newMeasure);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(measure.CalcProperty.KPI.StatusExpression))
+                    {
+                        var newMeasure = new DaxMeasure(
+                            "_" + measure.Name + " Status",
+                            measure.TableName,
+                            measure.CalcProperty.KPI.StatusExpression
+                            );
+                        supportMeasures.Add(newMeasure);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(measure.CalcProperty.KPI.TrendExpression))
+                    {
+                        var newMeasure = new DaxMeasure(
+                            "_" + measure.Name + " Trend",
+                            measure.TableName,
+                            measure.CalcProperty.KPI.TrendExpression
+                            );
+                        supportMeasures.Add(newMeasure);
+                    }
+                }
+            }
+
+            return new MeasuresContainer(measures.Union(supportMeasures).ToList());
         }
 
         public string GetDaxText()
@@ -251,17 +370,12 @@ Input text: {text}", exception);
             var builder = new StringBuilder();
             foreach (var measure in Measures)
             {
-                builder.Append(measure.FullText);
-                var propertyDax = measure.CalcProperty?.ToDax();
-                if (!string.IsNullOrWhiteSpace(propertyDax))
+                if (measure.Name.StartsWith("_"))
                 {
-                    builder.AppendLine();
-                    builder.Append(propertyDax);
+                    continue;
                 }
-                builder.AppendLine();
-                builder.Append(';');
-                builder.AppendLine();
-                builder.AppendLine();
+
+                builder.Append(measure.ToDax());
             }
             builder.AppendLine();
 
@@ -284,10 +398,10 @@ Input text: {text}", exception);
             var document = XDocument.Parse(text);
 
             var producer = new ServerCommandProducer(text);
-            var newScript = producer.ProduceAlterScriptElement(Measures);
+            var newScript = producer.ProduceAlterScriptElement(this);
             var newScriptDocument = XDocument.Parse(newScript);
             document.Descendants(NS + "MdxScript").First().ReplaceWith(newScriptDocument.Root);
-
+            
             return document.ToString(SaveOptions.OmitDuplicateNamespaces);
         }
 
