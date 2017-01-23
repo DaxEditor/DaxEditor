@@ -1,0 +1,838 @@
+{
+  "name": "SemanticModel",
+  "id": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "name": "SqlServer localhost Dw_ContosoRetailDW",
+        "connectionString": "Provider=SQLNCLI11;Data Source=.;Initial Catalog=Dw_ContosoRetailDW;Integrated Security=SSPI;Persist Security Info=false",
+        "impersonationMode": "impersonateServiceAccount",
+        "annotations": [
+          {
+            "name": "ConnectionEditUISource",
+            "value": "SqlServer"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "DimAccount",
+        "columns": [
+          {
+            "name": "AccountKey",
+            "dataType": "int64",
+            "sourceColumn": "AccountKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ParentAccountKey",
+            "dataType": "int64",
+            "sourceColumn": "ParentAccountKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "AccountLabel",
+            "dataType": "string",
+            "sourceColumn": "AccountLabel",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "AccountName",
+            "dataType": "string",
+            "sourceColumn": "AccountName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "AccountDescription",
+            "dataType": "string",
+            "sourceColumn": "AccountDescription",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "AccountType",
+            "dataType": "string",
+            "sourceColumn": "AccountType",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Operator",
+            "dataType": "string",
+            "sourceColumn": "Operator",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "CustomMembers",
+            "dataType": "string",
+            "sourceColumn": "CustomMembers",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ValueType",
+            "dataType": "string",
+            "sourceColumn": "ValueType",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "CustomMemberOptions",
+            "dataType": "string",
+            "sourceColumn": "CustomMemberOptions",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ETLLoadID",
+            "dataType": "int64",
+            "sourceColumn": "ETLLoadID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "LoadDate",
+            "dataType": "dateTime",
+            "sourceColumn": "LoadDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "UpdateDate",
+            "dataType": "dateTime",
+            "sourceColumn": "UpdateDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimAccount",
+            "dataView": "full",
+            "source": {
+              "query": " SELECT [dbo].[DimAccount].* FROM [dbo].[DimAccount] ",
+              "dataSource": "SqlServer localhost Dw_ContosoRetailDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[DimAccount].* FROM [dbo].[DimAccount] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimAccount"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "DimEmployee",
+        "columns": [
+          {
+            "name": "EmployeeKey",
+            "dataType": "int64",
+            "sourceColumn": "EmployeeKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ParentEmployeeKey",
+            "dataType": "int64",
+            "sourceColumn": "ParentEmployeeKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "FirstName",
+            "dataType": "string",
+            "sourceColumn": "FirstName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "LastName",
+            "dataType": "string",
+            "sourceColumn": "LastName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "MiddleName",
+            "dataType": "string",
+            "sourceColumn": "MiddleName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Title",
+            "dataType": "string",
+            "sourceColumn": "Title",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "HireDate",
+            "dataType": "dateTime",
+            "sourceColumn": "HireDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBDate"
+          },
+          {
+            "name": "BirthDate",
+            "dataType": "dateTime",
+            "sourceColumn": "BirthDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBDate"
+          },
+          {
+            "name": "EmailAddress",
+            "dataType": "string",
+            "sourceColumn": "EmailAddress",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Phone",
+            "dataType": "string",
+            "sourceColumn": "Phone",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "MaritalStatus",
+            "dataType": "string",
+            "sourceColumn": "MaritalStatus",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "EmergencyContactName",
+            "dataType": "string",
+            "sourceColumn": "EmergencyContactName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "EmergencyContactPhone",
+            "dataType": "string",
+            "sourceColumn": "EmergencyContactPhone",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "SalariedFlag",
+            "dataType": "boolean",
+            "sourceColumn": "SalariedFlag",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "Boolean"
+          },
+          {
+            "name": "Gender",
+            "dataType": "string",
+            "sourceColumn": "Gender",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "PayFrequency",
+            "dataType": "int64",
+            "sourceColumn": "PayFrequency",
+            "sourceProviderType": "UnsignedTinyInt"
+          },
+          {
+            "name": "BaseRate",
+            "dataType": "decimal",
+            "sourceColumn": "BaseRate",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "VacationHours",
+            "dataType": "int64",
+            "sourceColumn": "VacationHours",
+            "sourceProviderType": "SmallInt"
+          },
+          {
+            "name": "CurrentFlag",
+            "dataType": "boolean",
+            "sourceColumn": "CurrentFlag",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "Boolean"
+          },
+          {
+            "name": "SalesPersonFlag",
+            "dataType": "boolean",
+            "sourceColumn": "SalesPersonFlag",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "Boolean"
+          },
+          {
+            "name": "DepartmentName",
+            "dataType": "string",
+            "sourceColumn": "DepartmentName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "StartDate",
+            "dataType": "dateTime",
+            "sourceColumn": "StartDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBDate"
+          },
+          {
+            "name": "EndDate",
+            "dataType": "dateTime",
+            "sourceColumn": "EndDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBDate"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "Status",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ETLLoadID",
+            "dataType": "int64",
+            "sourceColumn": "ETLLoadID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "LoadDate",
+            "dataType": "dateTime",
+            "sourceColumn": "LoadDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "UpdateDate",
+            "dataType": "dateTime",
+            "sourceColumn": "UpdateDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimEmployee",
+            "dataView": "full",
+            "source": {
+              "query": " SELECT [dbo].[DimEmployee].* FROM [dbo].[DimEmployee] ",
+              "dataSource": "SqlServer localhost Dw_ContosoRetailDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[DimEmployee].* FROM [dbo].[DimEmployee] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimEmployee"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "DimProduct",
+        "columns": [
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ProductLabel",
+            "dataType": "string",
+            "sourceColumn": "ProductLabel",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ProductName",
+            "dataType": "string",
+            "sourceColumn": "ProductName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ProductDescription",
+            "dataType": "string",
+            "sourceColumn": "ProductDescription",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ProductSubcategoryKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductSubcategoryKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Manufacturer",
+            "dataType": "string",
+            "sourceColumn": "Manufacturer",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "BrandName",
+            "dataType": "string",
+            "sourceColumn": "BrandName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ClassID",
+            "dataType": "string",
+            "sourceColumn": "ClassID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ClassName",
+            "dataType": "string",
+            "sourceColumn": "ClassName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "StyleID",
+            "dataType": "string",
+            "sourceColumn": "StyleID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "StyleName",
+            "dataType": "string",
+            "sourceColumn": "StyleName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ColorID",
+            "dataType": "string",
+            "sourceColumn": "ColorID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ColorName",
+            "dataType": "string",
+            "sourceColumn": "ColorName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Size",
+            "dataType": "string",
+            "sourceColumn": "Size",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "SizeRange",
+            "dataType": "string",
+            "sourceColumn": "SizeRange",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "SizeUnitMeasureID",
+            "dataType": "string",
+            "sourceColumn": "SizeUnitMeasureID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Weight",
+            "dataType": "double",
+            "sourceColumn": "Weight",
+            "sourceProviderType": "Double"
+          },
+          {
+            "name": "WeightUnitMeasureID",
+            "dataType": "string",
+            "sourceColumn": "WeightUnitMeasureID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "UnitOfMeasureID",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasureID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "UnitOfMeasureName",
+            "dataType": "string",
+            "sourceColumn": "UnitOfMeasureName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "StockTypeID",
+            "dataType": "string",
+            "sourceColumn": "StockTypeID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "StockTypeName",
+            "dataType": "string",
+            "sourceColumn": "StockTypeName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "UnitCost",
+            "dataType": "decimal",
+            "sourceColumn": "UnitCost",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "UnitPrice",
+            "dataType": "decimal",
+            "sourceColumn": "UnitPrice",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "AvailableForSaleDate",
+            "dataType": "dateTime",
+            "sourceColumn": "AvailableForSaleDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "StopSaleDate",
+            "dataType": "dateTime",
+            "sourceColumn": "StopSaleDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "Status",
+            "dataType": "string",
+            "sourceColumn": "Status",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ImageURL",
+            "dataType": "string",
+            "sourceColumn": "ImageURL",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ProductURL",
+            "dataType": "string",
+            "sourceColumn": "ProductURL",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ETLLoadID",
+            "dataType": "int64",
+            "sourceColumn": "ETLLoadID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "LoadDate",
+            "dataType": "dateTime",
+            "sourceColumn": "LoadDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "UpdateDate",
+            "dataType": "dateTime",
+            "sourceColumn": "UpdateDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimProduct",
+            "dataView": "full",
+            "source": {
+              "query": " SELECT [dbo].[DimProduct].* FROM [dbo].[DimProduct] ",
+              "dataSource": "SqlServer localhost Dw_ContosoRetailDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[DimProduct].* FROM [dbo].[DimProduct] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimProduct"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "FactSales",
+        "columns": [
+          {
+            "name": "SalesKey",
+            "dataType": "int64",
+            "sourceColumn": "SalesKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DateKey",
+            "dataType": "dateTime",
+            "sourceColumn": "DateKey",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "channelKey",
+            "dataType": "int64",
+            "sourceColumn": "channelKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "StoreKey",
+            "dataType": "int64",
+            "sourceColumn": "StoreKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "sourceColumn": "ProductKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "PromotionKey",
+            "dataType": "int64",
+            "sourceColumn": "PromotionKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "CurrencyKey",
+            "dataType": "int64",
+            "sourceColumn": "CurrencyKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "UnitCost",
+            "dataType": "decimal",
+            "sourceColumn": "UnitCost",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "UnitPrice",
+            "dataType": "decimal",
+            "sourceColumn": "UnitPrice",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "SalesQuantity",
+            "dataType": "int64",
+            "sourceColumn": "SalesQuantity",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ReturnQuantity",
+            "dataType": "int64",
+            "sourceColumn": "ReturnQuantity",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ReturnAmount",
+            "dataType": "decimal",
+            "sourceColumn": "ReturnAmount",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "DiscountQuantity",
+            "dataType": "int64",
+            "sourceColumn": "DiscountQuantity",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DiscountAmount",
+            "dataType": "decimal",
+            "sourceColumn": "DiscountAmount",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "TotalCost",
+            "dataType": "decimal",
+            "sourceColumn": "TotalCost",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "SalesAmount",
+            "dataType": "decimal",
+            "sourceColumn": "SalesAmount",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "ETLLoadID",
+            "dataType": "int64",
+            "sourceColumn": "ETLLoadID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "LoadDate",
+            "dataType": "dateTime",
+            "sourceColumn": "LoadDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "UpdateDate",
+            "dataType": "dateTime",
+            "sourceColumn": "UpdateDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactSales",
+            "dataView": "full",
+            "source": {
+              "query": " SELECT [dbo].[FactSales].* FROM [dbo].[FactSales] ",
+              "dataSource": "SqlServer localhost Dw_ContosoRetailDW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Cost Amount",
+            "expression": "SUM([UnitCost])",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "# SKUs",
+            "expression": "COUNTA([ProductKey])"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[FactSales].* FROM [dbo].[FactSales] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "FactSales"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "bcef0293-a3bf-4bda-a232-7af2f1a1db87",
+        "fromTable": "FactSales",
+        "fromColumn": "ProductKey",
+        "toTable": "DimProduct",
+        "toColumn": "ProductKey"
+      }
+    ],
+    "cultures": [
+      {
+        "name": "en-GB",
+        "translations": {
+          "model": {
+            "name": "Model",
+            "tables": [
+              {
+                "name": "DimAccount",
+                "columns": [
+                  {
+                    "name": "AccountDescription",
+                    "translatedCaption": "test1"
+                  },
+                  {
+                    "name": "Operator",
+                    "translatedCaption": "test2"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "perspectives": [
+      {
+        "name": "New Perspective",
+        "tables": [
+          {
+            "name": "FactSales",
+            "measures": [
+              {
+                "name": "Cost Amount"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "400"
+      }
+    ]
+  }
+}

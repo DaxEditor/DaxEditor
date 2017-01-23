@@ -163,6 +163,7 @@
     <EmbeddedResource Include="Resources\VeryBigFile.dax" />
     <EmbeddedResource Include="Resources\KPIExample.bim" />
     <EmbeddedResource Include="Resources\KPIExample_JSON.bim" />
+    <EmbeddedResource Include="Resources\RMN_Model_Perspective.bim" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

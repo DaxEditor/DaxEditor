@@ -4,6 +4,8 @@ using DaxEditor;
 using DaxEditor.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
+using Microsoft.AnalysisServices;
 
 namespace DaxEditorSample.Test
 {
@@ -265,6 +267,57 @@ namespace DaxEditorSample.Test
             var actual = measuresFromDax.UpdateMeasures(text);
             //Ignore empty lines. Parser not support whitespaces before expressions.
             WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
+        }
+
+        [TestMethod]
+        public void RMN_Model_Perspective_Load_Save_Load()
+        {
+            //Open the BIM file you sent in Visual Studio (the .TXT must be replaced with .BIM)
+            var text = Utils.ReadFileFromResources("RMN_Model_Perspective.bim");
+
+            //Get measures from BIM file
+            var container = MeasuresContainer.ParseText(text);
+            Assert.IsNotNull(container.Measures);
+
+            //Remove the "Cost Amount" measure from the DAX file
+            var index = -1;
+            var i = 0;
+            foreach (var measure in container.AllMeasures)
+            {
+                if (measure.Name.Equals("Cost Amount", StringComparison.OrdinalIgnoreCase))
+                {
+                    index = i;
+                }
+                ++i;
+            }
+            container.AllMeasures.RemoveAt(index);
+
+            //Save measures to BIM file
+            text = container.UpdateMeasures(text);
+
+            //Open the BIM file
+            var server = new Microsoft.AnalysisServices.Tabular.Server();
+            server.ID = "ID";
+            server.Name = "name";
+
+            var database = JsonUtilities.Deserialize(text);
+            server.Databases.Add(database);
+
+            var errors = new ValidationErrorCollection();
+            server.Validate(errors);
+            Assert.AreEqual(0, errors.Count);
+
+            database.Validate(errors);
+            Assert.AreEqual(0, errors.Count);
+
+            var result = database.Model.Validate();
+            Assert.AreEqual(0, result.Errors.Count, 
+                string.Join(Environment.NewLine, 
+                    result.Errors.Select(
+                        error => error.Message
+                    )
+                )
+            );
         }
     }
 }
