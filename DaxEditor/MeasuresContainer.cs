@@ -22,15 +22,21 @@ namespace DaxEditor
         public const string NS = "{http://schemas.microsoft.com/analysisservices/2003/engine}";
         public const string NS200 = "{http://schemas.microsoft.com/analysisservices/2010/engine/200}";
 
-        public IList<DaxMeasure> Measures { get; private set; }
-        public IList<DaxMeasure> SupportingMeasures { get; private set; }
         public IList<DaxMeasure> AllMeasures { get; private set; }
+
+        public IList<DaxMeasure> Measures
+        {
+            get { return AllMeasures.Where(i => !i.Name.StartsWith("_")).ToList(); }
+        }
+
+        public IList<DaxMeasure> SupportingMeasures
+        {
+            get { return AllMeasures.Where(i => i.Name.StartsWith("_")).ToList(); }
+        }
 
         public MeasuresContainer(IList<DaxMeasure> measures)
         {
             AllMeasures = measures;
-            Measures = measures.Where(i => !i.Name.StartsWith("_")).ToList();
-            SupportingMeasures = measures.Where(i => i.Name.StartsWith("_")).ToList();
         }
 
         public static Measure ToEnding(Measure measure, string ending)
