@@ -14,34 +14,48 @@ namespace DaxEditor.IntegrationTests
     [TestClass]
     public class BismInfoProviderTests
     {
-        public static string _pathToBinDirectory;
+        public static bool IsInitialized { get; private set; }
 
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            _pathToBinDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            using(Server srv = new Server())
+            IsInitialized = false;
+            try
             {
-                srv.Connect(string.Format("Data Source={0}", Settings.SsasInstance));
-                srv.Restore("db1.abf", "db1", true);  // Assumptions - the backups are stored in backup folder of the SSAS instance
+                using (var server = new Server())
+                {
+                    server.Connect($"Data Source={Settings.SsasInstance}");
+                    // Assumptions - the backups are stored in backup folder of the SSAS instance
+                    server.Restore("db1.abf", "db1", true);
+                    IsInitialized = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("Not initialized: " + exception.Message);
             }
         }
 
         [TestMethod]
         public void BismInfoProvider_GetSchemaSimple()
         {
+            if (!IsInitialized)
+            {
+                return;
+            }
+
             var props = new DaxDocumentPropertiesBase();
-            props.ConnectionString = string.Format("Data Source={0};Catalog=db1", Settings.SsasInstance);
-            var bismInfoProvider = new BismInfoProvider(props);
-            string schema = string.Empty;
+            props.ConnectionString = $"Data Source={Settings.SsasInstance};Catalog=db1";
+            var provider = new BismInfoProvider(props);
+            var schema = string.Empty;
             var updateEditorMargin = new StubIUpdateEditorMargin(updateSchema: i => schema = i);
-            bismInfoProvider.SetUpdateEditorMargin(updateEditorMargin);
-            bismInfoProvider.Connect();
+            provider.SetUpdateEditorMargin(updateEditorMargin);
+            provider.Connect();
             Thread.Sleep(10000); //TODO: make async and wait
-            Assert.AreEqual(1, bismInfoProvider._tableDeclarations.Count());
-            Assert.AreEqual(4, bismInfoProvider._tableMembersDeclarations["T1"].Count);
-            Assert.AreEqual("[c]", bismInfoProvider._tableMembersDeclarations["T1"].First().Name);
-            Assert.AreEqual("[M1]", bismInfoProvider._tableMembersDeclarations["T1"].Skip(1).First().Name);
+            Assert.AreEqual(1, provider._tableDeclarations.Count());
+            Assert.AreEqual(4, provider._tableMembersDeclarations["T1"].Count);
+            Assert.AreEqual("[c]", provider._tableMembersDeclarations["T1"].First().Name);
+            Assert.AreEqual("[M1]", provider._tableMembersDeclarations["T1"].Skip(1).First().Name);
 
             var expectedHtmlSchema = @"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.0 Transitional//EN"">
 
