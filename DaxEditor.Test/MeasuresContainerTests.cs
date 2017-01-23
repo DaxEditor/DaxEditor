@@ -12,60 +12,94 @@ namespace DaxEditorSample.Test
     [TestClass]
     public class MeasuresContainerTests
     {
+        static public string BaseTest(string text)
+        {
+            var container = MeasuresContainer.ParseText(text);
+            Assert.IsNotNull(container, "container != null");
+            Assert.IsNotNull(container.Measures, "container.Measures != null");
+            Assert.IsNotNull(container.SupportingMeasures, "container.SupportingMeasures != null");
+            Assert.IsNotNull(container.AllMeasures, "container.AllMeasures != null");
+
+            var dax = container.GetDaxText();
+            Assert.IsNotNull(dax, "dax != null");
+
+            var daxContainer = MeasuresContainer.ParseDaxScript(dax);
+            Assert.AreEqual(container.Measures.Count, daxContainer.Measures.Count, "container.Measures.Count != daxContainer.Measures.Count");
+            //Assert.AreEqual(container.SupportingMeasures.Count, daxContainer.SupportingMeasures.Count, "container.SupportingMeasures.Count != daxContainer.SupportingMeasures.Count");
+            //Assert.AreEqual(container.AllMeasures.Count, daxContainer.AllMeasures.Count, "container.AllMeasures.Count != daxContainer.AllMeasures.Count");
+
+            return daxContainer.UpdateMeasures(text);
+        }
+
+        static public void BaseTestJson(string text, bool ignoreEmptyLines = false)
+        {
+            var actual = BaseTest(text);
+            var expected = text;
+
+            //Fix sorting. But missing properties in the model will be hidden.
+            var database = JsonUtilities.Deserialize(expected);
+            expected = JsonUtilities.Serialize(database);
+
+            if (ignoreEmptyLines)
+            {
+                //Ignore empty lines. Parser not support whitespaces before expressions.
+                WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
+            }
+            else
+            {
+                WindiffAssert.AreEqual(expected, actual);
+            }
+        }
+
+        static public void BaseTestXml(string text, bool normalize = false)
+        {
+            var actual = BaseTest(text);
+            var expected = text;
+
+            if (normalize)
+            {
+                WindiffAssert.AreEqualNormalizedXmla(expected, actual);
+            }
+            else
+            {
+                WindiffAssert.AreEqual(expected, actual);
+            }
+        }
+
         [TestMethod]
         public void MeasuresFormats()
         {
-            string input = Utils.ReadFileFromResources("MeasuresFormats.bim");
-            var bim = MeasuresContainer.ParseText(input);
-            Assert.IsNotNull(bim.Measures);
-            Assert.AreEqual(8, bim.Measures.Count);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
+            var text = Utils.ReadFileFromResources("MeasuresFormats.bim");
+            BaseTestXml(text, normalize: true);
 
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = input;
-            var actual = measuresFromDax.UpdateMeasures(input);
-            WindiffAssert.AreEqualNormalizedXmla(expected, actual);
+            var container = MeasuresContainer.ParseText(text);
+            Assert.AreEqual(8, container.Measures.Count);
+            Assert.AreEqual(0, container.SupportingMeasures.Count);
+            Assert.AreEqual(8, container.AllMeasures.Count);
         }
 
         [TestMethod]
         public void Bim1100()
         {
-            string input = Utils.ReadFileFromResources("BIM1100.bim");
-            var bim = MeasuresContainer.ParseText(input);
-            Assert.IsNotNull(bim.Measures);
-            Assert.AreEqual(3, bim.Measures.Count);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
+            var text = Utils.ReadFileFromResources("BIM1100.bim");
+            BaseTestXml(text, normalize: true);
 
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = input;
-            var actual = measuresFromDax.UpdateMeasures(input);
-            WindiffAssert.AreEqualNormalizedXmla(expected, actual);
+            var container = MeasuresContainer.ParseText(text);
+            Assert.AreEqual(3, container.Measures.Count);
+            Assert.AreEqual(0, container.SupportingMeasures.Count);
+            Assert.AreEqual(3, container.AllMeasures.Count);
         }
 
         [TestMethod]
         public void M1()
         {
-            string input = Utils.ReadFileFromResources("M1.bim");
-            var bim = MeasuresContainer.ParseText(input);
-            Assert.IsNotNull(bim.Measures);
-            Assert.AreEqual(68, bim.Measures.Count);
-            Assert.AreEqual(20, bim.SupportingMeasures.Count);
-            Assert.AreEqual(88, bim.AllMeasures.Count);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
+            var text = Utils.ReadFileFromResources("M1.bim");
+            BaseTestXml(text, normalize: true);
 
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = input;
-            var actual = measuresFromDax.UpdateMeasures(input);
-            WindiffAssert.AreEqualNormalizedXmla(expected, actual);
+            var container = MeasuresContainer.ParseText(text);
+            Assert.AreEqual(68, container.Measures.Count);
+            Assert.AreEqual(20, container.SupportingMeasures.Count);
+            Assert.AreEqual(88, container.AllMeasures.Count);
         }
 
 
@@ -73,200 +107,78 @@ namespace DaxEditorSample.Test
         public void Bim1100_Json()
         {
             var text = Utils.ReadFileFromResources("BIM1100_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            Assert.AreEqual(3, bim.Measures.Count);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
+            BaseTestJson(text);
 
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-            var actual = measuresFromDax.UpdateMeasures(text);
-            WindiffAssert.AreEqual(expected, actual);
+            var container = MeasuresContainer.ParseText(text);
+            Assert.AreEqual(3, container.Measures.Count);
+            Assert.AreEqual(0, container.SupportingMeasures.Count);
+            Assert.AreEqual(3, container.AllMeasures.Count);
         }
 
         [TestMethod]
         public void M1_Json()
         {
-            string text = Utils.ReadFileFromResources("M1_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            Assert.AreEqual(68, bim.Measures.Count);//MB FIX 88
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
+            var text = Utils.ReadFileFromResources("M1_JSON.bim");
+            BaseTestJson(text, ignoreEmptyLines: true);
 
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-
-            //Fix sorting. But missing properties in the model will be hidden.
-            var document = JsonUtilities.Deserialize(text);
-            expected = JsonUtilities.Serialize(document);
-
-            var actual = measuresFromDax.UpdateMeasures(text);
-            //Ignore empty lines. Parser not support whitespaces before expressions.
-            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
+            var container = MeasuresContainer.ParseText(text);
+            Assert.AreEqual(68, container.Measures.Count);
+            Assert.AreEqual(0, container.SupportingMeasures.Count);
+            Assert.AreEqual(68, container.AllMeasures.Count);
         }
 
         [TestMethod]
         public void NewDaxModel_Json()
         {
             var text = Utils.ReadFileFromResources("NewDaxModel_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
-
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-
-            //Fix sorting. But missing properties in the model will be hidden.
-            var document = JsonUtilities.Deserialize(expected);
-            expected = JsonUtilities.Serialize(document);
-
-            var actual = measuresFromDax.UpdateMeasures(text);
-            WindiffAssert.AreEqual(expected, actual);
+            BaseTestJson(text);
         }
 
         [TestMethod]
         public void NewMeasuresFuncs_Json()
         {
             var text = Utils.ReadFileFromResources("NewMeasuresFuncs_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
-
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-
-            //Fix sorting. But missing properties in the model will be hidden.
-            var document = JsonUtilities.Deserialize(expected);
-            expected = JsonUtilities.Serialize(document);
-
-            var actual = measuresFromDax.UpdateMeasures(text);
-            //Ignore empty lines. Parser not support whitespaces before expressions.
-            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
+            BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [TestMethod]
         public void WithComments_Json()
         {
             var text = Utils.ReadFileFromResources("WithComments_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
-
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-
-            //Fix sorting. But missing properties in the model will be hidden.
-            var document = JsonUtilities.Deserialize(expected);
-            expected = JsonUtilities.Serialize(document);
-
-            var actual = measuresFromDax.UpdateMeasures(text);
-            WindiffAssert.AreEqual(expected, actual);
+            BaseTestJson(text);
         }
 
         [TestMethod]
         public void WithTranslations_Json()
         {
             var text = Utils.ReadFileFromResources("WithTranslations_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
-
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-
-            //Fix sorting. But missing properties in the model will be hidden.
-            var document = JsonUtilities.Deserialize(expected);
-            expected = JsonUtilities.Serialize(document);
-
-            var actual = measuresFromDax.UpdateMeasures(text);
-            WindiffAssert.AreEqual(expected, actual);
+            BaseTestJson(text);
         }
 
         [TestMethod]
         public void WithKPI_Json()
         {
             var text = Utils.ReadFileFromResources("WithKPI_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
-
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-
-            //Fix sorting. But missing properties in the model will be hidden.
-            var document = JsonUtilities.Deserialize(expected);
-            expected = JsonUtilities.Serialize(document);
-
-            var actual = measuresFromDax.UpdateMeasures(text);
-            //Ignore empty lines. Parser not support whitespaces before expressions.
-            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
+            BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [TestMethod]
         public void KPIExample()
         {
             var text = Utils.ReadFileFromResources("KPIExample.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
-            Assert.AreEqual(6, bim.Measures.Count, "bim.Measures.Count != 6");
-            Assert.AreEqual(10, bim.SupportingMeasures.Count, "bim.SupportingMeasures.Count != 10");
-            Assert.AreEqual(16, bim.AllMeasures.Count, "bim.AllMeasures.Count != 16");
+            BaseTestXml(text, normalize: true);
 
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count, "bim.Measures.Count != measuresFromDax.Measures.Count");
-            Assert.AreEqual(bim.SupportingMeasures.Count, measuresFromDax.SupportingMeasures.Count, "bim.SupportingMeasures.Count != measuresFromDax.SupportingMeasures.Count");
-            Assert.AreEqual(bim.AllMeasures.Count, measuresFromDax.AllMeasures.Count, "bim.AllMeasures.Count != measuresFromDax.AllMeasures.Count");
-
-            var expected = text;
-            var actual = measuresFromDax.UpdateMeasures(text);
-            System.IO.File.WriteAllText("test.bim", actual);
-            WindiffAssert.AreEqualNormalizedXmla(expected, actual);
+            var container = MeasuresContainer.ParseText(text);
+            Assert.AreEqual(6, container.Measures.Count, "container.Measures.Count != 6");
+            Assert.AreEqual(10, container.SupportingMeasures.Count, "container.SupportingMeasures.Count != 10");
+            Assert.AreEqual(16, container.AllMeasures.Count, "container.AllMeasures.Count != 16");
         }
 
         [TestMethod]
         public void KPIExample_Json()
         {
             var text = Utils.ReadFileFromResources("KPIExample_JSON.bim");
-            var bim = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(bim.Measures);
-            var daxText = bim.GetDaxText();
-            Assert.IsNotNull(daxText);
-
-            var measuresFromDax = MeasuresContainer.ParseDaxScript(daxText);
-            Assert.AreEqual(bim.Measures.Count, measuresFromDax.Measures.Count);
-
-            var expected = text;
-
-            //Fix sorting. But missing properties in the model will be hidden.
-            var document = JsonUtilities.Deserialize(expected);
-            expected = JsonUtilities.Serialize(document);
-
-            var actual = measuresFromDax.UpdateMeasures(text);
-            //Ignore empty lines. Parser not support whitespaces before expressions.
-            WindiffAssert.AreEqualIgnoreEmptyLinesInExpressions(expected, actual);
+            BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [TestMethod]
