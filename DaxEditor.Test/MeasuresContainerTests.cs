@@ -12,6 +12,32 @@ namespace DaxEditorSample.Test
     [TestClass]
     public class MeasuresContainerTests
     {
+        static public void ValidateDatabase(string text)
+        {
+            var server = new Microsoft.AnalysisServices.Tabular.Server();
+            server.ID = "ID";
+            server.Name = "Name";
+
+            var database = JsonUtilities.Deserialize(text);
+            server.Databases.Add(database);
+
+            var errors = new ValidationErrorCollection();
+            server.Validate(errors);
+            Assert.AreEqual(0, errors.Count);
+
+            database.Validate(errors);
+            Assert.AreEqual(0, errors.Count);
+
+            var result = database.Model.Validate();
+            Assert.AreEqual(0, result.Errors.Count,
+                string.Join(Environment.NewLine,
+                    result.Errors.Select(
+                        error => error.Message
+                    )
+                )
+            );
+        }
+
         static public string BaseTest(string text)
         {
             var container = MeasuresContainer.ParseText(text);
@@ -49,6 +75,8 @@ namespace DaxEditorSample.Test
             {
                 WindiffAssert.AreEqual(expected, actual);
             }
+
+            ValidateDatabase(text);
         }
 
         static public void BaseTestXml(string text, bool normalize = false)
@@ -186,10 +214,10 @@ namespace DaxEditorSample.Test
         {
             //Open the BIM file you sent in Visual Studio (the .TXT must be replaced with .BIM)
             var text = Utils.ReadFileFromResources("RMN_Model_Perspective.bim");
+            BaseTestJson(text, ignoreEmptyLines: true);
 
             //Get measures from BIM file
             var container = MeasuresContainer.ParseText(text);
-            Assert.IsNotNull(container.Measures);
 
             //Remove the "Cost Amount" measure from the DAX file
             var index = -1;
@@ -208,28 +236,7 @@ namespace DaxEditorSample.Test
             text = container.UpdateMeasures(text);
 
             //Open the BIM file
-            var server = new Microsoft.AnalysisServices.Tabular.Server();
-            server.ID = "ID";
-            server.Name = "name";
-
-            var database = JsonUtilities.Deserialize(text);
-            server.Databases.Add(database);
-
-            var errors = new ValidationErrorCollection();
-            server.Validate(errors);
-            Assert.AreEqual(0, errors.Count);
-
-            database.Validate(errors);
-            Assert.AreEqual(0, errors.Count);
-
-            var result = database.Model.Validate();
-            Assert.AreEqual(0, result.Errors.Count, 
-                string.Join(Environment.NewLine, 
-                    result.Errors.Select(
-                        error => error.Message
-                    )
-                )
-            );
+            BaseTestJson(text, ignoreEmptyLines: true);
         }
     }
 }
