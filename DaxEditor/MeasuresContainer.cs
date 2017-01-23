@@ -515,6 +515,42 @@ Input text: {text}", exception);
                 }
             }
 
+            //Fix for perspective error after measure removing
+            foreach (var perspective in document.Model.Perspectives)
+            {
+                foreach (var table in perspective.PerspectiveTables)
+                {
+                    var newMeasures = new List<Microsoft.AnalysisServices.Tabular.PerspectiveMeasure>();
+                    foreach (var measure in table.PerspectiveMeasures)
+                    {
+                        var isContains = false;
+                        foreach (var jsonTable in jsonMeasures)
+                        {
+                            foreach (var jsonMeasure in jsonTable.Value)
+                            {
+                                if (jsonMeasure.Name.Equals(measure.Name, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    isContains = true;
+                                }
+                            }
+                        }
+
+                        //Add only if measure contains in output database
+                        if (isContains)
+                        {
+                            newMeasures.Add(measure.Clone());
+                        }
+                    }
+
+                    //Clear and add all measures from newMeasures array
+                    table.PerspectiveMeasures.Clear();
+                    foreach (var newMeasure in newMeasures)
+                    {
+                        table.PerspectiveMeasures.Add(newMeasure);
+                    }
+                }
+            }
+
             return JsonUtilities.Serialize(document);
         }
 
