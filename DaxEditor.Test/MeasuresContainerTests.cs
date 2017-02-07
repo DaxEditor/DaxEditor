@@ -170,6 +170,12 @@ namespace DaxEditorSample.Test
         }
 
         [TestMethod]
+        public void MeasureUnderscore_Json() {
+            var text = Utils.ReadFileFromResources("MeasureUnderscore_JSON.bim");
+            BaseTestJson(text, ignoreEmptyLines: true);
+        }
+
+        [TestMethod]
         public void WithComments_Json()
         {
             var text = Utils.ReadFileFromResources("WithComments_JSON.bim");
@@ -184,9 +190,14 @@ namespace DaxEditorSample.Test
         }
 
         [TestMethod]
-        public void WithKPI_Json()
-        {
+        public void WithKPI_Json() {
             var text = Utils.ReadFileFromResources("WithKPI_JSON.bim");
+            BaseTestJson(text, ignoreEmptyLines: true);
+        }
+
+        [TestMethod]
+        public void WithKPI2_Json() {
+            var text = Utils.ReadFileFromResources("WithKPI2_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
