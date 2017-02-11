@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Microsoft.AnalysisServices;
 using System.IO;
 using DaxEditor;
@@ -11,13 +11,13 @@ using DaxEditorSample.Test;
 
 namespace DaxEditor.IntegrationTests
 {
-    [TestClass]
+    [TestFixture]
     public class BismInfoProviderTests
     {
         public static bool IsInitialized { get; private set; }
 
-        [ClassInitialize]
-        public static void ClassInit(TestContext context)
+        [OneTimeSetUp]
+        public static void ClassInit()
         {
             IsInitialized = false;
             try
@@ -36,7 +36,7 @@ namespace DaxEditor.IntegrationTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void BismInfoProvider_GetSchemaSimple()
         {
             if (!IsInitialized)

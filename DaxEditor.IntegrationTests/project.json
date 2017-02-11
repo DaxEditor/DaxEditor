@@ -1,5 +1,8 @@
 ﻿{
-  "dependencies": {},
+  "dependencies": {
+    "NUnit": "3.6.0",
+    "NUnit3TestAdapter": "3.7.0"
+  },
   "frameworks": {
     "net45": {}
   },
