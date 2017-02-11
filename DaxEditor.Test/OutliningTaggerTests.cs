@@ -8,6 +8,7 @@ using System.Reflection;
 using DaxEditor;
 using NUnit.Framework;
 using Microsoft.VisualStudio.Text;
+using System.IO;
 
 namespace DaxEditorSample.Test
 {
@@ -119,8 +120,28 @@ CREATE MEASURE T[M2] = 2
 
         private static ITextBufferFactoryService GetTextBufferFactoryService()
         {
+            var dllFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var projectFolder = Directory.GetParent(dllFolder).Parent.FullName;
+
+            var dll1Name = "Microsoft.VisualStudio.Platform.VSEditor.dll";
+            var dll2Name = "Microsoft.VisualStudio.Platform.VSEditor.Interop.dll";
+            var dll1Path = Path.Combine(projectFolder, "Libraries", dll1Name);
+            var dll2Path = Path.Combine(projectFolder, "Libraries", dll2Name);
+            var outputDll1Path = Path.Combine(dllFolder, dll1Name);
+            var outputDll2Path = Path.Combine(dllFolder, dll2Name);
+            if (!File.Exists(outputDll1Path))
+            {
+                File.Copy(dll1Path, outputDll1Path, true);
+            }
+
+            if (!File.Exists(outputDll2Path))
+            {
+                File.Copy(dll2Path, outputDll2Path, true);
+            }
+
             //Worked only with Microsoft.VisualStudio.Platform.VSEditor.Interop.dll in folder
-            var assembly = Assembly.LoadFrom("Microsoft.VisualStudio.Platform.VSEditor.dll");
+            var assembly = Assembly.LoadFrom(Path.Combine(dllFolder, dll1Name));
+
             Assert.IsNotNull(assembly, "Assembly is null");
             var catalog = new AssemblyCatalog(assembly);
             Assert.IsNotNull(catalog, "Assembly catalog is null");
