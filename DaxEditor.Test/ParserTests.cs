@@ -4,17 +4,17 @@ using System;
 using System.Linq;
 using DaxEditor;
 using Microsoft.VisualStudio.Package;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace DaxEditorSample.Test
 {
     /// <summary>
     /// Unut tests for parser
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class ParserTests
     {
-        [TestMethod]
+        [Test]
         public void ParseQueryWithTrue()
         {
             Babel.Parser.Parser parser = ParseText(@"
@@ -33,7 +33,7 @@ EVALUATE CalculateTable (
             Assert.IsNotNull(parser);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseQueryWithOrderBy()
         {
             Babel.Parser.Parser parser = ParseText(@"DEFINE 
@@ -65,7 +65,7 @@ ORDER BY
             Assert.IsNotNull(parser);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseSimpleMeasure()
         {
             Babel.Parser.Parser parser = ParseText("CREATE MEASURE t[B]=Now()");
@@ -78,7 +78,7 @@ ORDER BY
             Assert.AreEqual("CREATE MEASURE t[B]=Now()", measure.FullText);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseTrueFalse()
         {
             Babel.Parser.Parser parser = ParseText("CREATE MEASURE t[B]=TRUE() && TRUE || FALSE || FALSE()");
@@ -91,7 +91,7 @@ ORDER BY
             Assert.AreEqual("CREATE MEASURE t[B]=TRUE() && TRUE || FALSE || FALSE()", measure.FullText);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseTI()
         {
             var parser = ParseText(@"CREATE MEASURE B[M1]=CALCULATE (
@@ -109,7 +109,7 @@ ORDER BY
 )", measure.Expression);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseTableNameTime()
         {
             Babel.Parser.Parser parser = ParseText("CREATE MEASURE 'Table1'[Hourly Avg CallCount]=AVERAGEX(CROSSJOIN(VALUES('Date'[DateID]), VALUES(Time[Hour])), [Count]);");
@@ -122,7 +122,7 @@ ORDER BY
             Assert.AreEqual("CREATE MEASURE 'Table1'[Hourly Avg CallCount]=AVERAGEX(CROSSJOIN(VALUES('Date'[DateID]), VALUES(Time[Hour])), [Count])", measure.FullText);
         }
 
-        [TestMethod]
+        [Test]
         public void SeveralMeasures()
         {
             var text = @"CALCULATE; 
@@ -159,7 +159,7 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             Assert.AreEqual("CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1)", measure2.FullText);
         }
 
-        [TestMethod]
+        [Test]
         public void YearDayMonth()
         {
             var text = @" CREATE MEASURE 'TRANSACTIONS'[ThisYear]=Date(Year(Now()), Month(Now()), Day(Now()))";
@@ -170,7 +170,7 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             Assert.AreEqual("ThisYear", measure1.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void CalculateShortcut()
         {
             var text = @" CREATE MEASURE 't3'[shortcut]=[M1](All(T)) + 't'[m 2](All(T2))";
@@ -181,7 +181,7 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             Assert.AreEqual("shortcut", measure1.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseMeasureWithCalcProperty1()
         {
             var text = @"CREATE MEASURE 'Table1'[C]=1 CALCULATION PROPERTY NumberDecimal Accuracy=5 ThousandSeparator=True Format='#,0.00000'";
@@ -200,7 +200,7 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             Assert.AreEqual(5, measure1.CalcProperty.Accuracy.Value);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseMeasureCalcPropertyWrongFormatType()
         {
             var text = @"CREATE MEASURE 'Table1'[C]=1 CALCULATION PROPERTY WrongFormatType";
@@ -211,11 +211,11 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             }
             catch (Exception e)
             {
-                StringAssert.Contains(e.Message, "Wrong calculation property type");
+                StringAssert.Contains("Wrong calculation property type", e.Message);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ParseMultipleDaxQueries()
         {
             var text = @"EVALUATE t1 EVALUATE t2";
@@ -223,7 +223,7 @@ CREATE MEASURE 'Table1'[MeasureCountRows]=COUNTROWS(Table1);
             // Expect NOT to fail on parsing
         }
 
-        [TestMethod]
+        [Test]
         public void ParseKPI()
         {
             var text = @"
@@ -251,14 +251,14 @@ CALCULATION PROPERTY GENERAL
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseNumberThatStartsWithDot()
         {
             var text = @"EVALUATE ROW(""a"", .1)";
             Babel.Parser.Parser parser = ParseText(text);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseFunctionWithoutParameterAfterComma()
         {
             try
@@ -269,11 +269,11 @@ CALCULATION PROPERTY GENERAL
             }
             catch (Exception e)
             {
-                StringAssert.Contains(e.Message, "syntax error");
+                StringAssert.Contains("syntax error", e.Message);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ParseSimpleVarExpression()
         {
             var text = @"=
@@ -295,7 +295,7 @@ CALCULATION PROPERTY GENERAL
             Babel.Parser.Parser parser = ParseText(text);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseSimpleVarExpression2()
         {
             var text = @"=
@@ -315,7 +315,7 @@ CALCULATION PROPERTY GENERAL
             Babel.Parser.Parser parser = ParseText(text);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseSimpleDataTable()
         {
             var text = @" = 
@@ -332,15 +332,15 @@ CALCULATION PROPERTY GENERAL
             var parser = ParseText(text);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseVeryBigFile()
         {
             var text = Utils.ReadFileFromResources("VeryBigFile.dax");
-            var parser = ParseText(text, false);
+            var parser = ParseText(text);
             Console.WriteLine(parser.Measures.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseDifficultDataTable()
         {
             var text = @" = 
@@ -358,7 +358,7 @@ CALCULATION PROPERTY GENERAL
             Babel.Parser.Parser parser = ParseText(text);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseExpressionRankX()
         {
             var text =
@@ -390,7 +390,7 @@ CALCULATION PROPERTY GENERAL
             Assert.IsNull(measure1.CalcProperty);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseExpressionRankX2()
         {
             var text = @"
@@ -422,7 +422,7 @@ CALCULATION PROPERTY General Format='0.00%;-0.00%;0.00%' DisplayFolder='Sequence
             Assert.IsNotNull(measure1.CalcProperty);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseExpressionWithComments()
         {
             var text = @"CREATE MEASURE 'Sales'[a] = CALCULATE ( // Comment with slash
@@ -505,7 +505,7 @@ CREATE MEASURE 'Sales'[c] = 1
             Assert.IsNull(measure3.CalcProperty);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseExpressionWithKPI1()
         {
             var text = @"CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )
@@ -570,7 +570,7 @@ CALCULATION
             Assert.AreEqual(@"80", measure1.CalcProperty.KPI.Annotations["KpiThreshold_1"].Value);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseExpressionWithKPI2()
         {
             var text = @"CREATE MEASURE 'Test'[Sales2] =  SUM ( Test[Value] ) / 2
@@ -632,7 +632,7 @@ return
             Assert.AreEqual(@"6.4", measure1.CalcProperty.KPI.Annotations["KpiThreshold_3"].Value);
         }
 
-        [TestMethod]
+        [Test]
         public void ParseExpressionWithKPI3()
         {
             var text = @"CREATE MEASURE 'Test'[Sales3] =  SUM ( Test[Value] ) / 3
@@ -694,7 +694,7 @@ return
             Assert.AreEqual(@"166", measure1.CalcProperty.KPI.Annotations["KpiThreshold_3"].Value);
         }
 
-        private static Babel.Parser.Parser ParseText(string text, bool trace = true)
+        private static Babel.Parser.Parser ParseText(string text, bool trace = false)
         {
             Babel.Parser.ErrorHandler handler = new Babel.Parser.ErrorHandler();
             Babel.Lexer.Scanner scanner = new Babel.Lexer.Scanner();

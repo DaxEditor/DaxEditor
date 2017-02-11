@@ -2,14 +2,14 @@
 
 using System.Xml.Linq;
 using DaxEditor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace DaxEditorSample.Test
 {
-    [TestClass]
+    [TestFixture]
     public class CalcPropertiesTests
     {
-        [TestMethod]
+        [Test]
         public void CalcProperty_GeneralFormat()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -45,7 +45,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(string.Empty, calcProp.ToDax());
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_NumberDecimalFormat()
         {
             string xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -85,7 +85,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expected, calcProp.ToDax());
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_NumberWholeFormat()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -123,7 +123,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expected, calcProp.ToDax());
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_PercentageFormat()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -162,7 +162,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expected, calcProp.ToDax());
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_ScientificFormat()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -201,7 +201,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expected, calcProp.ToDax());
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_CurrencyFormat()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -244,7 +244,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expectedDaxCalculatedPropertyString, calcProp.ToDax());
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_DateTimeCustomFormat()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -289,7 +289,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_DateTimeShortDatePattern()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -329,7 +329,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_DateTimeGeneral()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -369,7 +369,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void CalcProperty_Text()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">
@@ -405,7 +405,7 @@ namespace DaxEditorSample.Test
             string expected = @"CALCULATION PROPERTY TEXT";
             Assert.AreEqual(expected, calcProp.ToDax());
         }
-        [TestMethod]
+        [Test]
         public void CalcProperty_Description()
         {
             var xml = @"<CalculationProperty xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">

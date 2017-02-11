@@ -3,14 +3,14 @@
 using System.Collections.Generic;
 using Babel.Parser;
 using DaxEditor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace DaxEditorSample.Test
 {
-    [TestClass]
+    [TestFixture]
     public class TokenScannerTests
     {
-        [TestMethod]
+        [Test]
         public void TokenScanner_OneLine()
         {
             string inputQuery = @"EVALUATE ROW(""a"", 1)";
@@ -31,7 +31,7 @@ namespace DaxEditorSample.Test
             Assert.IsFalse(enumerator.MoveNext());
         }
 
-        [TestMethod]
+        [Test]
         public void TokenScanner_MultiLine()
         {
             string inputQuery = @"EVALUATE
@@ -54,7 +54,7 @@ ROW(""a"", 1)";
             Assert.IsFalse(enumerator.MoveNext());
         }
 
-        [TestMethod]
+        [Test]
         public void TokenScanner_CppStyleComment()
         {
             string inputQuery = @"EVALUATE T -- Comment";
@@ -71,7 +71,7 @@ ROW(""a"", 1)";
             Assert.IsFalse(enumerator.MoveNext());
         }
 
-        [TestMethod]
+        [Test]
         public void TokenScanner_NumberThatStarsWithDot()
         {
             string inputQuery = @"EVALUATE ROW(""a"", -.1)";
@@ -93,7 +93,7 @@ ROW(""a"", 1)";
             Assert.IsFalse(enumerator.MoveNext());
         }
 
-        [TestMethod]
+        [Test]
         public void TokenScanner_CStyleCommentOneLine()
         {
             string inputQuery = @"EVALUATE T /* */";
@@ -110,7 +110,7 @@ ROW(""a"", 1)";
             Assert.IsFalse(enumerator.MoveNext());
         }
 
-        [TestMethod]
+        [Test]
         public void TokenScanner_CStyleCommentSeveralLines()
         {
             string inputQuery = @"/*

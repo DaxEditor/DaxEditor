@@ -1,7 +1,7 @@
 ﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
 
 using DaxEditor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

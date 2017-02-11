@@ -21,7 +21,7 @@ namespace Babel.ParserGenerator
         where YYSTYPE : struct
         where YYLTYPE : IMerge<YYLTYPE>
     {
-		public bool Trace = false;
+		public bool Trace { get; set; } = false;
 		public AScanner<YYSTYPE,YYLTYPE> scanner;
 
 		protected YYSTYPE yyval;

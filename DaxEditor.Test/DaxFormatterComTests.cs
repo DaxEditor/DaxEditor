@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using DaxEditor;
 
 namespace DaxEditorSample.Test
 {
-    [TestClass]
+    [TestFixture]
     public class DaxFormatterComTests
     {
-        [TestMethod]
+        [Test]
         public void DaxFormatterCom_Trivial()
         {
             var input = @"
@@ -23,7 +23,7 @@ T
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void DaxFormatterCom_SyntaxError()
         {
             var input = @"EVALUATE '' T[A]";
@@ -43,7 +43,7 @@ T
             }
         }
 
-        [TestMethod]
+        [Test]
         public void DaxFormatterCom_Comments()
         {
             var input = @"/**** 
@@ -63,7 +63,7 @@ T
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void DaxFormatterCom_Unicode()
         {
             var input = @"EVALUATE ROW(""Мама мыла раму"", 1)";
@@ -75,7 +75,7 @@ ROW ( ""Мама мыла раму"", 1 )
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void DaxFormatterCom_JsonEncodingDecoding()
         {
             var input = @"Evaluate Row(""1"", ""	<TabChar>'/\"")";
@@ -87,7 +87,7 @@ ROW ( ""1"", ""	<TabChar>'/\"" )
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void DaxFormatterCom_NotTrivialQuery()
         {
             var input = @"EVALUATE ROW(""Cumulative Quantity"", 

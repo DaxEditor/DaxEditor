@@ -1,14 +1,14 @@
 ﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
 
 using Babel.ParserGenerator;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace DaxEditorSample.Test
 {
-    [TestClass]
+    [TestFixture]
     public class LexerTests
     {
-        [TestMethod]
+        [Test]
         public void GetText_SingleLine()
         {
             Babel.Parser.ErrorHandler handler = new Babel.Parser.ErrorHandler();
@@ -21,7 +21,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual("Random()", text);
         }
 
-        [TestMethod]
+        [Test]
         public void GetText_MultiLine()
         {
             Babel.Parser.ErrorHandler handler = new Babel.Parser.ErrorHandler();

@@ -2,14 +2,14 @@
 
 using DaxEditor;
 using DaxEditor.Json;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Linq;
 using Microsoft.AnalysisServices;
 
 namespace DaxEditorSample.Test
 {
-    [TestClass]
+    [TestFixture]
     public class MeasuresContainerTests
     {
         static public void ValidateDatabase(string text)
@@ -94,7 +94,7 @@ namespace DaxEditorSample.Test
             }
         }
 
-        [TestMethod]
+        [Test]
         public void MeasuresFormats()
         {
             var text = Utils.ReadFileFromResources("MeasuresFormats.bim");
@@ -106,7 +106,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(8, container.AllMeasures.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void Bim1100()
         {
             var text = Utils.ReadFileFromResources("BIM1100.bim");
@@ -118,7 +118,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(3, container.AllMeasures.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void M1()
         {
             var text = Utils.ReadFileFromResources("M1.bim");
@@ -131,7 +131,7 @@ namespace DaxEditorSample.Test
         }
 
 
-        [TestMethod]
+        [Test]
         public void Bim1100_Json()
         {
             var text = Utils.ReadFileFromResources("BIM1100_JSON.bim");
@@ -143,7 +143,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(3, container.AllMeasures.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void M1_Json()
         {
             var text = Utils.ReadFileFromResources("M1_JSON.bim");
@@ -155,47 +155,47 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(68, container.AllMeasures.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void NewDaxModel_Json()
         {
             var text = Utils.ReadFileFromResources("NewDaxModel_JSON.bim");
             BaseTestJson(text);
         }
 
-        [TestMethod]
+        [Test]
         public void NewMeasuresFuncs_Json()
         {
             var text = Utils.ReadFileFromResources("NewMeasuresFuncs_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
-        [TestMethod]
+        [Test]
         public void MeasureUnderscore_Json() {
             var text = Utils.ReadFileFromResources("MeasureUnderscore_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
-        [TestMethod]
+        [Test]
         public void WithComments_Json()
         {
             var text = Utils.ReadFileFromResources("WithComments_JSON.bim");
             BaseTestJson(text);
         }
 
-        [TestMethod]
+        [Test]
         public void WithTranslations_Json()
         {
             var text = Utils.ReadFileFromResources("WithTranslations_JSON.bim");
             BaseTestJson(text);
         }
 
-        [TestMethod]
+        [Test]
         public void WithKPI_Json() {
             var text = Utils.ReadFileFromResources("WithKPI_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
-        [TestMethod]
+        [Test]
         public void WithKPI2_Json() {
             var text = Utils.ReadFileFromResources("WithKPI2_JSON.bim");
 
@@ -206,7 +206,7 @@ namespace DaxEditorSample.Test
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
-        [TestMethod]
+        [Test]
         public void KPIExample()
         {
             var text = Utils.ReadFileFromResources("KPIExample.bim");
@@ -218,14 +218,14 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(16, container.AllMeasures.Count, "container.AllMeasures.Count != 16");
         }
 
-        [TestMethod]
+        [Test]
         public void KPIExample_Json()
         {
             var text = Utils.ReadFileFromResources("KPIExample_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
-        [TestMethod]
+        [Test]
         public void RMN_Model_Perspective_Load_Save_Load()
         {
             //Open the BIM file you sent in Visual Studio (the .TXT must be replaced with .BIM)

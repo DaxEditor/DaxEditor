@@ -2,14 +2,14 @@
 
 using System.Xml.Linq;
 using DaxEditor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace DaxEditorSample.Test
 {
-    [TestClass]
+    [TestFixture]
     public class ServerCommandProducerTest
     {
-        [TestMethod]
+        [Test]
         public void TestProduceMeasuresCompatLevel1103()
         {
             #region expectedResultText
@@ -136,7 +136,7 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__XL_Count o
             WindiffAssert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [Test]
         public void TestProduceMeasuresCompatLevel1100()
         {
             #region expectedResultText
@@ -235,7 +235,7 @@ CREATE MEASURE 'Quantities'[Sum of Qty Consumed 2]=SUM([Qty Consumed]);
 
 
 
-        [TestMethod]
+        [Test]
         public void TestProduceBeginTransaction()
         {
             const string expected = @"<BeginTransaction xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"" />";
@@ -246,7 +246,7 @@ CREATE MEASURE 'Quantities'[Sum of Qty Consumed 2]=SUM([Qty Consumed]);
             Assert.AreEqual(formattedExpected, formattedActual);
         }
 
-        [TestMethod]
+        [Test]
         public void TestProduceCommitTransaction()
         {
         const string expected = @"<CommitTransaction xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"" />";
@@ -257,7 +257,7 @@ CREATE MEASURE 'Quantities'[Sum of Qty Consumed 2]=SUM([Qty Consumed]);
             Assert.AreEqual(formattedExpected, formattedActual);
         }
 
-        [TestMethod]
+        [Test]
         public void TestProduceProcessRecalc()
         {
         const string expected = @"<Process xmlns=""http://schemas.microsoft.com/analysisservices/2003/engine"">

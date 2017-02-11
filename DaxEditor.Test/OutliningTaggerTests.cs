@@ -6,15 +6,15 @@ using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
 using DaxEditor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Microsoft.VisualStudio.Text;
 
 namespace DaxEditorSample.Test
 {
-    [TestClass]
+    [TestFixture]
     public class OutliningTaggerTests
     {
-        [TestMethod]
+        [Test]
         public void OutliningTagger_EmptyBuffer()
         {
             var iTextBufferFactoryService = GetTextBufferFactoryService();
@@ -26,7 +26,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(0, tags.Count());
         }
 
-        [TestMethod]
+        [Test]
         public void OutliningTagger_OnlyComment()
         {
             var iTextBufferFactoryService = GetTextBufferFactoryService();
@@ -38,7 +38,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(0, tags.Count());
         }
 
-        [TestMethod]
+        [Test]
         public void OutliningTagger_RandomText()
         {
             var iTextBufferFactoryService = GetTextBufferFactoryService();
@@ -50,7 +50,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(0, tags.Count());
         }
 
-        [TestMethod]
+        [Test]
         public void OutliningTagger_OneLineQuery()
         {
             var iTextBufferFactoryService = GetTextBufferFactoryService();
@@ -62,7 +62,7 @@ namespace DaxEditorSample.Test
             Assert.AreEqual(1, tags.Count());
         }
 
-        [TestMethod]
+        [Test]
         public void OutliningTagger_TwoMeasures()
         {
             var iTextBufferFactoryService = GetTextBufferFactoryService();
@@ -85,7 +85,7 @@ CREATE MEASURE 'T T'[M2] = 2", iTextBufferFactoryService.TextContentType);
             Assert.AreEqual("CREATE MEASURE 'T T'[M2] = 2", tag2.Tag.CollapsedHintForm as string);
         }
 
-        [TestMethod]
+        [Test]
         public void OutliningTagger_ThreeMeasures()
         {
             var iTextBufferFactoryService = GetTextBufferFactoryService();
