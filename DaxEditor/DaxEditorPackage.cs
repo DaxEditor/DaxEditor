@@ -12,19 +12,14 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Babel;
-using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
-using VsCommands2K = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 
 using EnvDTE;
-using System.Windows.Media;
 using System.Windows;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Package;
 using System.IO;
 using System.Reflection;
-using Microsoft.VisualStudio.CommandBars;
 
 namespace DaxEditor
 {

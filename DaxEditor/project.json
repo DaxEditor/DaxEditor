@@ -2,7 +2,12 @@
   "dependencies": {
     "EnvDTE": "8.0.0",
     "Microsoft.AnalysisServices.Tabular": "13.0.2150.2",
-    "stdole": "7.0.3300"
+    "Microsoft.VisualStudio.CoreUtility": "14.3.25407",
+    "Microsoft.VisualStudio.Editor": "14.3.25407",
+    "Microsoft.VisualStudio.Language.Intellisense": "14.3.25407",
+    "Microsoft.VisualStudio.Language.StandardClassification": "14.3.25407",
+    "Microsoft.VisualStudio.Package.LanguageService.14.0": "14.3.25407",
+    "Microsoft.VisualStudio.Shell.Interop.10.0": "10.0.30319"
   },
   "frameworks": {
     "net45": {}
