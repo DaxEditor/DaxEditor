@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using DaxEditor.MeasuresExtensions;
 using Microsoft.AnalysisServices;
 using Database = Microsoft.AnalysisServices.Tabular.Database;
 using Measure = Microsoft.AnalysisServices.Tabular.Measure;
@@ -26,12 +27,12 @@ namespace DaxEditor
 
         public IList<DaxMeasure> Measures
         {
-            get { return AllMeasures.Where(i => !i.Name.StartsWith("_")).ToList(); }
+            get { return AllMeasures.GetNotSupportingMeasures(); }
         }
 
         public IList<DaxMeasure> SupportingMeasures
         {
-            get { return AllMeasures.Where(i => i.Name.StartsWith("_")).ToList(); }
+            get { return AllMeasures.GetSupportingMeasures(); }
         }
 
         public MeasuresContainer(IList<DaxMeasure> measures)
@@ -326,7 +327,7 @@ Input text: {text}", exception);
             //Add support measures if measure contains KPIs
             var measures = parser.AllMeasures;
             var supportMeasures = new List<DaxMeasure>();
-            var containsSupportMeasures = measures.Where(i => i.Name.StartsWith("_")).Count() != 0;
+            var containsSupportMeasures = measures.GetSupportingMeasures().Count() != 0;
             if (!containsSupportMeasures)
             {
                 foreach (var measure in measures)
@@ -376,7 +377,7 @@ Input text: {text}", exception);
             var builder = new StringBuilder();
             foreach (var measure in Measures)
             {
-                if (measure.Name.StartsWith("_"))
+                if (MeasureUtilities.IsSupportingMeasure(measure))
                 {
                     continue;
                 }

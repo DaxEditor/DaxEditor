@@ -750,7 +750,7 @@
             "name": "# SKUs",
             "expression": "COUNTA([ProductKey])",
             "kpi": {
-              "targetExpression": "''FactSales''[x]",
+              "targetExpression": "'FactSales'[x]",
               "statusGraphic": "Traffic Light - Single",
               "statusExpression": [
                 "var x='FactSales'[# SKUs]/'FactSales'[_# SKUs Goal] return",

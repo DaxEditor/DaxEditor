@@ -18,6 +18,7 @@ using DaxEditor;
 using Babel.ParserGenerator;
 using System.Linq;
 using System.Diagnostics;
+using DaxEditor.MeasuresExtensions;
 using DaxEditor.StringExtensions;
 using Microsoft.AnalysisServices.Tabular;
 
@@ -49,11 +50,11 @@ namespace Babel.Parser
 
         public IList<DaxMeasure> Measures
         {
-            get { return this.measures.Where(i => !i.Name.StartsWith("_")).ToList(); }
+            get { return AllMeasures.GetNotSupportingMeasures(); }
         }
 
         public IList<DaxMeasure> SupportingMeasures {
-            get { return this.measures.Where(i => i.Name.StartsWith("_")).ToList(); }
+            get { return AllMeasures.GetSupportingMeasures(); }
         }
 
         public IList<DaxMeasure> AllMeasures {

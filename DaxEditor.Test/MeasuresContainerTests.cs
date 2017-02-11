@@ -198,6 +198,11 @@ namespace DaxEditorSample.Test
         [TestMethod]
         public void WithKPI2_Json() {
             var text = Utils.ReadFileFromResources("WithKPI2_JSON.bim");
+
+            var container = MeasuresContainer.ParseText(text);
+            var measure = container.Measures[0];
+            Assert.AreEqual(measure.Name, "# SKUs");
+
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 

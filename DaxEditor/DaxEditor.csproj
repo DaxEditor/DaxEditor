@@ -170,6 +170,7 @@
     <Compile Include="ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\MeasuresExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GeneratorSource\lexer.cs" />
     <Compile Include="GeneratorSource\parser.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="TernaryTree.cs" />
     <Compile Include="TokenScanner.cs" />
     <Compile Include="TokenToTypeConverter.cs" />
+    <Compile Include="Utilities\MeasureUtilities.cs" />
     <Compile Include="Xml.cs" />
   </ItemGroup>
   <ItemGroup>
