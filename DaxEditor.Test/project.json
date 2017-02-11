@@ -1,0 +1,13 @@
+﻿{
+  "dependencies": {
+    "Microsoft.AnalysisServices": "11.0.2100.60",
+    "Microsoft.AnalysisServices.AdomdClient": "12.0.2000.8",
+    "Microsoft.AnalysisServices.Tabular": "13.0.2150.2"
+  },
+  "frameworks": {
+    "net45": {}
+  },
+  "runtimes": {
+    "win": {}
+  }
+}
