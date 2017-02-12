@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="2da4570a-86fa-43dc-b855-890d9ad96f4d" Version="2.0.1702.081" Language="en-US" Publisher="github.com.DaxEditor" />
+    <Identity Id="2da4570a-86fa-43dc-b855-890d9ad96f4d" Version="2.0.1702.121" Language="en-US" Publisher="github.com.DaxEditor" />
     <DisplayName>DAX Editor</DisplayName>
     <Description xml:space="preserve">DAX Editor  is a Visual Studio extension that implements a language service for DAX language for SQL Server Analysis Services</Description>
     <MoreInfo>http://github.com/DaxEditor</MoreInfo>
