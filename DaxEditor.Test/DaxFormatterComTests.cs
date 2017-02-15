@@ -26,11 +26,11 @@ T
         [Test]
         public void DaxFormatterCom_SyntaxError()
         {
-            var input = @"EVALUATE '' T[A]";
+            var input = @"T[A] T[B]";
             var expected = @"Exception from www.daxformatter.com:
   Message: Syntax error, expected: =, :=
   Line: 0
-  Column: 16";
+  Column: 5";
             try
             {
                 var actual = DaxFormatterCom.Format(input, DaxFormatterCom.FormattingCulture.US);
