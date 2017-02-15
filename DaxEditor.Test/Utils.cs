@@ -1,10 +1,8 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using System.IO;
-using System.Reflection;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using System.IO;
+    using System.Reflection;
+    
     static class Utils
     {
         public static string ReadFileFromResources(string fileName)

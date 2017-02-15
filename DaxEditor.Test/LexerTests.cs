@@ -1,10 +1,8 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using Babel.ParserGenerator;
-using NUnit.Framework;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using Babel.ParserGenerator;
+    using NUnit.Framework;
+
     [TestFixture]
     public class LexerTests
     {

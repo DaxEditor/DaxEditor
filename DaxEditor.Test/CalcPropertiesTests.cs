@@ -1,11 +1,8 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using System.Xml.Linq;
-using DaxEditor;
-using NUnit.Framework;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using System.Xml.Linq;
+    using NUnit.Framework;
+
     [TestFixture]
     public class CalcPropertiesTests
     {

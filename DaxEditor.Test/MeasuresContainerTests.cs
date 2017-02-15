@@ -1,14 +1,11 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using DaxEditor;
-using DaxEditor.Json;
-using NUnit.Framework;
-using System;
-using System.Linq;
-using Microsoft.AnalysisServices;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using Json;
+    using NUnit.Framework;
+    using System;
+    using System.Linq;
+    using Microsoft.AnalysisServices;
+
     [TestFixture]
     public class MeasuresContainerTests
     {

@@ -1,13 +1,10 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using System;
-using System.Linq;
-using DaxEditor;
-using Microsoft.VisualStudio.Package;
-using NUnit.Framework;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using System;
+    using System.Linq;
+    using Microsoft.VisualStudio.Package;
+    using NUnit.Framework;
+
     /// <summary>
     /// Unut tests for parser
     /// </summary>
