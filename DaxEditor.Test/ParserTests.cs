@@ -271,6 +271,19 @@ CALCULATION PROPERTY GENERAL
         }
 
         [Test]
+        public void ParseScope()
+        {
+            //Currently we ignore this error
+            /*
+            var text = @"SCOPE( Measures.AllMembers );
+FORE_COLOR(THIS) =
+IIF( Measures.CurrentMember < 0 , 255, 0);  // 255 = RED
+END SCOPE;";
+            ParseText(text);
+            */
+        }
+
+        [Test]
         public void ParseSimpleVarExpression()
         {
             var text = @"=

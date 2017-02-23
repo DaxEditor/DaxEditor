@@ -47,7 +47,8 @@
             Assert.IsNotNull(dax, "dax != null");
 
             var daxContainer = MeasuresContainer.ParseDaxScript(dax);
-            Assert.AreEqual(container.Measures.Count, daxContainer.Measures.Count, "container.Measures.Count != daxContainer.Measures.Count");
+            Assert.AreEqual(container.Measures.Count, daxContainer.Measures.Count,
+                "container.Measures.Count != daxContainer.Measures.Count");
             //Assert.AreEqual(container.SupportingMeasures.Count, daxContainer.SupportingMeasures.Count, "container.SupportingMeasures.Count != daxContainer.SupportingMeasures.Count");
             //Assert.AreEqual(container.AllMeasures.Count, daxContainer.AllMeasures.Count, "container.AllMeasures.Count != daxContainer.AllMeasures.Count");
 
@@ -167,7 +168,8 @@
         }
 
         [Test]
-        public void MeasureUnderscore_Json() {
+        public void MeasureUnderscore_Json()
+        {
             var text = Utils.ReadFileFromResources("MeasureUnderscore_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
@@ -187,13 +189,15 @@
         }
 
         [Test]
-        public void WithKPI_Json() {
+        public void WithKPI_Json()
+        {
             var text = Utils.ReadFileFromResources("WithKPI_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [Test]
-        public void WithKPI2_Json() {
+        public void WithKPI2_Json()
+        {
             var text = Utils.ReadFileFromResources("WithKPI2_JSON.bim");
 
             var container = MeasuresContainer.ParseText(text);
@@ -250,6 +254,14 @@
 
             //Open the BIM file
             BaseTestJson(text, ignoreEmptyLines: true);
+        }
+
+        [Test]
+        public void WithScope()
+        {
+            //Currently we ignore this error
+            //var text = Utils.ReadFileFromResources("WithScope.bim");
+            //BaseTestXml(text, normalize: true);
         }
     }
 }
