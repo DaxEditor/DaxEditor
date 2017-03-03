@@ -516,6 +516,24 @@ CREATE MEASURE 'Sales'[c] = 1
         }
 
         [Test]
+        public void CalcProperty_KpiFormatWithDoubleQuotes()
+        {
+            var text = @"CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )
+CALCULATION PROPERTY CURRENCY
+    KPITARGETFORMATSTRING = '""€"" #,0;#,0 -""€"";""€"" #,0'";
+            var parser = ParseText(text);
+
+            //Check the correct reception of the format
+            var measure = parser.AllMeasures[0];
+            var expected = @"'""€"" #,0;#,0 -""€"";""€"" #,0'";
+            Assert.AreEqual(expected, measure.CalcProperty.KPI.TargetFormatString);
+
+            //Check the correct saving of the format
+            var container = new MeasuresContainer(parser.AllMeasures);
+            Assert.AreEqual(text, container.GetDaxText());
+        }
+
+        [Test]
         public void ParseExpressionWithKPI1()
         {
             var text = @"CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )
