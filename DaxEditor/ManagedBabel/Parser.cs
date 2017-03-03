@@ -356,7 +356,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TargetFormatString = GetConsistentText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.TargetFormatString = GetConsistentText(location).Trim('\'');
         }
 
         public void SpecifyCalcPropKpiTargetDescription(LexLocation location)

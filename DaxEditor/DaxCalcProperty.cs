@@ -339,10 +339,10 @@ namespace DaxEditor
                     if (ThousandSeparator.HasValue && ThousandSeparator.Value == true)
                         result = AppendIfNotEmpty(result, "ThousandSeparator", "True");
 
-                    result = AppendIfNotEmpty(result, "Format", Measure.FormatString, "\'");
-                    result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, "\'"); 
-                    result = AppendIfNotEmpty(result, "DisplayFolder", Measure.DisplayFolder, "\'");
-                    result = AppendIfNotEmpty(result, "Description", Measure.Description, "\'");
+                    result = AppendIfNotEmpty(result, "Format", Measure.FormatString, "'");
+                    result = AppendIfNotEmpty(result, "AdditionalInfo", CustomFormat, "'"); 
+                    result = AppendIfNotEmpty(result, "DisplayFolder", Measure.DisplayFolder, "'");
+                    result = AppendIfNotEmpty(result, "Description", Measure.Description, "'");
 
                     break;
                 default:
@@ -354,7 +354,7 @@ namespace DaxEditor
             if (KPI != null)
             {
                 result = AppendIfNotEmpty(result, "KpiDescription", KPI.Description, "\"");
-                result = AppendIfNotEmpty(result, "KpiTargetFormatString", KPI.TargetFormatString, "\"");
+                result = AppendIfNotEmpty(result, "KpiTargetFormatString", KPI.TargetFormatString, "'");
                 result = AppendIfNotEmpty(result, "KpiTargetDescription", KPI.TargetDescription, "\"");
                 result = AppendIfNotEmpty(result, "KpiTargetExpression", KPI.TargetExpression);
                 result = AppendIfNotEmpty(result, "KpiStatusGraphic", KPI.StatusGraphic, "\"");
@@ -371,7 +371,7 @@ namespace DaxEditor
                 }
                 if (KPI.Annotations.Count > 0)
                 {
-                    result = AppendIfNotEmpty(result, "KpiAnnotations", string.Join(", ", texts), "\'"); // Special format (include other strings)
+                    result = AppendIfNotEmpty(result, "KpiAnnotations", string.Join(", ", texts), "'"); // Special format (include other strings)
                 }
             }
 
