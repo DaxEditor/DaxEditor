@@ -117,6 +117,9 @@ CreateExpression
     | CreateMember
     | Calculate
     | Alter
+    | Scope
+    | ForeColor
+    | EndScope
     ;
 
 DaxScript
@@ -208,6 +211,18 @@ Calculate
 
 Alter
     : KWALTER
+    ;
+
+Scope
+    : KWSCOPE             { SpecifyScope(@1);  }
+    ;
+
+ForeColor
+    : KWFORE_COLOR
+    ;
+
+EndScope
+    : KWEND KWSCOPE       { SpecifyEndScope(@2);  }
     ;
 
 CalculationPropertyFormatType

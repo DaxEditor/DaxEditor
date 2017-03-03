@@ -35,15 +35,27 @@ namespace DaxEditor
         /// </summary>
         public string FullText { get; set; }
 
-        public string NameInBrackets {
-            get {
-                return "[" + Name + "]";
-            }
-        }
+        /// <summary>
+        /// Measure name with brackets
+        /// </summary>
+        public string NameInBrackets { get { return "[" + Name + "]"; } }
+
+        /// <summary>
+        /// Scope
+        /// </summary>
+        public string Scope { get; set; } = string.Empty;
 
         public string ToDax()
         {
             var builder = new System.Text.StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(Scope))
+            {
+                builder.AppendLine(Scope);
+                builder.AppendLine();
+                builder.AppendLine();
+            }
+
             builder.Append(FullText);
             var propertyDax = CalcProperty?.ToDax();
             if (!string.IsNullOrWhiteSpace(propertyDax))

@@ -273,14 +273,16 @@ CALCULATION PROPERTY GENERAL
         [Test]
         public void ParseScope()
         {
-            //Currently we ignore this error
-            /*
             var text = @"SCOPE( Measures.AllMembers );
 FORE_COLOR(THIS) =
 IIF( Measures.CurrentMember < 0 , 255, 0);  // 255 = RED
 END SCOPE;";
-            ParseText(text);
-            */
+            var parser = ParseText(text);
+
+            Assert.AreEqual(@"SCOPE( Measures.AllMembers );
+FORE_COLOR(THIS) =
+IIF( Measures.CurrentMember < 0 , 255, 0);  // 255 = RED
+END SCOPE;", parser.Scope);
         }
 
         [Test]

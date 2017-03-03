@@ -259,9 +259,8 @@
         [Test]
         public void WithScope()
         {
-            //Currently we ignore this error
-            //var text = Utils.ReadFileFromResources("WithScope.bim");
-            //BaseTestXml(text, normalize: true);
+            var text = Utils.ReadFileFromResources("WithScope.bim");
+            BaseTestXml(text, normalize: true);
         }
     }
 }

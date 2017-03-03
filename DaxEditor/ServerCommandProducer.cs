@@ -25,6 +25,11 @@ namespace DaxEditor
 
 
 ";
+        public const string DoNotModify1103Base = @"
+                    ----------------------------------------------------------
+                    -- PowerPivot measures command (do not modify manually) --
+                    ----------------------------------------------------------
+                    ";
         public const string DoNotModify1103 = @"
                     ----------------------------------------------------------
                     -- PowerPivot measures command (do not modify manually) --
