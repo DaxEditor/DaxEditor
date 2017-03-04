@@ -214,12 +214,13 @@ Input text: {text}", exception);
                 foreach (var measure in Measures)
                 {
                     var command = new Command();
-                    
+                    command.Text = ServerCommandProducer.DoNotModify1103;
+
                     if (!string.IsNullOrWhiteSpace(measure.Scope))
                     {
-                        command.Text = ServerCommandProducer.DoNotModify1103Base;
-                        command.Text = command.Text.TrimEnd(Environment.NewLine.ToCharArray());
+                        command.Text = command.Text.TrimEnd('\r', '\n', ' ');
                         command.Text += $@"
+
 -- MDX SCRIPT --
 
 {measure.Scope}
@@ -228,10 +229,6 @@ Input text: {text}", exception);
 
 
 ";
-                    }
-                    else
-                    {
-                        command.Text = ServerCommandProducer.DoNotModify1103;
                     }
                     command.Text += measure.FullText + ";" + Environment.NewLine;
 
