@@ -166,8 +166,11 @@ TableNameNotEscaped  [a-zA-Z_][a-zA-Z0-9_]
 [Kk][Pp][Ii][Aa][Nn][Nn][Oo][Tt][Aa][Tt][Ii][Oo][Nn][Ss]                                                { return (int)Tokens.KWKPIANNOTATIONS; }
 /* End generated code */
 
-[Mm][Ee][Mm][Bb][Ee][Rr][^;]*           { return (int)Tokens.MDXCODE; }
-[Al][Ll][Tt][Ee][Rr][^;]*               { return (int)Tokens.KWALTER; }
+[Mm][Ee][Mm][Bb][Ee][Rr][^;]*                   { return (int)Tokens.MDXCODE; }
+[Aa][Ll][Tt][Ee][Rr][^;]*                       { return (int)Tokens.KWALTER; }
+[Ss][Cc][Oo][Pp][Ee][^;]*                       { return (int)Tokens.KWSCOPE; }
+[Ff][Oo][Rr][Ee][__][Cc][Oo][Ll][Oo][Rr][^;]*   { return (int)Tokens.KWFORE_COLOR; }
+[Ee][Nn][Dd]                                    { return (int)Tokens.KWEND; }
 
 \[{ColumnName}                          { return (int)Tokens.PARTIALCOLUMNNAME; }
 '{TableNameEscaped}                     { return (int)Tokens.PARTIALTABLENAME; }

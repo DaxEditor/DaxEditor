@@ -1,16 +1,12 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
-using Microsoft.AnalysisServices;
-using System.IO;
-using DaxEditor;
-using System.Threading;
-using DaxEditorSample.Test;
-
-namespace DaxEditor.IntegrationTests
+﻿namespace DaxEditor.IntegrationTests
 {
+    using System;
+    using System.Linq;
+    using NUnit.Framework;
+    using Microsoft.AnalysisServices;
+    using System.Threading;
+    using Test;
+
     [TestFixture]
     public class BismInfoProviderTests
     {

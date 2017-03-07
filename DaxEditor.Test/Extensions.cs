@@ -1,16 +1,13 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using DaxEditor;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using DaxEditor.StringExtensions;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Text;
+    using StringExtensions;
+
     public static class WindiffAssert
     {
         public static string GetFCDiff(string expected, string actual)

@@ -1,14 +1,11 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using DaxEditor;
-using DaxEditor.Json;
-using NUnit.Framework;
-using System;
-using System.Linq;
-using Microsoft.AnalysisServices;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using Json;
+    using NUnit.Framework;
+    using System;
+    using System.Linq;
+    using Microsoft.AnalysisServices;
+
     [TestFixture]
     public class MeasuresContainerTests
     {
@@ -50,7 +47,8 @@ namespace DaxEditorSample.Test
             Assert.IsNotNull(dax, "dax != null");
 
             var daxContainer = MeasuresContainer.ParseDaxScript(dax);
-            Assert.AreEqual(container.Measures.Count, daxContainer.Measures.Count, "container.Measures.Count != daxContainer.Measures.Count");
+            Assert.AreEqual(container.Measures.Count, daxContainer.Measures.Count,
+                "container.Measures.Count != daxContainer.Measures.Count");
             //Assert.AreEqual(container.SupportingMeasures.Count, daxContainer.SupportingMeasures.Count, "container.SupportingMeasures.Count != daxContainer.SupportingMeasures.Count");
             //Assert.AreEqual(container.AllMeasures.Count, daxContainer.AllMeasures.Count, "container.AllMeasures.Count != daxContainer.AllMeasures.Count");
 
@@ -170,7 +168,8 @@ namespace DaxEditorSample.Test
         }
 
         [Test]
-        public void MeasureUnderscore_Json() {
+        public void MeasureUnderscore_Json()
+        {
             var text = Utils.ReadFileFromResources("MeasureUnderscore_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
@@ -190,13 +189,15 @@ namespace DaxEditorSample.Test
         }
 
         [Test]
-        public void WithKPI_Json() {
+        public void WithKPI_Json()
+        {
             var text = Utils.ReadFileFromResources("WithKPI_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [Test]
-        public void WithKPI2_Json() {
+        public void WithKPI2_Json()
+        {
             var text = Utils.ReadFileFromResources("WithKPI2_JSON.bim");
 
             var container = MeasuresContainer.ParseText(text);
@@ -253,6 +254,13 @@ namespace DaxEditorSample.Test
 
             //Open the BIM file
             BaseTestJson(text, ignoreEmptyLines: true);
+        }
+
+        [Test]
+        public void WithScope()
+        {
+            var text = Utils.ReadFileFromResources("WithScope.bim");
+            BaseTestXml(text, normalize: true);
         }
     }
 }

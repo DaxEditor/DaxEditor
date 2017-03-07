@@ -1,17 +1,13 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
-using System.Linq;
-using System.Reflection;
-using DaxEditor;
-using NUnit.Framework;
-using Microsoft.VisualStudio.Text;
-using System.IO;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using System.IO;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition.Hosting;
+    using System.Linq;
+    using System.Reflection;
+    using NUnit.Framework;
+    using Microsoft.VisualStudio.Text;
+
     [TestFixture]
     public class OutliningTaggerTests
     {

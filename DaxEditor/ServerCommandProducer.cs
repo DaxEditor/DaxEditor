@@ -116,7 +116,7 @@ ALTER CUBE CURRENTCUBE UPDATE DIMENSION Measures, Default_Member = [__No measure
             using (var reader = new XmlTextReader(new System.IO.StringReader(text)))
             {
                 var database = new Database();
-
+                
                 return Utils.Deserialize(reader, database) as Database;
             }
         }

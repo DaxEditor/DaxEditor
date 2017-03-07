@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <EmbeddedResource Include="Resources\WithScope.bim" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

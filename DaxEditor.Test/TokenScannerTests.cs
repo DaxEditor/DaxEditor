@@ -1,12 +1,9 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using System.Collections.Generic;
-using Babel.Parser;
-using DaxEditor;
-using NUnit.Framework;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using System.Collections.Generic;
+    using Babel.Parser;
+    using NUnit.Framework;
+
     [TestFixture]
     public class TokenScannerTests
     {

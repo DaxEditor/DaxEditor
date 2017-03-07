@@ -97,6 +97,25 @@ namespace Babel.Parser
             return scanner.GetText(location).ToSystemEnding();
         }
 
+        private LexLocation ScopeStartLocation { get; set; }
+        public string Scope { get; set; } = string.Empty;
+
+        public void SpecifyScope(LexLocation location)
+        {
+            ScopeStartLocation = location;
+        }
+
+        public void SpecifyEndScope(LexLocation location)
+        {
+            if (ScopeStartLocation == null)
+            {
+                return;
+            }
+
+            var scopeLocation = ScopeStartLocation.Merge(location);
+            Scope = GetConsistentText(scopeLocation) + ";";
+        }
+
         public void CreateNewMeasure(LexLocation tableRefLocation, LexLocation measureNameLocation)
         {
             var tableName = GetConsistentText(tableRefLocation);
@@ -109,6 +128,11 @@ namespace Babel.Parser
                 measureName = measureName.Substring(1, measureName.Length - 2);
 
             var measure = new DaxMeasure() {TableName = tableName, Name = measureName};
+            if (!string.IsNullOrWhiteSpace(Scope))
+            {
+                measure.Scope = Scope;
+                Scope = string.Empty;
+            }
             measures.Add(measure);
         }
 
@@ -356,7 +380,7 @@ namespace Babel.Parser
             Debug.Assert(lastMeasure != null);
             Debug.Assert(lastMeasure.CalcProperty != null);
             lastMeasure.CalcProperty.KPI = lastMeasure.CalcProperty.KPI ?? new KPI();
-            lastMeasure.CalcProperty.KPI.TargetFormatString = GetConsistentText(location).Trim('\"');
+            lastMeasure.CalcProperty.KPI.TargetFormatString = GetConsistentText(location).Trim('\'');
         }
 
         public void SpecifyCalcPropKpiTargetDescription(LexLocation location)

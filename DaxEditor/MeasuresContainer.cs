@@ -214,7 +214,23 @@ Input text: {text}", exception);
                 foreach (var measure in Measures)
                 {
                     var command = new Command();
-                    command.Text = ServerCommandProducer.DoNotModify1103 + measure.FullText + ";" + Environment.NewLine;
+                    command.Text = ServerCommandProducer.DoNotModify1103;
+
+                    if (!string.IsNullOrWhiteSpace(measure.Scope))
+                    {
+                        command.Text = command.Text.TrimEnd('\r', '\n', ' ');
+                        command.Text += $@"
+
+-- MDX SCRIPT --
+
+{measure.Scope}
+
+-- MDX SCRIPT --
+
+
+";
+                    }
+                    command.Text += measure.FullText + ";" + Environment.NewLine;
 
                     if (measure.CalcProperty?.KPI != null)
                     {

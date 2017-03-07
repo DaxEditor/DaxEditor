@@ -1,13 +1,10 @@
-﻿// The project released under MS-PL license https://daxeditor.codeplex.com/license
-
-using System;
-using System.Linq;
-using DaxEditor;
-using Microsoft.VisualStudio.Package;
-using NUnit.Framework;
-
-namespace DaxEditorSample.Test
+﻿namespace DaxEditor.Test
 {
+    using System;
+    using System.Linq;
+    using Microsoft.VisualStudio.Package;
+    using NUnit.Framework;
+
     /// <summary>
     /// Unut tests for parser
     /// </summary>
@@ -274,6 +271,21 @@ CALCULATION PROPERTY GENERAL
         }
 
         [Test]
+        public void ParseScope()
+        {
+            var text = @"SCOPE( Measures.AllMembers );
+FORE_COLOR(THIS) =
+IIF( Measures.CurrentMember < 0 , 255, 0);  // 255 = RED
+END SCOPE;";
+            var parser = ParseText(text);
+
+            Assert.AreEqual(@"SCOPE( Measures.AllMembers );
+FORE_COLOR(THIS) =
+IIF( Measures.CurrentMember < 0 , 255, 0);  // 255 = RED
+END SCOPE;", parser.Scope);
+        }
+
+        [Test]
         public void ParseSimpleVarExpression()
         {
             var text = @"=
@@ -503,6 +515,28 @@ CREATE MEASURE 'Sales'[c] = 1
 /* Final check
 */", measure3.FullText);
             Assert.IsNull(measure3.CalcProperty);
+        }
+
+        [Test]
+        public void CalcProperty_KpiFormatWithDoubleQuotes()
+        {
+            var text = @"CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )
+CALCULATION PROPERTY CURRENCY
+    KPITARGETFORMATSTRING = '""€"" #,0;#,0 -""€"";""€"" #,0'
+;
+
+
+";
+            var parser = ParseText(text);
+
+            //Check the correct reception of the format
+            var measure = parser.AllMeasures[0];
+            var expected = @"""€"" #,0;#,0 -""€"";""€"" #,0";
+            Assert.AreEqual(expected, measure.CalcProperty.KPI.TargetFormatString);
+
+            //Check the correct saving of the format
+            var container = new MeasuresContainer(parser.AllMeasures);
+            Assert.AreEqual(text, container.GetDaxText());
         }
 
         [Test]
