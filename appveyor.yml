@@ -1,0 +1,16 @@
+version: 0.{build}
+skip_tags: true
+configuration: Release
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+  - nuget restore ".\DaxEditor.sln"
+build:
+  project: .\DaxEditor.sln
+test_script:
+  - nunit3-console.exe ./DaxEditor.Tests/bin/Release/DaxEditor.Tests.dll
+  - nunit3-console.exe ./DaxEditor.IntegrationTests/bin/Release/DaxEditor.IntegrationTests.dll
