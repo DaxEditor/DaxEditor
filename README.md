@@ -11,4 +11,4 @@ dev
 ---------------
 AppVeyor
 -------------
-[![Build status](https://ci.appveyor.com/api/projects/status/github/DaxEditor/DaxEditor?branch=dev&svg=true)](https://ci.appveyor.com/project/DaxEditor/DaxEditor/branch/dev)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/DaxEditor/DaxEditor?branch=dev&svg=true)](https://ci.appveyor.com/project/HavenDV/DaxEditor/branch/dev)
