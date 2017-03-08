@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor", "DaxEditor\DaxEditor.csproj", "{05A67D31-2607-49E3-825A-9F720A105D7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor.Tests", "DaxEditor.Test\DaxEditor.Tests.csproj", "{57475029-350C-4E9E-AB8C-6240DEE121F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor.Tests", "DaxEditor.Tests\DaxEditor.Tests.csproj", "{57475029-350C-4E9E-AB8C-6240DEE121F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor.IntegrationTests", "DaxEditor.IntegrationTests\DaxEditor.IntegrationTests.csproj", "{6E4406D6-F9A7-4260-8BA1-71EEBE971A3E}"
 EndProject
