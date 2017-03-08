@@ -7,8 +7,8 @@ Install the VSIX from the VS Gallery, or install the VSIX locally if you want to
 Branches
 ========
 
-master (stable)
+dev
 ---------------
 AppVeyor
 -------------
-[![Build status](https://ci.appveyor.com/api/projects/status/github/DaxEditor/DaxEditor?branch=master&svg=true)](https://ci.appveyor.com/project/DaxEditor/DaxEditor/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/DaxEditor/DaxEditor?branch=dev&svg=true)](https://ci.appveyor.com/project/DaxEditor/DaxEditor/branch/dev)
