@@ -353,6 +353,13 @@ END SCOPE;", parser.Scope);
         }
 
         [Test]
+        public void ParseCurrencyFunction()
+        {
+            var text = "CREATE MEASURE Table[test] = CURRENCY( 1234 );";
+            ParseText(text);
+        }
+
+        [Test]
         public void ParseDifficultDataTable()
         {
             var text = @" = 

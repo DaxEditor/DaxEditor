@@ -485,11 +485,17 @@ RankXFunction
     : RankX                         { StartFunction(@1, $1.str); }
     ;
 
+CurrencyFunction
+    : KWCURRENCY '(' Expression ')'
+    ;
+
 FunctionCall
     : FunctionName FunctionArgs
     | RankXFunction
+    | CurrencyFunction
     | KWNOT FunctionName FunctionArgs
     | KWNOT RankXFunction
+    | KWNOT CurrencyFunction
     ;
 
 ColumnRef
