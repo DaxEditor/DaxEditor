@@ -347,7 +347,7 @@ END SCOPE;", parser.Scope);
         [Test]
         public void ParseVeryBigFile()
         {
-            var text = Utils.ReadFileFromResources("VeryBigFile.dax");
+            var text = Utilities.ReadFileFromResources("VeryBigFile.dax");
             var parser = ParseText(text);
             Console.WriteLine(parser.Measures.Count);
         }

@@ -1,16 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9326DAC9-8A66-4914-81C6-4D7A69B7C617}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		DaxEditor.vsmdi = DaxEditor.vsmdi
-		Local.testsettings = Local.testsettings
-		Microsoft Public License.rtf = Microsoft Public License.rtf
+		LICENSE.md = LICENSE.md
 		README.md = README.md
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaxEditor", "DaxEditor\DaxEditor.csproj", "{05A67D31-2607-49E3-825A-9F720A105D7D}"
