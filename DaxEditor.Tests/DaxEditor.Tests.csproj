@@ -9,8 +9,8 @@
     <ProjectGuid>{57475029-350C-4E9E-AB8C-6240DEE121F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DaxEditorSample.Test</RootNamespace>
-    <AssemblyName>DaxEditorSample.Test</AssemblyName>
+    <RootNamespace>DaxEditor.Tests</RootNamespace>
+    <AssemblyName>DaxEditor.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -64,58 +64,58 @@
     <Compile Include="ParserTests.cs" />
     <Compile Include="ServerCommandProducerTest.cs" />
     <Compile Include="TokenScannerTests.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DaxEditor\DaxEditor.csproj">
       <Project>{05A67D31-2607-49E3-825A-9F720A105D7D}</Project>
-      <Name>DaxEditorSample</Name>
+      <Name>DaxEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\MeasuresFormats.bim">
+    <None Include="Resources\MeasuresFormats.bim">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\BIM1100.bim" />
+    <None Include="Resources\BIM1100.bim" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\M1.bim" />
+    <None Include="Resources\M1.bim" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\BIM1100_JSON.bim" />
+    <None Include="Resources\BIM1100_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\M1_JSON.bim" />
+    <None Include="Resources\M1_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\NewDaxModel_JSON.bim" />
+    <None Include="Resources\NewDaxModel_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\NewMeasuresFuncs_JSON.bim" />
+    <None Include="Resources\NewMeasuresFuncs_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\WithComments_JSON.bim" />
+    <None Include="Resources\WithComments_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\WithTranslations_JSON.bim" />
+    <None Include="Resources\WithTranslations_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\WithKPI_JSON.bim" />
-    <EmbeddedResource Include="Resources\VeryBigFile.dax" />
-    <EmbeddedResource Include="Resources\KPIExample.bim" />
-    <EmbeddedResource Include="Resources\KPIExample_JSON.bim" />
-    <EmbeddedResource Include="Resources\RMN_Model_Perspective.bim" />
-    <EmbeddedResource Include="Resources\MeasureUnderscore_JSON.bim" />
-    <EmbeddedResource Include="Resources\WithKPI2_JSON.bim" />
+    <None Include="Resources\WithKPI_JSON.bim" />
+    <None Include="Resources\VeryBigFile.dax" />
+    <None Include="Resources\KPIExample.bim" />
+    <None Include="Resources\KPIExample_JSON.bim" />
+    <None Include="Resources\RMN_Model_Perspective.bim" />
+    <None Include="Resources\MeasureUnderscore_JSON.bim" />
+    <None Include="Resources\WithKPI2_JSON.bim" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
-    <EmbeddedResource Include="Resources\WithScope.bim" />
+    <None Include="Resources\WithScope.bim" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

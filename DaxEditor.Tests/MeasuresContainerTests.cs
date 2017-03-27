@@ -95,7 +95,7 @@
         [Test]
         public void MeasuresFormats()
         {
-            var text = Utils.ReadFileFromResources("MeasuresFormats.bim");
+            var text = Utilities.ReadFileFromResources("MeasuresFormats.bim");
             BaseTestXml(text, normalize: true);
 
             var container = MeasuresContainer.ParseText(text);
@@ -107,7 +107,7 @@
         [Test]
         public void Bim1100()
         {
-            var text = Utils.ReadFileFromResources("BIM1100.bim");
+            var text = Utilities.ReadFileFromResources("BIM1100.bim");
             BaseTestXml(text, normalize: true);
 
             var container = MeasuresContainer.ParseText(text);
@@ -119,7 +119,7 @@
         [Test]
         public void M1()
         {
-            var text = Utils.ReadFileFromResources("M1.bim");
+            var text = Utilities.ReadFileFromResources("M1.bim");
             BaseTestXml(text, normalize: true);
 
             var container = MeasuresContainer.ParseText(text);
@@ -132,7 +132,7 @@
         [Test]
         public void Bim1100_Json()
         {
-            var text = Utils.ReadFileFromResources("BIM1100_JSON.bim");
+            var text = Utilities.ReadFileFromResources("BIM1100_JSON.bim");
             BaseTestJson(text);
 
             var container = MeasuresContainer.ParseText(text);
@@ -144,7 +144,7 @@
         [Test]
         public void M1_Json()
         {
-            var text = Utils.ReadFileFromResources("M1_JSON.bim");
+            var text = Utilities.ReadFileFromResources("M1_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
 
             var container = MeasuresContainer.ParseText(text);
@@ -156,49 +156,49 @@
         [Test]
         public void NewDaxModel_Json()
         {
-            var text = Utils.ReadFileFromResources("NewDaxModel_JSON.bim");
+            var text = Utilities.ReadFileFromResources("NewDaxModel_JSON.bim");
             BaseTestJson(text);
         }
 
         [Test]
         public void NewMeasuresFuncs_Json()
         {
-            var text = Utils.ReadFileFromResources("NewMeasuresFuncs_JSON.bim");
+            var text = Utilities.ReadFileFromResources("NewMeasuresFuncs_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [Test]
         public void MeasureUnderscore_Json()
         {
-            var text = Utils.ReadFileFromResources("MeasureUnderscore_JSON.bim");
+            var text = Utilities.ReadFileFromResources("MeasureUnderscore_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [Test]
         public void WithComments_Json()
         {
-            var text = Utils.ReadFileFromResources("WithComments_JSON.bim");
+            var text = Utilities.ReadFileFromResources("WithComments_JSON.bim");
             BaseTestJson(text);
         }
 
         [Test]
         public void WithTranslations_Json()
         {
-            var text = Utils.ReadFileFromResources("WithTranslations_JSON.bim");
+            var text = Utilities.ReadFileFromResources("WithTranslations_JSON.bim");
             BaseTestJson(text);
         }
 
         [Test]
         public void WithKPI_Json()
         {
-            var text = Utils.ReadFileFromResources("WithKPI_JSON.bim");
+            var text = Utilities.ReadFileFromResources("WithKPI_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
         [Test]
         public void WithKPI2_Json()
         {
-            var text = Utils.ReadFileFromResources("WithKPI2_JSON.bim");
+            var text = Utilities.ReadFileFromResources("WithKPI2_JSON.bim");
 
             var container = MeasuresContainer.ParseText(text);
             var measure = container.Measures[0];
@@ -210,7 +210,7 @@
         [Test]
         public void KPIExample()
         {
-            var text = Utils.ReadFileFromResources("KPIExample.bim");
+            var text = Utilities.ReadFileFromResources("KPIExample.bim");
             BaseTestXml(text, normalize: true);
 
             var container = MeasuresContainer.ParseText(text);
@@ -222,7 +222,7 @@
         [Test]
         public void KPIExample_Json()
         {
-            var text = Utils.ReadFileFromResources("KPIExample_JSON.bim");
+            var text = Utilities.ReadFileFromResources("KPIExample_JSON.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
         }
 
@@ -230,7 +230,7 @@
         public void RMN_Model_Perspective_Load_Save_Load()
         {
             //Open the BIM file you sent in Visual Studio (the .TXT must be replaced with .BIM)
-            var text = Utils.ReadFileFromResources("RMN_Model_Perspective.bim");
+            var text = Utilities.ReadFileFromResources("RMN_Model_Perspective.bim");
             BaseTestJson(text, ignoreEmptyLines: true);
 
             //Get measures from BIM file
@@ -259,7 +259,7 @@
         [Test]
         public void WithScope()
         {
-            var text = Utils.ReadFileFromResources("WithScope.bim");
+            var text = Utilities.ReadFileFromResources("WithScope.bim");
             BaseTestXml(text, normalize: true);
         }
     }

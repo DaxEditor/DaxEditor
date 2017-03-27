@@ -63,9 +63,9 @@
     <Compile Include="StubIUpdateEditorMargin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DaxEditor.Test\DaxEditor.Test.csproj">
+    <ProjectReference Include="..\DaxEditor.Tests\DaxEditor.Tests.csproj">
       <Project>{57475029-350C-4E9E-AB8C-6240DEE121F7}</Project>
-      <Name>DaxEditor.Test</Name>
+      <Name>DaxEditor.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\DaxEditor\DaxEditor.csproj">
       <Project>{05A67D31-2607-49E3-825A-9F720A105D7D}</Project>
