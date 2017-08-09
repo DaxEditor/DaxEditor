@@ -214,67 +214,67 @@ namespace DaxEditor
                 // Top level menu
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, topLevelMenuCommandId);
                 command = new OleMenuCommand(null, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusVisible);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusVisible;
                 mcs.AddCommand(command);
 
                 // New File
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, newFileCommandId);
                 command = new OleMenuCommand(NewFileCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Connect
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, connectCommandId);
                 command = new OleMenuCommand(ConnectCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Disconnect
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, disconnectCommandId);
                 command = new OleMenuCommand(DisconnectCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Get measures and calculated columns
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, getMeasuresAndCalculateCommandId);
                 command = new OleMenuCommand(GetMeasuresAndCalculatedColumnsCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Save measures and calculated columns
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, saveMeasuresAndCalculateCommandId);
                 command = new OleMenuCommand(SaveMeasuresAndCalculatedColumnsCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // ExecuteQuery
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, executeQueryCommandId);
                 command = new OleMenuCommand(ExecuteQueryCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Reformat selection
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, reformatSelectionCommandId);
                 command = new OleMenuCommand(ReformatSelectionCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Reformat document
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, reformatDocumentCommandId);
                 command = new OleMenuCommand(ReformatDocumentCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Increase depth button
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, increaseDepthCommandId);
                 command = new OleMenuCommand(EditAdvancedIncreaseIndentDepthCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Decrease depth button
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, decreaseDepthCommandId);
                 command = new OleMenuCommand(EditAdvancedDecreaseIndentDepthCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnDaxCommandQueryStatusEnabled);
+                command.BeforeQueryStatus += OnDaxCommandQueryStatusEnabled;
                 mcs.AddCommand(command);
 
                 // Get measures from BIM file button
@@ -285,7 +285,7 @@ namespace DaxEditor
                 // Save measures to BIM file button
                 commandID = new CommandID(GuidList.guidDaxEditorCmdSet, saveMeasuresToFileCommandId);
                 command = new OleMenuCommand(EditAdvancedSaveBimFileContentCommandExecute, commandID);
-                command.BeforeQueryStatus += new EventHandler(OnSaveDaxToBimQueryStatus);
+                command.BeforeQueryStatus += OnSaveDaxToBimQueryStatus;
                 mcs.AddCommand(command);
             }
         }

@@ -1,11 +1,12 @@
-﻿namespace DaxEditor.IntegrationTests
+﻿using DaxEditor.Tests;
+
+namespace DaxEditor.IntegrationTests
 {
     using System;
     using System.Linq;
     using NUnit.Framework;
     using Microsoft.AnalysisServices;
     using System.Threading;
-    using Test;
 
     [TestFixture]
     public class BismInfoProviderTests
