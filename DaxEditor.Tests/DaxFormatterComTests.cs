@@ -1,8 +1,8 @@
-﻿namespace DaxEditor.Test
-{
-    using System;
-    using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
+namespace DaxEditor.Tests
+{
     [TestFixture]
     public class DaxFormatterComTests
     {

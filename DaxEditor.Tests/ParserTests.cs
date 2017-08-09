@@ -1,10 +1,10 @@
-﻿namespace DaxEditor.Test
-{
-    using System;
-    using System.Linq;
-    using Microsoft.VisualStudio.Package;
-    using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using Microsoft.VisualStudio.Package;
+using NUnit.Framework;
 
+namespace DaxEditor.Tests
+{
     /// <summary>
     /// Unut tests for parser
     /// </summary>

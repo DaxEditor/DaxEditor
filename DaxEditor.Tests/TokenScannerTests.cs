@@ -1,9 +1,9 @@
-﻿namespace DaxEditor.Test
-{
-    using System.Collections.Generic;
-    using Babel.Parser;
-    using NUnit.Framework;
+﻿using System.Collections.Generic;
+using Babel.Parser;
+using NUnit.Framework;
 
+namespace DaxEditor.Tests
+{
     [TestFixture]
     public class TokenScannerTests
     {

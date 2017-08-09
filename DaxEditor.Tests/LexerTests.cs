@@ -1,8 +1,8 @@
-﻿namespace DaxEditor.Test
-{
-    using Babel.ParserGenerator;
-    using NUnit.Framework;
+﻿using Babel.ParserGenerator;
+using NUnit.Framework;
 
+namespace DaxEditor.Tests
+{
     [TestFixture]
     public class LexerTests
     {

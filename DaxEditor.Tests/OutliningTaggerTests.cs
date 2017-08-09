@@ -1,13 +1,13 @@
-﻿namespace DaxEditor.Test
-{
-    using System.IO;
-    using System.Collections.Generic;
-    using System.ComponentModel.Composition.Hosting;
-    using System.Linq;
-    using System.Reflection;
-    using NUnit.Framework;
-    using Microsoft.VisualStudio.Text;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Microsoft.VisualStudio.Text;
+using NUnit.Framework;
 
+namespace DaxEditor.Tests
+{
     [TestFixture]
     public class OutliningTaggerTests
     {

@@ -1,4 +1,4 @@
-﻿namespace DaxEditor.Test
+﻿namespace DaxEditor.Tests
 {
     using NUnit.Framework;
     using System;

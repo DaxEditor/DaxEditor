@@ -1,8 +1,8 @@
-﻿namespace DaxEditor.Test
-{
-    using System.Xml.Linq;
-    using NUnit.Framework;
+﻿using System.Xml.Linq;
+using NUnit.Framework;
 
+namespace DaxEditor.Tests
+{
     [TestFixture]
     public class ServerCommandProducerTest
     {

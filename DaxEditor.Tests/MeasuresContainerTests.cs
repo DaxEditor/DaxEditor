@@ -1,4 +1,4 @@
-﻿namespace DaxEditor.Test
+﻿namespace DaxEditor.Tests
 {
     using Json;
     using NUnit.Framework;
@@ -9,11 +9,13 @@
     [TestFixture]
     public class MeasuresContainerTests
     {
-        static public void ValidateDatabase(string text)
+        public static void ValidateDatabase(string text)
         {
-            var server = new Microsoft.AnalysisServices.Tabular.Server();
-            server.ID = "ID";
-            server.Name = "Name";
+            var server = new Microsoft.AnalysisServices.Tabular.Server
+            {
+                ID = "ID",
+                Name = "Name"
+            };
 
             var database = JsonUtilities.Deserialize(text);
             server.Databases.Add(database);
@@ -35,7 +37,7 @@
             );
         }
 
-        static public string BaseTest(string text)
+        public static string BaseTest(string text)
         {
             var container = MeasuresContainer.ParseText(text);
             Assert.IsNotNull(container, "container != null");
@@ -55,7 +57,7 @@
             return daxContainer.UpdateMeasures(text);
         }
 
-        static public void BaseTestJson(string text, bool ignoreEmptyLines = false)
+        public static void BaseTestJson(string text, bool ignoreEmptyLines = false)
         {
             var actual = BaseTest(text);
             var expected = text;
@@ -77,7 +79,7 @@
             ValidateDatabase(text);
         }
 
-        static public void BaseTestXml(string text, bool normalize = false)
+        public static void BaseTestXml(string text, bool normalize = false)
         {
             var actual = BaseTest(text);
             var expected = text;
@@ -208,7 +210,7 @@
         }
 
         [Test]
-        public void KPIExample()
+        public void KpiExample()
         {
             var text = Utilities.ReadFileFromResources("KPIExample.bim");
             BaseTestXml(text, normalize: true);

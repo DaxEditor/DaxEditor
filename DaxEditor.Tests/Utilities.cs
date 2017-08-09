@@ -1,4 +1,4 @@
-﻿namespace DaxEditor.Test
+﻿namespace DaxEditor.Tests
 {
     using System.IO;
     using System.Reflection;
