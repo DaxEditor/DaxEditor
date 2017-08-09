@@ -1,4 +1,4 @@
-	CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )
+CREATE MEASURE 'Test'[Sales1] =  SUM ( Test[Value] )
 CALCULATION 
     PROPERTY Currency 
 	Accuracy=2 
