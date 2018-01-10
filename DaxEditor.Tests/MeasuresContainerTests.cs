@@ -182,6 +182,13 @@
             var text = Utilities.ReadFileFromResources("WithComments_JSON.bim");
             BaseTestJson(text);
         }
+        
+        [Test]
+        public void DataSourceTypeError_Json()
+        {
+            var text = Utilities.ReadFileFromResources("DataSourceTypeError_JSON.bim");
+            BaseTestJson(text);
+        }
 
         [Test]
         public void WithTranslations_Json()

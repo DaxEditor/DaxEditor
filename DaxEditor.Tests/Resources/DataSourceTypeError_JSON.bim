@@ -1,0 +1,106 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1400,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/Demo;ContosoDW",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "Demo",
+            "database": "ContosoDW"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "ServiceAccount",
+          "kind": "SQL",
+          "path": "demo;ContosoDW",
+          "EncryptConnection": false
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "Analytics Account",
+        "columns": [
+          {
+            "name": "AccountKey",
+            "dataType": "int64",
+            "sourceColumn": "AccountKey"
+          },
+          {
+            "name": "ParentAccountKey",
+            "dataType": "int64",
+            "sourceColumn": "ParentAccountKey"
+          },
+          {
+            "name": "Label",
+            "dataType": "string",
+            "sourceColumn": "Label"
+          },
+          {
+            "name": "Account",
+            "dataType": "string",
+            "sourceColumn": "Account"
+          },
+          {
+            "name": "Description",
+            "dataType": "string",
+            "sourceColumn": "Description"
+          },
+          {
+            "name": "Type",
+            "dataType": "string",
+            "sourceColumn": "Type"
+          },
+          {
+            "name": "Operator",
+            "dataType": "string",
+            "sourceColumn": "Operator"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/Demo;ContosoDW\",",
+                "    Analytics_Account = Source{[Schema=\"Analytics\",Item=\"Account\"]}[Data]",
+                "in",
+                "    Analytics_Account"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "a",
+            "expression": " COUNTROWS ( 'Analytics Account' )",
+            "detailRowsDefinition": {}
+          },
+          {
+            "name": "b",
+            "expression": " SUM ( 'Analytics Account'[AccountKey] )",
+            "detailRowsDefinition": {}
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "500"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}

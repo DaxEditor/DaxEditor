@@ -85,6 +85,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\DataSourceTypeError_JSON.bim" />
     <None Include="Resources\MeasuresFormats.bim">
       <SubType>Designer</SubType>
     </None>
